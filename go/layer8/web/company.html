@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
 </head>
 <body>
 <nav>
@@ -27,9 +28,33 @@
   </div>
 </nav>
 
-<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
   <div class="container">
-    <p class="mono reveal">Company</p>
+    <div class="hero-title-row reveal">
+      <p class="mono">Company</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <!-- Order: 3x2 grid lines on the right (always visible) -->
+          <line x1="120" y1="8" x2="120" y2="52" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="145" y1="8" x2="145" y2="52" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="170" y1="8" x2="170" y2="52" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="112" y1="10" x2="178" y2="10" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="112" y1="30" x2="178" y2="30" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="112" y1="50" x2="178" y2="50" stroke="#E5E5E5" stroke-width="0.5"/>
+          <!-- Chaos dots: start scattered left, travel to center, appear on grid -->
+          <circle cx="12" cy="8"  r="3"   fill="#000" class="illus-c2o-1"/>
+          <circle cx="30" cy="48" r="3"   fill="#000" class="illus-c2o-2"/>
+          <circle cx="5"  cy="30" r="3"   fill="#333" class="illus-c2o-3"/>
+          <circle cx="40" cy="14" r="2.5" fill="#444" class="illus-c2o-4"/>
+          <circle cx="18" cy="40" r="2.5" fill="#444" class="illus-c2o-5"/>
+          <circle cx="50" cy="52" r="2.5" fill="#666" class="illus-c2o-6"/>
+          <!-- AI core: central diamond -->
+          <g class="illus-ai-core">
+            <rect x="82" y="24" width="12" height="12" rx="2" transform="rotate(45 88 30)" fill="#000"/>
+          </g>
+        </svg>
+      </div>
+    </div>
     <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">We build enterprise software.<br>You run your business.</h1>
     <p class="reveal">
       Layer 8 is a software company that builds custom enterprise systems
