@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Network Simulator - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8opensim</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Network Simulator</h1>
+    <p>Scalable simulator for 25,000+ devices across 28 types.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8opensim" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>OpenSim is a scalable network and infrastructure simulator. It provides realistic SNMP v2c/v3, SSH, and HTTPS REST API interfaces for testing network management applications, monitoring systems, and automation tools. It can simulate 25,000+ devices with dedicated IP addresses using TUN interfaces and Linux network namespaces.</p>
+
+    <h2>Protocols</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">SNMP v2c/v3</div>
+        <div class="def-desc">MD5/SHA1 authentication, DES/AES128 privacy, OID walks and gets</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SSH</div>
+        <div class="def-desc">VT100 terminal emulation with vendor-specific command sets</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">HTTPS REST</div>
+        <div class="def-desc">Storage device simulation with shared TLS certificates</div>
+      </div>
+    </div>
+
+    <h2>Device Categories</h2>
+
+    <h3>Core Routers (5 types)</h3>
+    <p>Cisco ASR9K (48 ports), Cisco CRS-X (144 ports), Huawei NE8000 (96 ports), Nokia 7750 SR-12 (72 ports), Juniper MX960 (96 ports).</p>
+
+    <h3>Edge Routers (3 types)</h3>
+    <p>Juniper MX240 (24 ports), NEC IX3315 (48 ports), Cisco IOS (4 ports).</p>
+
+    <h3>Data Center Switches (2 types)</h3>
+    <p>Cisco Nexus 9500 (48 ports), Arista 7280R3 (32 ports).</p>
+
+    <h3>Campus Switches (3 types)</h3>
+    <p>Cisco Catalyst 9500, Extreme VSP4450, D-Link DGS-3630.</p>
+
+    <h3>Firewalls (4 types)</h3>
+    <p>Palo Alto PA-3220, Fortinet FortiGate-600E, SonicWall NSa 6700, Check Point 15600.</p>
+
+    <h3>Servers (4 types)</h3>
+    <p>Dell PowerEdge R750, HPE ProLiant DL380, IBM Power S922, Linux Server (Ubuntu 24.04 with 36+ SSH commands).</p>
+
+    <h3>GPU Servers (3 types)</h3>
+    <p>NVIDIA DGX-A100 (8x80GB), DGX-H100 (8x80GB), HGX-H200 (8x141GB). Per-GPU metrics: utilization, VRAM, temperature, power, fan speed, clock speeds.</p>
+
+    <h3>Storage Systems (4 types)</h3>
+    <p>AWS S3, Pure Storage FlashArray, NetApp ONTAP, Dell EMC Unity. All support SNMP, SSH, and HTTPS REST APIs.</p>
+
+    <h2>Features</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Network Namespace Isolation</div>
+        <div class="def-desc">Each device runs in its own Linux network namespace</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TUN/TAP Integration</div>
+        <div class="def-desc">Dedicated IP per device via TUN interfaces</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Dynamic Metrics</div>
+        <div class="def-desc">Realistic CPU, memory, temperature, GPU metrics with sine-wave cycling</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Entity MIB Alignment</div>
+        <div class="def-desc">Properly aligned ifTable and Entity MIB data across all devices</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">CDP and LLDP</div>
+        <div class="def-desc">Network topology discovery support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">OSPF, BGP, VRF</div>
+        <div class="def-desc">Routing protocol simulation via SSH</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Round-Robin Creation</div>
+        <div class="def-desc">Bulk device creation by category</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">CSV Export</div>
+        <div class="def-desc">Device list export and routing script generation</div>
+      </div>
+    </div>
+
+    <h2>Performance</h2>
+    <div class="clean-list">
+      <div class="clean-row">Tested at 25,000+ concurrent devices</div>
+      <div class="clean-row">~50MB base + ~1KB per device memory footprint</div>
+      <div class="clean-row">Pre-generated metrics (100-point sine-wave curves)</div>
+      <div class="clean-row">Lock-free atomic indexing</div>
+      <div class="clean-row">Shared SSH and TLS keys across devices</div>
+      <div class="clean-row">SNMP buffer pooling</div>
+      <div class="clean-row">Worker-pool pre-allocation for bulk creation (10+ devices)</div>
+    </div>
+
+    <h2>Deployment</h2>
+    <p>Run directly with root privileges for TUN interface creation. Docker image available as <code>saichler/opensim-web</code>. Kubernetes deployment via StatefulSet in the <code>opensim</code> namespace with <code>hostNetwork: true</code>.</p>
+
+    <h2>Use Cases</h2>
+    <div class="clean-list">
+      <div class="clean-row">SNMP polling application testing with dynamic metrics</div>
+      <div class="clean-row">GPU infrastructure monitoring validation</div>
+      <div class="clean-row">SSH-based network automation development</div>
+      <div class="clean-row">Large-scale topology load testing</div>
+      <div class="clean-row">CI/CD integration testing for network applications</div>
+      <div class="clean-row">Storage management tool validation</div>
+      <div class="clean-row">CDP/LLDP topology discovery testing</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

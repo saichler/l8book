@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notifications - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8notify</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Notifications</h1>
+    <p>Multi-channel notification dispatch with throttling and escalation.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8notify" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>l8notify is a shared notification library, not a standalone service. Consumer projects import its Go packages and copy its l8ui components into their own web directories. It provides reusable packages for notification delivery, template rendering, throttling, and escalation scheduling.</p>
+    <p>l8notify never persists anything. The consumer project stores policies, rules, SMTP configs, webhook configs, and delivery logs in its own services. l8notify only provides the types and runtime behavior.</p>
+
+    <h2>Channels</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Email</div>
+        <div class="def-desc">SMTP with plain and TLS support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Webhook</div>
+        <div class="def-desc">HMAC-SHA256 signing with retry and exponential backoff</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Slack</div>
+        <div class="def-desc">Incoming webhook integration</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">PagerDuty</div>
+        <div class="def-desc">Planned</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Custom</div>
+        <div class="def-desc">Register your own <code>Sender</code> interface implementation</div>
+      </div>
+    </div>
+
+    <h2>Go Packages</h2>
+
+    <h3><span class="mono">channel</span> -- Dispatch Router</h3>
+    <p><code>channel.Dispatch()</code> routes a rendered message to the appropriate sender based on the target's channel type. Email sends via SMTP. Webhooks sign with HMAC-SHA256 and retry with exponential backoff (1s, 2s, 4s). Slack posts to an incoming webhook URL. Custom channels iterate all registered senders.</p>
+
+    <h3><span class="mono">template</span> -- Message Rendering</h3>
+    <p><code>template.Render(tmpl, vars)</code> replaces <code>{{key}}</code> placeholders with values from a map. Unknown placeholders are left as-is. <code>RenderWithDefault</code> replaces remaining placeholders with a default value.</p>
+
+    <h3><span class="mono">throttle</span> -- Rate Limiting</h3>
+    <p>Thread-safe per-key cooldown and hourly rate limiter. Call <code>IsThrottled()</code> before dispatch, <code>Record()</code> after a successful send. Supports per-entity cooldown and per-policy hourly caps.</p>
+
+    <h3><span class="mono">escalation</span> -- Timed Step Chains</h3>
+    <p>Schedules escalation chains for entities. Steps are sorted by order and fire after their configured delay via goroutine timers. Templates are rendered before calling the consumer's <code>StepHandler</code>. Active escalations can be cancelled when an entity is acknowledged or resolved.</p>
+
+    <h2>Protobuf Types</h2>
+    <p>All types are shared building blocks embedded in consumer-specific types. None are Prime Objects.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>NotifyChannel</code></div>
+        <div class="def-desc">Enum: EMAIL, WEBHOOK, SLACK, PAGERDUTY, CUSTOM</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>DeliveryStatus</code></div>
+        <div class="def-desc">Enum: PENDING, SENT, FAILED, RETRYING</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>NotifyTarget</code></div>
+        <div class="def-desc">Delivery target (channel + endpoint + template)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>SmtpConfig</code></div>
+        <div class="def-desc">SMTP connection settings</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>WebhookConfig</code></div>
+        <div class="def-desc">Webhook endpoint with HMAC secret, retry count, timeout</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>DeliveryResult</code></div>
+        <div class="def-desc">Result of a delivery attempt</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>EscalationStep</code></div>
+        <div class="def-desc">Single step in an escalation chain</div>
+      </div>
+    </div>
+
+    <h2>l8ui Components</h2>
+    <p>l8notify ships reusable UI components that consumers copy into their web directory:</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">SMTP Config</div>
+        <div class="def-desc">Form component for SMTP settings with test email support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Webhook Management</div>
+        <div class="def-desc">CRUD table and form for webhook endpoints</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Delivery Log</div>
+        <div class="def-desc">Table viewer with detail popup for delivery results</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Target Editor</div>
+        <div class="def-desc">Inline table definition for <code>NotifyTarget</code> arrays in policy forms</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Shared Enums</div>
+        <div class="def-desc">Channel and delivery status enums with renderers</div>
+      </div>
+    </div>
+
+    <h2>End-to-End Flow</h2>
+    <ol>
+      <li>Entity event fires (POST/PUT/DELETE) in a ServiceCallback</li>
+      <li>Consumer loads matching notification rules from its own service</li>
+      <li>For each rule and target: build template vars, check throttle, render message, dispatch</li>
+      <li>Record throttle on success, log delivery result</li>
+      <li>For escalation policies: schedule on create/update, cancel on resolve/acknowledge</li>
+    </ol>
+
+    <h2>Dependencies</h2>
+    <p>Go: <code>google.golang.org/protobuf</code> only. No l8orm, l8services, l8bus, or other Layer 8 infrastructure dependencies. l8ui components require the l8ui shared library already present in the consumer project.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collector - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8collector</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Collector</h1>
+    <p>Multi-protocol network data collection (SNMP, SSH, K8s, REST).</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8collector" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Collector is a multi-protocol network data collection service built on the Layer 8 ecosystem and the Pollaris model. It provides a unified framework for collecting data from network devices and systems using SNMP, SSH, Kubernetes, REST/RESTCONF, and GraphQL. Target management is handled by the Pollaris framework.</p>
+
+    <h2>Architecture</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">CollectorService</div>
+        <div class="def-desc">Main orchestrator with SLA support. Receives <code>L8PTarget</code> messages to start/stop polling devices.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">ExecuteService</div>
+        <div class="def-desc">Remote job execution and distribution across cluster nodes. Falls back to routing jobs to other collector instances.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">HostCollector</div>
+        <div class="def-desc">Per-host orchestrator. Creates protocol collectors, runs the 5-stage boot sequence, and executes scheduled jobs.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">JobsQueue</div>
+        <div class="def-desc">Ordered list of scheduled jobs with cadence-based round-robin execution.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Aggregator</div>
+        <div class="def-desc">Batches collection results before forwarding to the parser service.</div>
+      </div>
+    </div>
+
+    <h2>Protocol Collectors</h2>
+    <p>All collectors implement the <code>ProtocolCollector</code> interface: <code>Init</code>, <code>Connect</code>, <code>Exec</code>, <code>Disconnect</code>, <code>Online</code>.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">SNMPv2</div>
+        <div class="def-desc">Community-based auth, OID normalization, walks and gets, net-snmp fallback for timeout resilience</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SSH</div>
+        <div class="def-desc">Username/password auth, command execution with prompt detection, session management</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Kubernetes</div>
+        <div class="def-desc">kubectl-based collection, context-aware, base64 kubeconfig, <code>$variable</code> parameter substitution</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">REST/RESTCONF</div>
+        <div class="def-desc">HTTP/HTTPS with token and basic auth, GET/POST/PUT/PATCH/DELETE, certificate support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">GraphQL</div>
+        <div class="def-desc">Query execution with API key and token auth, typed response handling</div>
+      </div>
+    </div>
+
+    <h2>Data Flow</h2>
+    <ol>
+      <li><strong>Target Arrival</strong> -- <code>L8PTarget</code> POST creates HostCollectors</li>
+      <li><strong>Boot Sequence</strong> -- 5 stages of progressive device discovery</li>
+      <li><strong>Steady-State Polling</strong> -- JobsQueue executes jobs based on cadence intervals</li>
+      <li><strong>Result Aggregation</strong> -- Batched forwarding to parser service</li>
+      <li><strong>Remote Execution</strong> -- On-demand jobs routed to the correct collector instance</li>
+    </ol>
+
+    <h2>Scalability</h2>
+    <div class="clean-list">
+      <div class="clean-row">1,000-2,000 devices per instance (conservative), up to 5,000-10,000 (optimistic)</div>
+      <div class="clean-row">1:1 host-to-goroutine mapping with per-protocol collectors</div>
+      <div class="clean-row">Thread-safe <code>SyncMap</code> for device management</div>
+      <div class="clean-row">Connection reuse across multiple jobs</div>
+      <div class="clean-row">Smooth first collection -- randomized initial timing prevents thundering herd</div>
+      <div class="clean-row">Horizontal scaling via Layer 8 service mesh with automatic failover</div>
+    </div>
+
+    <h2>Boot Sequence</h2>
+    <p>5-stage progressive device discovery (stages 00-04). Each stage builds on the previous, gradually discovering device capabilities, protocols, and polling configuration.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

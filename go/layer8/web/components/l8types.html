@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Type System - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8types</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Type System</h1>
+    <p>Service interfaces and core type definitions for the Layer 8 ecosystem.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8types" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Types is the foundational library for Layer 8. It defines all Protocol Buffer schemas, Go interfaces, and utilities needed to build distributed applications with service discovery, health monitoring, and secure communication. Every other Layer 8 component depends on it.</p>
+
+    <h2>Protocol Buffer Schemas</h2>
+    <p>The core type system is defined in <code>.proto</code> files compiled to Go via Docker-based code generation.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>api.proto</code></div>
+        <div class="def-desc">Query expressions, conditions, comparators, aggregate functions, time-series points, data import/export, file upload/download, CSV export</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services.proto</code></div>
+        <div class="def-desc">Service discovery, area mappings, model mappings, replication indices, transactions</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>health.proto</code></div>
+        <div class="def-desc">Health monitoring, statistics, pprof profiling, system status</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>sysconfig.proto</code></div>
+        <div class="def-desc">System configuration, VNet settings, connection parameters</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>notification.proto</code></div>
+        <div class="def-desc">Property change notifications, TSDB notifications, event propagation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>web.proto</code></div>
+        <div class="def-desc">Web service definitions and plugin system</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>reflect.proto</code></div>
+        <div class="def-desc">Type reflection, nodes, decorators, table views</div>
+      </div>
+    </div>
+
+    <h2>Virtual Networking (VNic)</h2>
+    <p>The VNic interface defines six communication patterns for distributed messaging.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Unicast</div>
+        <div class="def-desc">Point-to-point delivery to a specific node</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Multicast</div>
+        <div class="def-desc">Broadcast to all instances of a service</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Round-robin</div>
+        <div class="def-desc">Distribute requests evenly across providers</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Proximity</div>
+        <div class="def-desc">Route to the nearest service instance</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Leader</div>
+        <div class="def-desc">Route to the elected leader instance</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Local</div>
+        <div class="def-desc">Same-VNic messaging for co-located services</div>
+      </div>
+    </div>
+
+    <h2>Service Discovery</h2>
+    <p>Services register by area with automatic discovery, health tracking, and replication-aware routing. Service groups allow shared leader election across related services, reducing election traffic by roughly 80%.</p>
+
+    <h2>Query System</h2>
+    <p>The <code>L8Query</code> protobuf message supports expression-based filtering with comparators, conditions, sorting, pagination, and MapReduce flags. Aggregation queries use <code>group_by</code>, <code>having</code>, and aggregate functions (<code>count</code>, <code>sum</code>, <code>avg</code>, <code>min</code>, <code>max</code>).</p>
+
+    <h2>Security</h2>
+    <div class="clean-list">
+      <div class="clean-row">AES symmetric encryption for message transport</div>
+      <div class="clean-row">Token-based authentication with validation and activation</div>
+      <div class="clean-row">Two-phase authentication with token hash verification</div>
+      <div class="clean-row">Two-factor authentication (TOTP) setup and verification</div>
+      <div class="clean-row">CAPTCHA challenge/response for bot protection</div>
+      <div class="clean-row">Resource-based access control with permission scoping</div>
+    </div>
+
+    <h2>Additional Capabilities</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Time-Series Database</div>
+        <div class="def-desc"><code>ITSDBService</code> interface for collecting and querying timestamped data points</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Data Import/Export</div>
+        <div class="def-desc">Templates with 10 transform types, AI-assisted column mapping, CSV export</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">File Management</div>
+        <div class="def-desc">Upload/download with SHA-256 checksums and MIME type support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Map-Reduce</div>
+        <div class="def-desc"><code>IMapReduceService</code> interface for distributed computation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Health Monitoring</div>
+        <div class="def-desc">CPU, memory, message counts, pprof profiling data</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Service Callbacks</div>
+        <div class="def-desc">Before/After hooks with continuation control</div>
+      </div>
+    </div>
+
+    <h2>Project Structure</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>proto/</code></div>
+        <div class="def-desc">Protocol Buffer definitions and <code>make-bindings.sh</code> generation script</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/ifs/</code></div>
+        <div class="def-desc">Core Go interfaces (VNic, Registry, Services, Security, Web)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/types/</code></div>
+        <div class="def-desc">Generated Protocol Buffer types</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/nets/</code></div>
+        <div class="def-desc">Network protocol implementation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/aes/</code></div>
+        <div class="def-desc">AES encryption utilities</div>
+      </div>
+    </div>
+
+    <h2>Test Coverage</h2>
+    <p>95% overall coverage across message operations, encryption, network protocol, type conversion, authentication, SLA configuration, and registry operations.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

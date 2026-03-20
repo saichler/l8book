@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Utilities - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8utils</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Utilities</h1>
+    <p>Shared utilities: logging, caching, configuration.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8utils" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Utils provides the shared building blocks used across all Layer 8 services. High-performance cache, priority queues, async logging, thread-safe maps, type registry, notifications, and a centralized resource container. All components are interface-driven and thread-safe.</p>
+
+    <h2>Cache</h2>
+    <p>In-memory cache with optional storage persistence. Supports CRUD, paginated queries with 30-second TTL, clone-based isolation, statistics tracking, and collection operations.</p>
+    <div class="clean-list">
+      <div class="clean-row"><code>Post</code>, <code>Get</code>, <code>Put</code>, <code>Patch</code>, <code>Delete</code> with optional notification</div>
+      <div class="clean-row">Dry-run Patch for optimized updates</div>
+      <div class="clean-row">Named stat functions with automatic totals</div>
+      <div class="clean-row">Query cache with configurable TTL and background cleanup</div>
+    </div>
+
+    <h2>Queues</h2>
+    <p>Two queue implementations optimized for different workloads.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">ByteQueue</div>
+        <div class="def-desc">8 priority levels with O(1) bit operations. Blocking and non-blocking dequeue.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Queue</div>
+        <div class="def-desc">Generic queue for any type. Optional no-limit mode for unbounded workloads.</div>
+      </div>
+    </div>
+
+    <h2>Logging</h2>
+    <p>Async, queue-based logging framework with a 50,000-entry buffer. Supports file output with configurable directory, console output, or both. Five log levels: Trace, Debug, Info, Warning, Error. Includes pprof integration for CPU and heap profiling. Direct (synchronous) logger also available.</p>
+
+    <h2>Notifications</h2>
+    <p>Distributed state change notification system. Supports Add, Delete, Update, Replace, and Sync types plus TSDB notifications for time-series data. Property-level change granularity with sequence numbering and service-area routing.</p>
+
+    <h2>Registry</h2>
+    <p>Type registration and dynamic instance creation. Enum registration and management. Layer 8 core types pre-registered. Thread-safe operations via <code>sync.RWMutex</code>.</p>
+
+    <h2>Additional Components</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Resources</div>
+        <div class="def-desc">Centralized dependency injection container (logger, registry, security, serializers, config, services)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SyncMap</div>
+        <div class="def-desc">Thread-safe map with reflection-based type-safe value/key lists</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Workers</div>
+        <div class="def-desc">Worker pool with configurable concurrency limits and condition-variable coordination</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Certificates</div>
+        <div class="def-desc">TLS/SSL certificate utilities with self-signed certificate support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Strings</div>
+        <div class="def-desc">Type-safe string-to-primitive conversions, formatting, escape handling</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Aggregator</div>
+        <div class="def-desc">Data aggregation utilities for collection processing</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Web</div>
+        <div class="def-desc">RESTful service utilities with protocol buffer integration</div>
+      </div>
+    </div>
+
+    <h2>Project Structure</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/cache/</code></div>
+        <div class="def-desc">Cache with storage integration</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/queues/</code></div>
+        <div class="def-desc">Priority queue implementations</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/logger/</code></div>
+        <div class="def-desc">Async logging with pprof support</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/notify/</code></div>
+        <div class="def-desc">Notification system</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/registry/</code></div>
+        <div class="def-desc">Type registration</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/resources/</code></div>
+        <div class="def-desc">Centralized resource container</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/maps/</code></div>
+        <div class="def-desc">Thread-safe SyncMap</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/utils/workers/</code></div>
+        <div class="def-desc">Worker pool</div>
+      </div>
+    </div>
+
+    <h2>Design Principles</h2>
+    <div class="clean-list">
+      <div class="clean-row">Interface-driven: all components expose interfaces from <code>l8types</code></div>
+      <div class="clean-row">Thread-safe: <code>sync.RWMutex</code>, <code>sync.Cond</code>, or <code>sync.Map</code> throughout</div>
+      <div class="clean-row">Clone-based isolation: cache returns clones to prevent external mutation</div>
+      <div class="clean-row">Async processing: logger and cache use background goroutines</div>
+      <div class="clean-row">No file exceeds 500 lines</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

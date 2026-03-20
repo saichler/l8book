@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log Fusion - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8logfusion</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Log Fusion</h1>
+    <p>Distributed log aggregation and centralized storage.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8logfusion" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8LogFusion is a distributed log aggregation and fusion system. It collects, centralizes, and provides browsable access to logs from multiple sources in containerized environments. Logs are aggregated over a Layer 8 virtual network overlay and consolidated into a unified, queryable store.</p>
+
+    <h2>Architecture</h2>
+    <p>Three components work together:</p>
+
+    <h3>Log Collector Agent</h3>
+    <div class="clean-list">
+      <div class="clean-row">Scans directories recursively for <code>.log</code> and <code>.err</code> files</div>
+      <div class="clean-row">Tails files in real-time with rotation detection (size-based truncation check)</div>
+      <div class="clean-row">Buffers lines in a 30,000-entry queue with 512KB byte cap</div>
+      <div class="clean-row">Flushes on cooldown (2s idle), max age (30s), or buffer cap</div>
+      <div class="clean-row">Uses <code>/proc</code> filesystem analysis to detect actively-written files</div>
+      <div class="clean-row">Rescans for new files every 30 seconds</div>
+    </div>
+
+    <h3>Log Server</h3>
+    <div class="clean-list">
+      <div class="clean-row">Receives log batches from collectors via L8Bus unicast</div>
+      <div class="clean-row">Persists logs organized by source IP and filename</div>
+      <div class="clean-row">Thread-safe file handle cache for optimized write I/O</div>
+      <div class="clean-row">REST GET endpoint for directory listing and paginated file content (5KB per page)</div>
+      <div class="clean-row">Multi-instance merge for distributed queries</div>
+    </div>
+
+    <h3>Web UI</h3>
+    <div class="clean-list">
+      <div class="clean-row">File tree navigation across all collected sources</div>
+      <div class="clean-row">Paginated log viewing</div>
+      <div class="clean-row">Health monitoring via Probler integration</div>
+      <div class="clean-row">HTTPS on port 26000</div>
+    </div>
+
+    <h2>Data Flow</h2>
+    <ol>
+      <li>Collector opens log file, seeks to position</li>
+      <li>Polls file every 1s, reads new lines into queue buffer</li>
+      <li>Flushes buffer on cooldown, max age, size cap, or rotation</li>
+      <li>Sends <code>L8LogF</code> message via L8Bus unicast to server</li>
+      <li>Server writes to <code>/data/logdb/{sourceIp}/{filename}</code></li>
+      <li>Web UI queries server via REST GET with L8Query</li>
+    </ol>
+
+    <h2>Buffering Parameters</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Poll interval</div>
+        <div class="def-desc">1s</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Cooldown</div>
+        <div class="def-desc">2s flush after idle</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Max buffer age</div>
+        <div class="def-desc">30s forced flush</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Max buffer bytes</div>
+        <div class="def-desc">512KB</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Queue capacity</div>
+        <div class="def-desc">30,000 lines</div>
+      </div>
+    </div>
+
+    <h2>Key Features</h2>
+    <div class="clean-list">
+      <div class="clean-row">File rotation handling -- detects truncation and seamlessly reopens</div>
+      <div class="clean-row">Crash recovery -- resume tailing from byte offset after restart</div>
+      <div class="clean-row">Configurable storage location (default <code>/data/logdb</code>)</div>
+      <div class="clean-row">Active file detection via Linux <code>/proc</code> filesystem</div>
+      <div class="clean-row">Protocol Buffers for efficient serialization</div>
+    </div>
+
+    <h2>Docker Images</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>saichler/probler-logagent</code></div>
+        <div class="def-desc">Collector agent</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>saichler/probler-logserver</code></div>
+        <div class="def-desc">Central log server</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>saichler/probler-logsui</code></div>
+        <div class="def-desc">Web UI</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

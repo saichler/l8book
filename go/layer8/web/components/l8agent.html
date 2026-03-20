@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Agent - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8agent</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">AI Agent</h1>
+    <p>AI-powered chat orchestration with data masking.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8agent" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>l8agent provides AI-powered chat orchestration with built-in data masking, tool execution, and conversation persistence. Consumer projects integrate this library to add AI assistant capabilities to their systems. It connects to the Anthropic Claude API and exposes a tool loop that can query, create, update, and delete records through the Layer 8 service mesh.</p>
+
+    <h2>Architecture</h2>
+    <p>A client sends a message to the <code>AgntChat</code> endpoint. The chat orchestrator loads or creates a conversation, masks user input for PII and financial data, enters a tool loop (max 10 iterations), executes tool calls via the virtual NIC, masks tool results, unmasks the final response, persists messages to PostgreSQL, and returns the response.</p>
+
+    <h2>Services</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Conversations</div>
+        <div class="def-desc"><code>AgntConvo</code> -- Conversation metadata: title, status, timestamps. PostgreSQL backed.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Messages</div>
+        <div class="def-desc"><code>AgntMsg</code> -- Individual chat messages (user + assistant). PostgreSQL backed.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Prompts</div>
+        <div class="def-desc"><code>AgntPrmpt</code> -- Reusable system prompt templates. PostgreSQL backed.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Chat</div>
+        <div class="def-desc"><code>AgntChat</code> -- Orchestration facade. No direct persistence.</div>
+      </div>
+    </div>
+
+    <h2>LLM Tools</h2>
+    <p>The agent exposes 6 tools to the Claude model:</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>l8query</code></div>
+        <div class="def-desc">Execute SELECT queries with filtering, aggregates, GROUP BY</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>create_record</code></div>
+        <div class="def-desc">POST a new record to a service endpoint</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>update_record</code></div>
+        <div class="def-desc">PUT an updated record</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>delete_record</code></div>
+        <div class="def-desc">DELETE a record via query</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>list_modules</code></div>
+        <div class="def-desc">Return the service catalog (Tier 1 schema)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>describe_model</code></div>
+        <div class="def-desc">Return field definitions for a model (Tier 2 schema)</div>
+      </div>
+    </div>
+
+    <h2>Data Masking</h2>
+    <p>All data flowing through the agent is classified and masked before reaching the LLM. Token maps are per-request -- masked values are unmasked only in the final response within the same request lifecycle.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Always Mask</div>
+        <div class="def-desc">SSN, tax ID, bank account. Replaced with <code>[MASKED]</code>.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Mask Names</div>
+        <div class="def-desc">Names, emails, phones. Tokenized: <code>[NAME_1]</code>, <code>[NAME_2]</code>.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Mask Money</div>
+        <div class="def-desc">Salaries, amounts, prices. Tokenized: <code>[MONEY_1]</code>, <code>[MONEY_2]</code>.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Never Mask</div>
+        <div class="def-desc">IDs, dates, codes, enums. Passed through unchanged.</div>
+      </div>
+    </div>
+
+    <h2>Integration</h2>
+    <p>Initialization is split into two phases. Phase 1 activates ORM services (parallel with other services). Phase 2 activates the chat service after the introspector is fully populated, so the schema provider can build the system prompt with all registered types.</p>
+    <p>Requires the <code>ANTHROPIC_API_KEY</code> environment variable for Claude API access.</p>
+
+    <h2>UI Components</h2>
+    <p>Ships with desktop and mobile chat UI components:</p>
+    <div class="clean-list">
+      <div class="clean-row"><code>l8agent-chat.js</code> / <code>l8agent-chat.css</code> -- Desktop chat interface</div>
+      <div class="clean-row"><code>l8agent-chat-m.js</code> / <code>l8agent-chat-m.css</code> -- Mobile chat interface</div>
+      <div class="clean-row">Enum definitions, form configurations, and table column definitions for managing conversations and prompts</div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

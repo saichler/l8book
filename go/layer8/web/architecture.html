@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Architecture - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sections.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="company.html">Company</a></li>
+      <li><a href="how.html">Technology</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono reveal">Architecture</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">Every layer builds on the one below it.</h1>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="arch-diagram reveal">
+      <div class="arch-layer">
+        <div class="arch-layer-label">Products</div>
+        <div class="arch-layer-items">
+          <a href="https://github.com/saichler/l8erp" class="arch-item">
+            <span class="arch-item-name">l8erp</span>
+            <span class="arch-item-display">ERP</span>
+          </a>
+          <a href="https://github.com/saichler/probler" class="arch-item">
+            <span class="arch-item-name">probler</span>
+            <span class="arch-item-display">DCIM</span>
+          </a>
+          <a href="https://github.com/saichler/l8bugs" class="arch-item">
+            <span class="arch-item-name">l8bugs</span>
+            <span class="arch-item-display">Issue Tracker</span>
+          </a>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Feature Libraries</div>
+        <div class="arch-layer-items">
+          <a href="components/l8notify.html" class="arch-item">
+            <span class="arch-item-name">l8notify</span>
+            <span class="arch-item-display">Notifications</span>
+          </a>
+          <a href="components/l8agent.html" class="arch-item">
+            <span class="arch-item-name">l8agent</span>
+            <span class="arch-item-display">AI Agent</span>
+          </a>
+          <a href="components/l8ui.html" class="arch-item">
+            <span class="arch-item-name">l8ui</span>
+            <span class="arch-item-display">UI Library</span>
+          </a>
+          <a href="components/l8events.html" class="arch-item">
+            <span class="arch-item-name">l8events</span>
+            <span class="arch-item-display">Events</span>
+          </a>
+          <a href="components/l8topology.html" class="arch-item">
+            <span class="arch-item-name">l8topology</span>
+            <span class="arch-item-display">Topology</span>
+          </a>
+          <a href="components/l8traffic.html" class="arch-item">
+            <span class="arch-item-name">l8traffic</span>
+            <span class="arch-item-display">Traffic</span>
+          </a>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Data Pipeline</div>
+        <div class="arch-layer-items">
+          <a href="components/l8collector.html" class="arch-item">
+            <span class="arch-item-name">l8collector</span>
+            <span class="arch-item-display">Collector</span>
+          </a>
+          <a href="components/l8parser.html" class="arch-item">
+            <span class="arch-item-name">l8parser</span>
+            <span class="arch-item-display">Parser</span>
+          </a>
+          <a href="components/l8inventory.html" class="arch-item">
+            <span class="arch-item-name">l8inventory</span>
+            <span class="arch-item-display">Inventory</span>
+          </a>
+          <a href="components/l8pollaris.html" class="arch-item">
+            <span class="arch-item-name">l8pollaris</span>
+            <span class="arch-item-display">Polling Config</span>
+          </a>
+          <a href="components/l8logfusion.html" class="arch-item">
+            <span class="arch-item-name">l8logfusion</span>
+            <span class="arch-item-display">Log Fusion</span>
+          </a>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Services &amp; Persistence</div>
+        <div class="arch-layer-items">
+          <a href="components/l8services.html" class="arch-item">
+            <span class="arch-item-name">l8services</span>
+            <span class="arch-item-display">Service Framework</span>
+          </a>
+          <a href="components/l8orm.html" class="arch-item">
+            <span class="arch-item-name">l8orm</span>
+            <span class="arch-item-display">ORM</span>
+          </a>
+          <a href="components/l8web.html" class="arch-item">
+            <span class="arch-item-name">l8web</span>
+            <span class="arch-item-display">Web Server</span>
+          </a>
+          <a href="components/l8test.html" class="arch-item">
+            <span class="arch-item-name">l8test</span>
+            <span class="arch-item-display">Testing</span>
+          </a>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Foundational Infrastructure</div>
+        <div class="arch-layer-items">
+          <a href="components/l8types.html" class="arch-item">
+            <span class="arch-item-name">l8types</span>
+            <span class="arch-item-display">Type System</span>
+          </a>
+          <a href="components/l8utils.html" class="arch-item">
+            <span class="arch-item-name">l8utils</span>
+            <span class="arch-item-display">Utilities</span>
+          </a>
+          <a href="components/l8reflect.html" class="arch-item">
+            <span class="arch-item-name">l8reflect</span>
+            <span class="arch-item-display">Introspection</span>
+          </a>
+          <a href="components/l8srlz.html" class="arch-item">
+            <span class="arch-item-name">l8srlz</span>
+            <span class="arch-item-display">Serialization</span>
+          </a>
+          <a href="components/l8ql.html" class="arch-item">
+            <span class="arch-item-name">l8ql</span>
+            <span class="arch-item-display">Query Language</span>
+          </a>
+          <a href="components/l8bus.html" class="arch-item">
+            <span class="arch-item-name">l8bus</span>
+            <span class="arch-item-display">Virtual Network</span>
+          </a>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-label">Simulation</div>
+        <div class="arch-layer-items">
+          <a href="components/l8opensim.html" class="arch-item">
+            <span class="arch-item-name">l8opensim</span>
+            <span class="arch-item-display">Network Simulator</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <p class="arch-caption reveal">
+      No circular dependencies. Each component has a single responsibility.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/reveal.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

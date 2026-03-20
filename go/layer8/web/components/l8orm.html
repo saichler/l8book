@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ORM - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8orm</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">ORM</h1>
+    <p>Object-relational mapping as a service.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8orm" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8ORM is a distributed, horizontally and vertically scalable ORM service. It automatically converts between Go objects and PostgreSQL, with built-in time-series support via TimescaleDB, query caching, write-through caching, and service mesh integration.</p>
+
+    <h2>Two-Layer Conversion</h2>
+    <p>Objects convert through an intermediate relational format: Go objects to <code>L8OrmRData</code> (protobuf-based relational format) to database rows. This decouples object structure from storage layout.</p>
+
+    <h2>Core Interfaces</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">IORM</div>
+        <div class="def-desc"><code>Read</code>, <code>Write</code>, <code>Delete</code>, <code>Close</code>. Pluggable database implementations.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">ITSDB</div>
+        <div class="def-desc"><code>AddTSDB</code>, <code>GetTSDB</code>, <code>Close</code>. Time-series database interface.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">IORMRelational</div>
+        <div class="def-desc">Raw relational access via <code>ReadRelational</code> and <code>WriteRelational</code>.</div>
+      </div>
+    </div>
+
+    <h2>PostgreSQL Plugin</h2>
+    <p>Native PostgreSQL integration with connection pooling, upserts (<code>INSERT ON CONFLICT</code>), automatic table and index creation, prepared statement caching, and wildcard query support (<code>*</code> converted to SQL <code>LIKE</code> with <code>%</code>).</p>
+
+    <h2>Time-Series Database</h2>
+    <p>TimescaleDB-backed time-series storage. Hypertable chunking. Separate from the relational ORM. Write time-series data points and query by property ID within a time range.</p>
+
+    <h2>Caching</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Query Cache</div>
+        <div class="def-desc">30-second TTL for pagination optimization with background cleanup</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Write-Through Cache</div>
+        <div class="def-desc">Optional in-memory layer with automatic invalidation on writes/deletes. Initialized from existing database contents on startup.</div>
+      </div>
+    </div>
+
+    <h2>Composite Keys</h2>
+    <p>ParentKey + RecKey scheme supporting nested structures, slices, and maps. ParentKey encodes the object hierarchy path. RecKey identifies the specific field, slice index, or map key.</p>
+
+    <h2>Service Mesh Integration</h2>
+    <p>Activate an ORM service on the Layer 8 service mesh with cache, TSDB routing, and Before/After callbacks in a single call.</p>
+
+    <h2>Data Model</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>L8OrmRData</code></div>
+        <div class="def-desc">Root container mapping table names to schemas</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>L8OrmTable</code></div>
+        <div class="def-desc">Column definitions and instance rows</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>L8OrmInstanceRows</code></div>
+        <div class="def-desc">Rows grouped by parent key</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>L8OrmRow</code></div>
+        <div class="def-desc">Single record with composite key and column values</div>
+      </div>
+    </div>
+
+    <h2>SQL Generation</h2>
+    <p>Statement builders for SELECT, INSERT (upsert), UPDATE with COALESCE (PATCH semantics), DELETE, and metadata COUNT queries. L8Query WHERE clauses convert to SQL automatically.</p>
+
+    <h2>Testing</h2>
+    <p>Coverage includes PostgreSQL CRUD (POST, PUT, DELETE), PATCH/partial update, service mesh integration, object-relational conversion, write-through cache with database pre-loading, missing/empty table handling, and TSDB write/read/time-range queries.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

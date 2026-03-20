@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Testing - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 120px; padding-bottom: 30px;">
+  <div class="container">
+    <p class="mono">l8test</p>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Testing</h1>
+    <p>Integration testing with full distributed topology.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8test" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Test is the integration testing framework for the Layer 8 ecosystem. It spins up a full distributed topology with 3 VNets connected in a mesh, each with 4 VNics (12 total), and validates health propagation, service discovery, transaction coordination, Map-Reduce readiness, and replication.</p>
+
+    <h2>Topology</h2>
+    <p>Three VNets on ports 20000, 30000, and 40000 connected in a full mesh. Each VNet has 4 VNics: 3 service-bearing (all handler types registered) and 1 observer node. Total: 12 network interfaces, 9 service-bearing nodes, 15 expected health points per VNic.</p>
+
+    <h2>What It Validates</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Health propagation</div>
+        <div class="def-desc">Every VNic must see exactly 15 health points (all peers across all VNets)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Service discovery</div>
+        <div class="def-desc">All 9 service-bearing VNics are discovered by every node</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Transaction coordination</div>
+        <div class="def-desc">Leader election and participant registration across VNets</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">MapReduce</div>
+        <div class="def-desc">Participant readiness for distributed map-reduce operations</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Replication</div>
+        <div class="def-desc">Distributed cache replication with configurable replica count</div>
+      </div>
+    </div>
+
+    <h2>Service Handler Types</h2>
+    <p>Three handler types exercise different service configurations.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">TestServiceHandler (Area 0)</div>
+        <div class="def-desc">Basic stateless CRUD. No transactions, no replication.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TestServiceTransactionHandler (Area 1)</div>
+        <div class="def-desc">Distributed transaction coordination. Voter role.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TestServiceReplicationHandler (Area 2)</div>
+        <div class="def-desc">Full replication with distributed cache. 2 replicas. Voter role.</div>
+      </div>
+    </div>
+    <p>All handlers support POST, PUT, PATCH, DELETE, and GET with atomic counters for tracking invocations.</p>
+
+    <h2>Initialization Sequence</h2>
+    <ol>
+      <li>Create 3 VNets on designated ports</li>
+      <li>Connect VNets in full mesh (each sees 2 external peers)</li>
+      <li>Wait for VNet connectivity</li>
+      <li>Create 4 VNics per VNet (3 with services, 1 without)</li>
+      <li>Wait for health propagation (15 health points per VNic)</li>
+      <li>Wait for service discovery (9 service instances visible to all)</li>
+      <li>Wait for transaction leader election and participant registration</li>
+      <li>Wait for MapReduce participant readiness</li>
+    </ol>
+
+    <h2>Project Structure</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>infra/t_topology/</code></div>
+        <div class="def-desc">Topology orchestration: VNet mesh, VNic creation, health checks</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>infra/t_service/</code></div>
+        <div class="def-desc">Three service handler types</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>infra/t_resources/</code></div>
+        <div class="def-desc">Test data and resource setup</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>infra/t_plugin/</code></div>
+        <div class="def-desc">Plugin-based service and registry registration</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>tests/</code></div>
+        <div class="def-desc">Test files and initialization</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8 Ecosystem. Apache License 2.0.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>
