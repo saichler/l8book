@@ -139,6 +139,91 @@
 .illus-beacon-2 { transform-origin: center; animation: beacon-pulse 2.5s ease-out 0.8s infinite; }
 .illus-beacon-3 { transform-origin: center; animation: beacon-pulse 2.5s ease-out 1.6s infinite; }
 
+/* ── Problem: Warning Pulse ── */
+@keyframes warning-flash {
+  0%, 100% { opacity: 0.2; }
+  50%      { opacity: 1; }
+}
+.illus-warn-1 { animation: warning-flash 2s ease-in-out 0s infinite; }
+.illus-warn-2 { animation: warning-flash 2s ease-in-out 0.5s infinite; }
+.illus-warn-3 { animation: warning-flash 2s ease-in-out 1s infinite; }
+
+/* ── Shift: Arrow Transform ── */
+@keyframes shift-arrow {
+  0%   { transform: translateX(-8px); opacity: 0; }
+  30%  { transform: translateX(0); opacity: 1; }
+  70%  { transform: translateX(0); opacity: 1; }
+  100% { transform: translateX(8px); opacity: 0; }
+}
+.illus-shift { animation: shift-arrow 3s ease-in-out infinite; }
+
+/* ── Architecture: Cascade Down ── */
+@keyframes cascade {
+  0%   { transform: translateY(-6px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+.illus-cas-1 { animation: cascade 0.5s ease-out 0.1s both; }
+.illus-cas-2 { animation: cascade 0.5s ease-out 0.3s both; }
+.illus-cas-3 { animation: cascade 0.5s ease-out 0.5s both; }
+.illus-cas-4 { animation: cascade 0.5s ease-out 0.7s both; }
+.illus-cas-5 { animation: cascade 0.5s ease-out 0.9s both; }
+
+/* ── Components: Spinning Gear ── */
+@keyframes gear-spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes gear-counter {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(-360deg); }
+}
+.illus-gear-cw  { transform-origin: center; animation: gear-spin 8s linear infinite; }
+.illus-gear-ccw { transform-origin: center; animation: gear-counter 8s linear infinite; }
+
+/* ── Component Detail: Generic Dot Flow ── */
+@keyframes dot-flow {
+  0%   { transform: translateX(0); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(140px); opacity: 0; }
+}
+.illus-dot-flow-1 { animation: dot-flow 3s ease-in-out 0s infinite; }
+.illus-dot-flow-2 { animation: dot-flow 3s ease-in-out 0.6s infinite; }
+.illus-dot-flow-3 { animation: dot-flow 3s ease-in-out 1.2s infinite; }
+
+/* ── Component Detail: Signal Wave ── */
+@keyframes wave-move {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-40px); }
+}
+.illus-wave { animation: wave-move 2s linear infinite; }
+
+/* ── Component Detail: Scan Line ── */
+@keyframes scan-line {
+  0%   { transform: translateX(0); }
+  50%  { transform: translateX(160px); }
+  100% { transform: translateX(0); }
+}
+.illus-scan { animation: scan-line 4s ease-in-out infinite; }
+
+/* ── Component Detail: Blink Cursor ── */
+@keyframes blink {
+  0%, 49%  { opacity: 1; }
+  50%, 100%{ opacity: 0; }
+}
+.illus-blink { animation: blink 1s steps(1) infinite; }
+
+/* ── Component Detail: Data Stream ── */
+@keyframes stream-up {
+  0%   { transform: translateY(8px); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(-8px); opacity: 0; }
+}
+.illus-stream-1 { animation: stream-up 2s ease-in-out 0s infinite; }
+.illus-stream-2 { animation: stream-up 2s ease-in-out 0.4s infinite; }
+.illus-stream-3 { animation: stream-up 2s ease-in-out 0.8s infinite; }
+
 /* ── Responsive ── */
 @media (max-width: 768px) {
   .hero-illustration svg {

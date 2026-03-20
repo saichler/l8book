@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
   <link rel="stylesheet" href="css/components.css">
 </head>
 <body>
@@ -30,7 +31,29 @@
 
 <section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
   <div class="container">
-    <p class="mono reveal">Components</p>
+    <div class="hero-title-row reveal">
+      <p class="mono">Components</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <g class="illus-gear-cw" style="transform-origin: 70px 30px;">
+            <circle cx="70" cy="30" r="14" stroke="#000" stroke-width="1.5" fill="none"/>
+            <circle cx="70" cy="30" r="4" fill="#000"/>
+            <line x1="70" y1="14" x2="70" y2="20" stroke="#000" stroke-width="3"/>
+            <line x1="70" y1="40" x2="70" y2="46" stroke="#000" stroke-width="3"/>
+            <line x1="54" y1="30" x2="60" y2="30" stroke="#000" stroke-width="3"/>
+            <line x1="80" y1="30" x2="86" y2="30" stroke="#000" stroke-width="3"/>
+          </g>
+          <g class="illus-gear-ccw" style="transform-origin: 120px 30px;">
+            <circle cx="120" cy="30" r="10" stroke="#666" stroke-width="1.5" fill="none"/>
+            <circle cx="120" cy="30" r="3" fill="#666"/>
+            <line x1="120" y1="18" x2="120" y2="22" stroke="#666" stroke-width="2.5"/>
+            <line x1="120" y1="38" x2="120" y2="42" stroke="#666" stroke-width="2.5"/>
+            <line x1="108" y1="30" x2="112" y2="30" stroke="#666" stroke-width="2.5"/>
+            <line x1="128" y1="30" x2="132" y2="30" stroke="#666" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
     <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">The building blocks.</h1>
     <p class="reveal">22 components. Each with a single responsibility.</p>
   </div>

@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
 </head>
 <body>
 <nav>
@@ -29,7 +30,21 @@
 
 <section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
   <div class="container">
-    <p class="mono reveal">The Shift</p>
+    <div class="hero-title-row reveal">
+      <p class="mono">The Shift</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect x="8" y="15" width="50" height="30" rx="2" stroke="#999" stroke-width="1" fill="none" stroke-dasharray="3 2"/>
+          <text x="33" y="34" text-anchor="middle" font-size="8" font-family="Inter" fill="#999">IMPLICIT</text>
+          <g class="illus-shift">
+            <line x1="68" y1="30" x2="120" y2="30" stroke="#000" stroke-width="1.5"/>
+            <polygon points="118,26 126,30 118,34" fill="#000"/>
+          </g>
+          <rect x="136" y="15" width="56" height="30" rx="2" stroke="#000" stroke-width="1.5" fill="none"/>
+          <text x="164" y="34" text-anchor="middle" font-size="8" font-weight="600" font-family="Inter" fill="#000">EXPLICIT</text>
+        </svg>
+      </div>
+    </div>
     <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">Explicit architecture.<br>By construction.</h1>
   </div>
 </section>

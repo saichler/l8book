@@ -9,6 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
 </head>
 <body>
 <nav>
@@ -29,7 +30,22 @@
 
 <section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
   <div class="container">
-    <p class="mono reveal">The Problem</p>
+    <div class="hero-title-row reveal">
+      <p class="mono">The Problem</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect x="10" y="10" width="8" height="40" rx="1" fill="#000" class="illus-warn-1"/>
+          <rect x="28" y="16" width="8" height="28" rx="1" fill="#333" class="illus-warn-2"/>
+          <rect x="46" y="8" width="8" height="44" rx="1" fill="#000" class="illus-warn-3"/>
+          <rect x="64" y="18" width="8" height="24" rx="1" fill="#333" class="illus-warn-1"/>
+          <rect x="82" y="12" width="8" height="36" rx="1" fill="#000" class="illus-warn-2"/>
+          <line x1="105" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <line x1="105" y1="10" x2="105" y2="50" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="3 3"/>
+          <text x="148" y="26" text-anchor="middle" font-size="8" font-family="Inter" fill="#999">COMPLEXITY</text>
+          <polygon points="185,27 190,30 185,33" fill="#999"/>
+        </svg>
+      </div>
+    </div>
     <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">Why software slows down,<br>and why teams can't stop it.</h1>
     <p class="reveal">
       It is not a talent problem. Teams are capable. Tools are abundant.

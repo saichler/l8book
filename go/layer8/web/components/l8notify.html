@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/sections.css">
   <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
 </head>
 <body>
 <nav>
@@ -30,7 +31,20 @@
 
 <section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
   <div class="container">
-    <p class="mono">l8notify</p>
+    <div class="hero-title-row reveal">
+      <p class="mono">l8notify</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <circle cx="40" cy="30" r="4" fill="#000"/>
+          <ellipse cx="40" cy="30" rx="20" ry="15" fill="none" stroke="#000" stroke-width="1" class="illus-beacon-1"/>
+          <ellipse cx="40" cy="30" rx="20" ry="15" fill="none" stroke="#000" stroke-width="1" class="illus-beacon-2"/>
+          <line x1="65" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="0.5"/>
+          <rect x="80" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+          <rect x="120" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+          <rect x="160" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+        </svg>
+      </div>
+    </div>
     <h1 style="font-size: clamp(32px, 4vw, 56px);">Notifications</h1>
     <p>Multi-channel notification dispatch with throttling and escalation.</p>
     <div class="hero-cta" style="margin-top: 24px;">
