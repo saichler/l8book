@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Радикальная простота для ИИ | Радикальная простота для людей — Шарон Айхлер">
+    <meta name="author" content="Sharon Aicler">
+    <title>Радикальная простота для ИИ | Радикальная простота для людей</title>
+    <link rel="stylesheet" href="css/book.css">
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Переключить навигацию">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <div class="site-container">
+        <nav class="sidebar" role="navigation" aria-label="Оглавление">
+            <header class="site-header">
+                <h1 class="book-title">Радикальная простота<br>для людей</h1>
+                <p class="book-subtitle">Layer 8</p>
+                <div class="author-info">
+                    <p>Sharon Aicler</p>
+                    <p><a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+                </div>
+                <div class="sponsor-button">
+                    <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                </div>
+            </header>
+
+            <h2 class="nav-title">Содержание</h2>
+            <ul class="chapter-list">
+                <li><a href="book.html">Главная</a></li>
+                <li><a href="about.html">Об авторе</a></li>
+                <li><a href="introduction.html">Введение</a></li>
+                <li><a href="thoughts.html">Размышления</a></li>
+                <li><a href="ground-rules.html">Основные правила</a></li>
+                <li><a href="architecture.html">Архитектура как механизм согласования</a></li>
+                <li><a href="failure-modes.html">Режимы отказа</a></li>
+                <li><a href="economics.html">Экономика</a></li>
+                <li><a href="security.html">Безопасность</a></li>
+                <li><a href="networking.html">Сетевое взаимодействие</a></li>
+                <li><a href="serialization.html">Сериализация</a></li>
+                <li><a href="model-agnostic-runtime.html">Модельно-агностичная среда выполнения</a></li>
+                <li><a href="service-as-contract.html">Сервис как контракт</a></li>
+                <li><a href="api-query-language.html">API и язык запросов</a></li>
+                <li><a href="object-relation-mapping.html">Объектно-реляционное отображение</a></li>
+                <li><a href="web-server.html">Веб-сервер</a></li>
+                <li><a href="quality.html">Качество</a></li>
+                <li><a href="practice.html">Практика</a></li>
+                <li><a href="radical-simplicity-ai.html" class="active">Радикальная простота для ИИ</a></li>
+                <li><span class="coming-soon">Миграция</span></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <article>
+                    <h1>Радикальная простота для ИИ</h1>
+
+                    <p>Мы широко использовали ИИ для укрепления как архитектуры, так и реализаций экосистемы Layer 8. В процессе мы обнаружили, что <strong>эффективность ИИ ограничена не интеллектом, а структурой</strong>.</p>
+
+                    <p>В рамках этого процесса мы определили чёткий и явный набор правил использования ИИ &mdash; правил, призванных предотвращать галлюцинации, избегать дублирования кода, обеспечивать надлежащую абстракцию и согласовывать генерируемый код с архитектурным замыслом.</p>
+
+                    <p>Вместо того чтобы ожидать, что пользователи будут раз за разом обучать ИИ тому, как работает Layer 8, мы встроили архитектурные рекомендации и API Layer 8 непосредственно в эти правила &mdash; чтобы вам не приходилось этого делать.</p>
+
+                    <p>Мы также разработали UI-компоненты Layer 8, которые уже интегрированы с API Layer 8 и предзагружены с ИИ-руководствами. Эти компоненты действуют как ограждения, гарантирующие, что ИИ-генерируемый вывод остаётся согласованным, обслуживаемым и готовым к продакшену.</p>
+
+                    <p>Наша цель &mdash; не просто чтобы ИИ писал код. Наша цель &mdash; чтобы ИИ создавал <strong>качественное программное обеспечение корпоративного класса &mdash; правильно, с первого раза</strong>.</p>
+
+                    <p><strong>Радикальная простота для ИИ</strong> означает доставку работающего продукта за часы вместо месяцев &mdash; без ущерба для архитектуры, корректности или долгосрочной поддерживаемости.</p>
+
+                    <hr>
+
+                    <h2>Правила руководства ИИ</h2>
+
+                    <blockquote>
+                        <strong>Скачайте полные наборы правил</strong><br>
+                        Полные определения правил ИИ, используемые в этой главе, доступны здесь:
+                        <ul>
+                            <li><strong>Общие правила разработки ПО</strong><br>
+                            https://example.com/generic-software-development-rules.md</li>
+                            <li><strong>Правила архитектуры Layer 8 и ERP</strong><br>
+                            https://example.com/layer8-erp-rules.md</li>
+                        </ul>
+                        Эти наборы правил предназначены для прямого внедрения в рабочие процессы ИИ. Замените эти ссылки на их расположение на GitHub при публикации.
+                    </blockquote>
+
+                    <p>Прежде чем начать работу с ИИ, необходимо дать ему <strong>явные глобальные руководства по разработке программного обеспечения</strong>.</p>
+
+                    <p>Это было одним из наиболее удивительных открытий в нашей работе. Несмотря на кажущуюся изощрённость, ИИ <strong>не</strong> надёжно применяет основополагающую дисциплину программной инженерии, если эта дисциплина не указана явно.</p>
+
+                    <p>Для решения этой проблемы мы определили два отдельных набора правил:</p>
+
+                    <ol>
+                        <li><strong>Общие правила разработки ПО</strong><br>
+                        Это архитектурно-агностичные принципы, применимые к любой серьёзной программной системе.</li>
+                        <li><strong>Правила, специфичные для Layer 8</strong><br>
+                        Они кодируют архитектурный замысел, ограничения обслуживаемости и инварианты проекта, которые ИИ не может вывести самостоятельно.</li>
+                    </ol>
+
+                    <p>Вместе эти правила превращают ИИ из генератора кода в <strong>ограниченного, архитектурно осведомлённого участника</strong>.</p>
+
+                    <h3>Примеры общих правил разработки ПО</h3>
+
+                    <p>Некоторые из наиболее эффективных общих правил были удивительно базовыми &mdash; но критически важными:</p>
+
+                    <ul>
+                        <li><strong>Никакого дублирования кода</strong><br>
+                        ИИ склонен к повторению. Любой второй экземпляр паттерна рассматривается как принуждающая функция для абстракции, а не копипаста.</li>
+                        <li><strong>Читай перед реализацией</strong><br>
+                        При расширении или интеграции с существующими компонентами ИИ обязан прочитать <em>весь</em> соответствующий код сначала. Допущения не допускаются.</li>
+                        <li><strong>Ограничения размера файла обеспечивают проектирование</strong><br>
+                        Файлы, превышающие определённый порог размера, рассматриваются как архитектурные неудачи и должны быть отрефакторены.</li>
+                        <li><strong>Конфигурация вместо поведения</strong><br>
+                        Файлы, специфичные для модуля, содержат только данные. Вся логика живёт в общих, переиспользуемых компонентах.</li>
+                    </ul>
+
+                    <p>Эти правила радикально сократили разрастание кода, тихое расхождение и долгосрочные затраты на обслуживание.</p>
+
+                    <h3>Примеры правил, специфичных для Layer 8</h3>
+
+                    <p>Правила Layer 8 кодируют архитектурные ограничения, которые ИИ не может &laquo;угадать&raquo;, даже при полном контексте:</p>
+
+                    <ul>
+                        <li><strong>Архитектура явна, никогда не подразумевается</strong><br>
+                        Сервисы, области сервисов, владение и границы должны быть указаны и обеспечены.</li>
+                        <li><strong>API сервисов &mdash; источник истины</strong><br>
+                        UI, оркестрация и автоматизация всегда соответствуют контрактам сервисов &mdash; не наоборот.</li>
+                        <li><strong>Эволюция модели ожидаема</strong><br>
+                        Проекты должны предполагать, что модели будут меняться, расти и переиспользоваться между модулями без нарушения поведения.</li>
+                        <li><strong>Обслуживаемость важнее удобства</strong><br>
+                        Любое решение, улучшающее краткосрочную скорость, но ухудшающее наблюдаемость, контроль или эволюцию, отклоняется.</li>
+                    </ul>
+
+                    <p>Эти правила гарантируют, что ИИ-генерируемый код согласован с основными принципами Layer 8: явная архитектура, контролируемая конкурентность и долгосрочная обслуживаемость.</p>
+
+                    <h3>Почему это важно</h3>
+
+                    <p>Без правил ИИ оптимизирует <em>локальную корректность</em>. С правилами ИИ оптимизирует <em>целостность системы</em>.</p>
+
+                    <p>Разница не является тонкой.</p>
+
+                    <p>Встроив как общие, так и специфичные для Layer 8 руководства непосредственно в рабочий процесс ИИ, мы устранили:</p>
+                    <ul>
+                        <li>Галлюцинированные абстракции</li>
+                        <li>Тихий архитектурный дрейф</li>
+                        <li>Взрывной рост модулей через копипаст</li>
+                        <li>Недолговечные &laquo;рабочие&raquo; решения, которые ломаются при масштабировании</li>
+                    </ul>
+
+                    <p>ИИ не заменяет архитектуру. <strong>Правила &mdash; это то, как архитектура обеспечивается &mdash; на машинной скорости.</strong></p>
+
+                    <hr>
+
+                    <h1>Создание вашего первого ИИ-проекта</h1>
+
+                    <p>Разработка собственной ИИ-управляемой системы с <strong>экосистемой Layer 8</strong> намеренно проста. Это руководство проведёт вас через создание первого проекта с нуля с использованием паттернов Layer 8 и ИИ-ассистируемой разработки.</p>
+
+                    <hr>
+
+                    <h2>Настройка среды разработки</h2>
+
+                    <h3>1. Установка Go, wget и Docker/Docker desktop</h3>
+
+                    <p>Скачайте и установите Go для вашей платформы:<br>
+                    https://go.dev/dl/</p>
+
+                    <p>Скачайте и установите Docker для Linux для вашего дистрибутива или Docker desktop с https://docs.docker.com/get-started/ если вы на windows/mac.</p>
+
+                    <p>Если в вашей системе нет <strong>wget</strong> (утилита командной строки), пожалуйста, установите его.</p>
+
+                    <h3>2. Откройте терминал и перейдите в домашнюю директорию</h3>
+
+<pre><code>cd ~</code></pre>
+
+                    <h3>3. Распакуйте архив Go</h3>
+
+<pre><code>tar -zxvf ~/Downloads/&lt;golang file name&gt;</code></pre>
+
+                    <h3>4. Настройка переменных окружения</h3>
+
+                    <p>Добавьте следующее в файл конфигурации вашей оболочки (например, ~/.bashrc):</p>
+
+<pre><code>export GOROOT=~/go
+export GOPATH=~/proj
+export GOBIN=~/proj/bin
+export PATH=~/.local/bin:~/go/bin:$GOBIN:$PATH
+
+alias ll="ls -lt"
+
+git config --global user.email "&lt;your email address&gt;"
+git config --global user.name "&lt;your name&gt;"
+
+export DOCKER_BUILDKIT=1</code></pre>
+
+                    <p>Перезагрузите оболочку:</p>
+
+<pre><code>source ~/.bashrc</code></pre>
+
+                    <h3>5. Создание рабочего пространства для разработки</h3>
+
+<pre><code>mkdir -p ~/proj/src/github.com/&lt;your github username&gt;</code></pre>
+
+                    <p>Эта директория будет содержать все ваши проекты Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Создание и клонирование вашего проекта</h2>
+
+                    <h3>1. Создайте новый репозиторий на GitHub</h3>
+
+                    <p>Создайте репозиторий по адресу:</p>
+
+<pre><code>github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>2. Клонируйте проект локально</h3>
+
+<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;
+git clone https://github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>3. Клонируйте эталонную реализацию Layer 8 ERP</h3>
+
+<pre><code>git clone https://github.com/saichler/l8erp</code></pre>
+
+                    <p>Проект <code>l8erp</code> служит полным рабочим примером системы Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Установка ИИ-ассистента для кодирования</h2>
+
+                    <p>Установите один из поддерживаемых ИИ-инструментов для кодирования:</p>
+
+                    <p>Claude Code:<br>
+                    https://code.claude.com/docs/en/setup</p>
+
+                    <p>или ChatGPT Codex (или эквивалентный кодирующий агент).</p>
+
+                    <p>Эти инструменты генерируют архитектуру, код и документацию, следуя правилам Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Создание документа требований к продукту (PRD)</h2>
+
+                    <h3>1. Перейдите в ваш проект</h3>
+
+<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>2. Запустите сессию ИИ-кодирования</h3>
+
+<pre><code>claude</code></pre>
+
+                    <p>или</p>
+
+<pre><code>codex</code></pre>
+
+                    <h3>3. Используйте следующие промпты</h3>
+
+                    <p>Пожалуйста, скопируйте и вставьте следующие промпты для настройки правил и руководств экосистемы Layer 8 для ИИ:</p>
+
+                    <blockquote>
+                        <p>Please install to your memory the following Layer 8 global rules so it will be available in every session: ./l8erp/plans/global-rules-all.md and make sure any PRD is in compliance to those rules.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>The following ../l8erp/go/erp/ui/web/l8ui/GUIDE.md is a guide for the Layer 8 UI/UX generic components, please add it to your memory and use it whenever planning or implementing PRD with UI section.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>An example project built using the Layer 8 ecosystem is in ../l8erp. Please follow this project structure and architecture whenever you create a PRD for a new project.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>Create a PRD in the directory plans that comply with the global rules and follows the Layer 8 architecture for &lt;your project/system idea&gt;</p>
+                    </blockquote>
+
+                    <p>ИИ сгенерирует полный PRD, согласованный с архитектурой Layer 8 и её ограничениями.</p>
+
+                    <hr>
+
+                    <h2>Начало реализации</h2>
+
+                    <p>После создания PRD:</p>
+
+                    <ol>
+                        <li>Следуйте фазам реализации, определённым в PRD.</li>
+                        <li>Позвольте ИИ-ассистенту генерировать код и структуру для каждой фазы.</li>
+                        <li>Убедитесь, что все сгенерированные компоненты соответствуют глобальным правилам Layer 8.</li>
+                        <li>Продолжайте итерации до полной реализации PRD.</li>
+                    </ol>
+
+                    <p>С этого момента разработка становится управляемым выполнением PRD &mdash; с Layer 8, обеспечивающим архитектурную согласованность, и ИИ, ускоряющим доставку.</p>
+
+                    <nav class="chapter-nav">
+                        <a href="practice.html" class="prev">Практика</a>
+                        <span class="placeholder next">Следующая глава</span>
+                    </nav>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/book.js"></script>
+</body>
+</html>

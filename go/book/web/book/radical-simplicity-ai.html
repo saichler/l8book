@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Radical Simplicity for AI | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="author" content="Sharon Aicler">
+    <title>Radical Simplicity for AI | Radical Simplicity for Humans</title>
+    <link rel="stylesheet" href="css/book.css">
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <div class="site-container">
+        <nav class="sidebar" role="navigation" aria-label="Table of Contents">
+            <header class="site-header">
+                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <p class="book-subtitle">Layer 8</p>
+                <div class="author-info">
+                    <p>Sharon Aicler</p>
+                    <p><a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+                </div>
+                <div class="sponsor-button">
+                    <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                </div>
+            </header>
+
+            <h2 class="nav-title">Contents</h2>
+            <ul class="chapter-list">
+                <li><a href="book.html">Home</a></li>
+                <li><a href="about.html">About the Author</a></li>
+                <li><a href="introduction.html">Introduction</a></li>
+                <li><a href="thoughts.html">Thoughts</a></li>
+                <li><a href="ground-rules.html">Ground Rules</a></li>
+                <li><a href="architecture.html">Architecture Is the Alignment Mechanism</a></li>
+                <li><a href="failure-modes.html">Failure Modes</a></li>
+                <li><a href="economics.html">Economics</a></li>
+                <li><a href="security.html">Security</a></li>
+                <li><a href="networking.html">Networking</a></li>
+                <li><a href="serialization.html">Serialization</a></li>
+                <li><a href="model-agnostic-runtime.html">Model-Agnostic Runtime</a></li>
+                <li><a href="service-as-contract.html">Service as a Contract</a></li>
+                <li><a href="api-query-language.html">API &amp; Query Language</a></li>
+                <li><a href="object-relation-mapping.html">Object Relation Mapping</a></li>
+                <li><a href="web-server.html">Web Server</a></li>
+                <li><a href="quality.html">Quality</a></li>
+                <li><a href="practice.html">Practice</a></li>
+                <li><a href="radical-simplicity-ai.html" class="active">Radical Simplicity for AI</a></li>
+                <li><span class="coming-soon">Migration</span></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <article>
+                    <h1>Radical Simplicity for AI</h1>
+
+                    <p>We used AI extensively to harden both the architecture and the implementations of the Layer 8 ecosystem. In doing so, we discovered that <strong>AI effectiveness is not limited by intelligence, but by structure</strong>.</p>
+
+                    <p>As part of this process, we defined a clear and explicit set of rules for AI usage&mdash;rules designed to prevent hallucinations, avoid duplicated code, enforce proper abstraction, and align generated code with architectural intent.</p>
+
+                    <p>Rather than expecting users to repeatedly teach AI how Layer 8 works, we embedded the Layer 8 architecture guidelines and APIs directly into these rules&mdash;so you do not have to.</p>
+
+                    <p>We also developed Layer 8 UI components that are already integrated with Layer 8 APIs and preloaded with AI guidance. These components act as guardrails, ensuring that AI-generated output remains consistent, serviceable, and production-ready.</p>
+
+                    <p>Our goal is not for AI to simply write code. Our goal is for AI to build <strong>quality, enterprise-grade software&mdash;correctly, the first time</strong>.</p>
+
+                    <p><strong>Radical Simplicity for AI</strong> means delivering a working product in hours instead of months&mdash;without sacrificing architecture, correctness, or long-term maintainability.</p>
+
+                    <hr>
+
+                    <h2>AI Guideline Rules</h2>
+
+                    <blockquote>
+                        <strong>Download the full rule sets</strong><br>
+                        The complete AI rule definitions used throughout this chapter are available here:
+                        <ul>
+                            <li><strong>Generic Software Development Rules</strong><br>
+                            https://example.com/generic-software-development-rules.md</li>
+                            <li><strong>Layer 8 Architecture and ERP Rules</strong><br>
+                            https://example.com/layer8-erp-rules.md</li>
+                        </ul>
+                        These rule sets are designed to be injected directly into AI workflows. Replace these links with their GitHub locations when publishing.
+                    </blockquote>
+
+                    <p>Before you start working with AI, you must give it <strong>explicit global guidelines for software development</strong>.</p>
+
+                    <p>This was one of the more surprising discoveries in our work. Despite its apparent sophistication, AI does <strong>not</strong> reliably apply foundational software engineering discipline unless that discipline is stated explicitly.</p>
+
+                    <p>To address this, we defined two distinct rule sets:</p>
+
+                    <ol>
+                        <li><strong>Generic software development rules</strong><br>
+                        These are architecture-agnostic principles that apply to any serious software system.</li>
+                        <li><strong>Layer 8&ndash;specific rules</strong><br>
+                        These encode architectural intent, serviceability constraints, and project-specific invariants that AI cannot infer on its own.</li>
+                    </ol>
+
+                    <p>Together, these rules turn AI from a code generator into a <strong>constrained, architecture-aware participant</strong>.</p>
+
+                    <h3>Examples of Generic Software Development Rules</h3>
+
+                    <p>Some of the most impactful generic rules were surprisingly basic&mdash;but critical:</p>
+
+                    <ul>
+                        <li><strong>No duplicate code</strong><br>
+                        AI is biased toward repetition. Any second instance of a pattern is treated as a forcing function for abstraction, not copy-paste.</li>
+                        <li><strong>Read before implementing</strong><br>
+                        When extending or integrating with existing components, AI must read <em>all</em> relevant code first. Assumptions are not allowed.</li>
+                        <li><strong>File size limits enforce design</strong><br>
+                        Files exceeding a defined size threshold are treated as architectural failures and must be refactored.</li>
+                        <li><strong>Configuration over behavior</strong><br>
+                        Module-specific files contain data only. All logic lives in shared, reusable components.</li>
+                    </ul>
+
+                    <p>These rules dramatically reduced code sprawl, silent divergence, and long-term maintenance cost.</p>
+
+                    <h3>Examples of Layer 8&ndash;Specific Rules</h3>
+
+                    <p>Layer 8 rules encode architectural constraints that AI cannot &ldquo;guess,&rdquo; even with full context:</p>
+
+                    <ul>
+                        <li><strong>Architecture is explicit, never implied</strong><br>
+                        Services, service areas, ownership, and boundaries must be stated and enforced.</li>
+                        <li><strong>Service APIs are the source of truth</strong><br>
+                        UI, orchestration, and automation always conform to service contracts&mdash;not the other way around.</li>
+                        <li><strong>Model evolution is expected</strong><br>
+                        Designs must assume models will change, grow, and be reused across modules without breaking behavior.</li>
+                        <li><strong>Serviceability over convenience</strong><br>
+                        Any solution that improves short-term speed but degrades observability, control, or evolution is rejected.</li>
+                    </ul>
+
+                    <p>These rules ensure that AI-generated code aligns with Layer 8&rsquo;s core principles: explicit architecture, controlled concurrency, and long-term serviceability.</p>
+
+                    <h3>Why This Matters</h3>
+
+                    <p>Without rules, AI optimizes for <em>local correctness</em>. With rules, AI optimizes for <em>system integrity</em>.</p>
+
+                    <p>The difference is not subtle.</p>
+
+                    <p>By embedding both generic and Layer 8&ndash;specific guidelines directly into the AI workflow, we eliminated:</p>
+                    <ul>
+                        <li>Hallucinated abstractions</li>
+                        <li>Silent architectural drift</li>
+                        <li>Copy-paste module explosions</li>
+                        <li>Short-lived &ldquo;working&rdquo; solutions that fail at scale</li>
+                    </ul>
+
+                    <p>AI does not replace architecture. <strong>Rules are how architecture is enforced&mdash;at machine speed.</strong></p>
+
+                    <hr>
+
+                    <h1>Building Your First AI Project</h1>
+
+                    <p>Developing your own AI-driven system with the <strong>Layer 8 Ecosystem</strong> is intentionally simple. This guide walks you through creating your first project from scratch using Layer 8 patterns and AI-assisted development.</p>
+
+                    <hr>
+
+                    <h2>Setting Up the Development Environment</h2>
+
+                    <h3>1. Install Go, wget &amp; Docker/Docker desktop</h3>
+
+                    <p>Download and install Go for your platform:<br>
+                    https://go.dev/dl/</p>
+
+                    <p>Download and install Docker on linux for your distribution or Docker desktop from https://docs.docker.com/get-started/ if you are on windows/mac.</p>
+
+                    <p>If your system does not contain <strong>wget</strong> (cli tool), please install it.</p>
+
+                    <h3>2. Open a terminal and move to your home directory</h3>
+
+<pre><code>cd ~</code></pre>
+
+                    <h3>3. Extract the Go archive</h3>
+
+<pre><code>tar -zxvf ~/Downloads/&lt;golang file name&gt;</code></pre>
+
+                    <h3>4. Configure environment variables</h3>
+
+                    <p>Add the following to your shell configuration file (for example ~/.bashrc):</p>
+
+<pre><code>export GOROOT=~/go
+export GOPATH=~/proj
+export GOBIN=~/proj/bin
+export PATH=~/.local/bin:~/go/bin:$GOBIN:$PATH
+
+alias ll="ls -lt"
+
+git config --global user.email "&lt;your email address&gt;"
+git config --global user.name "&lt;your name&gt;"
+
+export DOCKER_BUILDKIT=1</code></pre>
+
+                    <p>Reload your shell:</p>
+
+<pre><code>source ~/.bashrc</code></pre>
+
+                    <h3>5. Create your development workspace</h3>
+
+<pre><code>mkdir -p ~/proj/src/github.com/&lt;your github username&gt;</code></pre>
+
+                    <p>This directory will contain all your Layer 8 projects.</p>
+
+                    <hr>
+
+                    <h2>Creating and Cloning Your Project</h2>
+
+                    <h3>1. Create a new repository on GitHub</h3>
+
+                    <p>Create a repository at:</p>
+
+<pre><code>github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>2. Clone your project locally</h3>
+
+<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;
+git clone https://github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>3. Clone the Layer 8 ERP reference implementation</h3>
+
+<pre><code>git clone https://github.com/saichler/l8erp</code></pre>
+
+                    <p>The <code>l8erp</code> project serves as a complete working example of a Layer 8 system.</p>
+
+                    <hr>
+
+                    <h2>Install Your AI Coding Assistant</h2>
+
+                    <p>Install one of the supported AI coding tools:</p>
+
+                    <p>Claude Code:<br>
+                    https://code.claude.com/docs/en/setup</p>
+
+                    <p>or ChatGPT Codex (or equivalent coding agent).</p>
+
+                    <p>These tools generate architecture, code, and documentation while following Layer 8 rules.</p>
+
+                    <hr>
+
+                    <h2>Create Your Product Requirements Document (PRD)</h2>
+
+                    <h3>1. Navigate to your project</h3>
+
+<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+
+                    <h3>2. Start your AI coding session</h3>
+
+<pre><code>claude</code></pre>
+
+                    <p>or</p>
+
+<pre><code>codex</code></pre>
+
+                    <h3>3. Use the following prompts</h3>
+
+                    <p>Please copy &amp; paste the following prompts to setup the Layer 8 ecosystem rules and guides for the AI:</p>
+
+                    <blockquote>
+                        <p>Please install to your memory the following Layer 8 global rules so it will be available in every session: ./l8erp/plans/global-rules-all.md and make sure any PRD is in compliance to those rules.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>The following ../l8erp/go/erp/ui/web/l8ui/GUIDE.md is a guide for the Layer 8 UI/UX generic components, please add it to your memory and use it whenever planning or implementing PRD with UI section.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>An example project built using the Layer 8 ecosystem is in ../l8erp. Please follow this project structure and architecture whenever you create a PRD for a new project.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p>Create a PRD in the directory plans that comply with the global rules and follows the Layer 8 architecture for &lt;your project/system idea&gt;</p>
+                    </blockquote>
+
+                    <p>The AI will generate a complete PRD aligned with Layer 8 architecture and constraints.</p>
+
+                    <hr>
+
+                    <h2>Start Implementation</h2>
+
+                    <p>Once the PRD is created:</p>
+
+                    <ol>
+                        <li>Follow the implementation phases defined in the PRD.</li>
+                        <li>Let the AI assistant generate code and structure for each phase.</li>
+                        <li>Ensure all generated components comply with Layer 8 global rules.</li>
+                        <li>Continue iterating until the PRD is fully implemented.</li>
+                    </ol>
+
+                    <p>From this point forward, development becomes a guided execution of the PRD&mdash;with Layer 8 enforcing architectural consistency and AI accelerating delivery.</p>
+
+                    <nav class="chapter-nav">
+                        <a href="practice.html" class="prev">Practice</a>
+                        <span class="placeholder next">Next Chapter</span>
+                    </nav>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/book.js"></script>
+</body>
+</html>

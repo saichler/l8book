@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Layer 8 — Radical Simplicity for Humans. When architecture is implicit, organizations spend human effort compensating for structural absence.">
+    <meta name="author" content="Sharon Aicler">
+    <title>Layer 8 | Radical Simplicity for Humans</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-background: #fdfbf7;
+            --color-text: #333333;
+            --color-accent: #8b4049;
+            --color-link: #1a4480;
+            --color-link-hover: #0d2d5a;
+            --color-blockquote-bg: #f5f0e6;
+            --color-blockquote-border: #8b4049;
+            --color-divider: #d4cfc5;
+            --color-muted: #666666;
+            --color-card-bg: #f8f5ef;
+            --color-card-bg-end: #f3efe7;
+
+            --font-body: Georgia, "Times New Roman", serif;
+            --font-heading: "Palatino Linotype", Palatino, "Book Antiqua", serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ---- Deck Layout ---- */
+
+        .deck {
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 6rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease, visibility 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-inner {
+            max-width: 960px;
+            width: 100%;
+        }
+
+        /* ---- Typography ---- */
+
+        .slide h1 {
+            font-family: var(--font-heading);
+            font-size: 3.4rem;
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .slide h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+        }
+
+        .slide h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .slide p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .slide ul {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin: 0 0 1.2rem 1.5rem;
+        }
+
+        .slide ul li {
+            margin-bottom: 0.45rem;
+        }
+
+        blockquote {
+            background-color: var(--color-blockquote-bg);
+            border-left: 4px solid var(--color-blockquote-border);
+            margin: 1.2rem 0;
+            padding: 1rem 1.6rem;
+            font-style: italic;
+            font-size: 1.15rem;
+        }
+
+        blockquote p { margin-bottom: 0; }
+        blockquote strong { color: var(--color-accent); }
+
+        a {
+            color: var(--color-link);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+        }
+
+        a:hover { color: var(--color-link-hover); }
+
+        /* ---- Hero Slide ---- */
+
+        .slide-hero .slide-inner {
+            text-align: center;
+        }
+
+        .slide-hero .subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+        }
+
+        .slide-hero .tagline {
+            font-size: 1.15rem;
+            color: var(--color-muted);
+            max-width: 620px;
+            margin: 0 auto 1.8rem;
+            font-style: italic;
+        }
+
+        .slide-hero .author {
+            font-size: 1.05rem;
+            color: var(--color-muted);
+        }
+
+        /* ---- Formula ---- */
+
+        .formula {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            padding: 1.2rem;
+            margin: 1rem 0;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ---- Timeline ---- */
+
+        .timeline {
+            margin: 1.2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.9rem;
+            align-items: flex-start;
+        }
+
+        .timeline-year {
+            flex-shrink: 0;
+            width: 66px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #fff;
+            background-color: var(--color-accent);
+            text-align: center;
+            padding: 0.25rem 0;
+            border-radius: 4px;
+            margin-top: 0.15rem;
+        }
+
+        .timeline-content { flex: 1; }
+        .timeline-content strong { display: block; font-size: 1rem; margin-bottom: 0.1rem; }
+        .timeline-content p { margin-bottom: 0; font-size: 0.92rem; color: var(--color-muted); line-height: 1.5; }
+
+        /* ---- Table ---- */
+
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .impact-table th,
+        .impact-table td {
+            text-align: left;
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .impact-table th {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+        }
+
+        .impact-table td:first-child { font-weight: 600; width: 38%; }
+
+        /* ---- Cards ---- */
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.1rem;
+        }
+
+        .card h3 { color: var(--color-accent); font-size: 1rem; margin-bottom: 0.3rem; }
+        .card p { font-size: 0.92rem; margin-bottom: 0; color: var(--color-muted); line-height: 1.55; }
+
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        /* ---- Tradeoff ---- */
+
+        .tradeoff {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            color: var(--color-muted);
+        }
+
+        .tradeoff strong { color: var(--color-text); }
+
+        /* ---- Principles ---- */
+
+        .principle-list {
+            list-style: none;
+            margin: 1rem 0;
+            padding: 0;
+        }
+
+        .principle-list li {
+            padding: 0.55rem 0;
+            border-bottom: 1px solid var(--color-divider);
+            display: flex;
+            gap: 0.8rem;
+            align-items: baseline;
+            font-size: 1.05rem;
+        }
+
+        .principle-list li:last-child { border-bottom: none; }
+        .principle-label { font-weight: 600; flex-shrink: 0; min-width: 180px; }
+        .principle-desc { color: var(--color-muted); }
+
+        /* ---- Stat Row ---- */
+
+        .stat-row {
+            display: flex;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            flex: 1;
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.2rem 0.8rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            line-height: 1.2;
+        }
+
+        .stat-label { font-size: 0.88rem; color: var(--color-muted); margin-top: 0.25rem; }
+
+        /* ---- CTA Slide ---- */
+
+        .slide-cta .slide-inner { text-align: center; }
+
+        .cta-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.8rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: var(--color-accent);
+            padding: 0.7rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .cta-btn:hover { background-color: #73343c; color: #fff; }
+
+        .cta-btn.secondary {
+            background-color: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+        }
+
+        .cta-btn.secondary:hover { background-color: var(--color-accent); color: #fff; }
+
+        .sponsor-section { margin-top: 1.5rem; }
+
+        /* ---- Navigation Controls ---- */
+
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1rem;
+            opacity: 0.35;
+            transition: opacity 0.2s ease;
+            font-size: 2rem;
+            color: var(--color-accent);
+            user-select: none;
+        }
+
+        .nav-arrow:hover { opacity: 0.8; }
+        .nav-arrow:disabled { opacity: 0.1; cursor: default; }
+
+        .nav-prev { left: 1rem; }
+        .nav-next { right: 1rem; }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: linear-gradient(transparent, rgba(253, 251, 247, 0.95));
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--color-divider);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .progress-dot.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .progress-dot:hover {
+            border-color: var(--color-accent);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 0.8rem;
+            right: 1.5rem;
+            z-index: 100;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* ---- Responsive ---- */
+
+        @media (max-width: 1024px) {
+            .slide { padding: 3rem 4rem; }
+            .slide h1 { font-size: 2.6rem; }
+            .slide h2 { font-size: 1.8rem; }
+            .card-grid-3 { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 2.5rem 2rem; }
+            .slide h1 { font-size: 2rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .slide p, .slide ul { font-size: 1rem; }
+            .hero .subtitle { font-size: 1.2rem; }
+            .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+            .stat-row { flex-direction: column; gap: 0.8rem; }
+            .principle-list li { flex-direction: column; gap: 0.15rem; font-size: 0.95rem; }
+            .principle-label { min-width: auto; }
+            .nav-arrow { font-size: 1.5rem; padding: 0.6rem; }
+            .nav-prev { left: 0.3rem; }
+            .nav-next { right: 0.3rem; }
+            .timeline-item { flex-direction: column; gap: 0.3rem; }
+            .timeline-year { width: auto; display: inline-block; padding: 0.2rem 0.7rem; }
+            .formula { font-size: 1.3rem; }
+            .cta-links { flex-direction: column; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .slide { padding: 2rem 1.2rem; }
+            .slide h1 { font-size: 1.7rem; }
+            .slide h2 { font-size: 1.3rem; }
+            .slide p, .slide ul { font-size: 0.95rem; }
+            blockquote { padding: 0.8rem 1rem; font-size: 0.95rem; }
+        }
+
+        /* ---- Overflow scroll for tall content ---- */
+        .slide-inner {
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-divider) transparent;
+        }
+
+        @media (max-width: 768px) {
+            .slide-inner {
+                max-height: calc(100vh - 5rem);
+            }
+        }
+
+        @media print {
+            html, body { height: auto; overflow: visible; }
+            .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; padding: 2rem; }
+            .nav-arrow, .progress-bar, .slide-counter { display: none; }
+            .slide-inner { max-height: none; overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck">
+
+        <!-- Slide 1: Title -->
+    <section class="slide slide-hero active" data-slide="0">
+        <div class="slide-inner">
+            <h1>Layer 8</h1>
+            <p class="subtitle">The Operating System for AI-Built Software</p>
+            <p class="tagline">The architectural platform that allows AI to generate production-grade distributed systems directly from intent&mdash;eliminating the complexity tax and collapsing enterprise software development effort by an order of magnitude.</p>
+            <p class="author">Sharon Aicler &amp; Harold Lowenthal &middot; Founders</p>
+        </div>
+    </section>
+
+
+    <!-- Slide 2: The Future of Software -->
+    <section class="slide" data-slide="1">
+        <div class="slide-inner">
+            <h2>The Future of Software</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Old Model</h3>
+                    <p>Humans write code, teams assemble architecture, and organizations spend years coordinating before software reaches production.</p>
+                </div>
+                <div class="card">
+                    <h3>New Model</h3>
+                    <p>Humans declare intent. AI + Layer 8 generate the architecture, services, contracts, security, and runtime needed for a production-grade distributed system.</p>
+                </div>
+            </div>
+            <div class="formula">Intent &rarr; AI + Layer 8 &rarr; Production System</div>
+            <p>Layer 8 is not another coding tool. It is the architectural layer that turns AI from a code generator into a reliable system builder.</p>
+        </div>
+    </section>
+
+    <!-- Slide 3: The Problem — Market Pain -->
+    <section class="slide" data-slide="2">
+        <div class="slide-inner">
+            <h2>The Problem</h2>
+            <p>Enterprise software is broken. Not technically&mdash;<strong>economically</strong>.</p>
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="stat-number">$1.7T</div>
+                    <div class="stat-label">Global enterprise software spend (2025)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-label">Of digital transformations fail to meet goals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3&ndash;5x</div>
+                    <div class="stat-label">Cost overruns on average enterprise projects</div>
+                </div>
+            </div>
+            <p>The root cause is not talent, tooling, or AI. It is <strong>implicit architecture</strong>&mdash;when architectural intent is never declared, complexity compounds silently. Organizations pay for coordination, rework, and firefighting instead of building.</p>
+            <blockquote>
+                <p><strong>Years pass between idea and production, when months should be enough.</strong></p>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Slide 4: The Complexity Tax -->
+    <section class="slide" data-slide="3">
+        <div class="slide-inner">
+            <h2>The Complexity Tax</h2>
+            <div class="formula">Complexity &times; Time = Drag</div>
+            <p>Every organization pays this tax. Few name it. None escape it without structural change.</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-year">Year 1</span>
+                    <div class="timeline-content">
+                        <strong>Velocity Feels High</strong>
+                        <p>Small team, shared mental model. Architecture is implicit but tractable.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Year 2</span>
+                    <div class="timeline-content">
+                        <strong>Coordination Appears</strong>
+                        <p>New teams added. Execution time turns into alignment time. Drag is present but not yet named.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Year 3</span>
+                    <div class="timeline-content">
+                        <strong>Fragility Normalized</strong>
+                        <p>Heroics become culture. Headcount grows, throughput does not.</p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-year">Year 4&ndash;5</span>
+                    <div class="timeline-content">
+                        <strong>Drag Becomes Strategy</strong>
+                        <p>Budget defends the past. Change requires executive sponsorship. Senior engineers trapped in firefighting.</p>
+                    </div>
+                </div>
+            </div>
+            <p><strong>This is how innovation stalls without a visible crash.</strong></p>
+        </div>
+    </section>
+
+        <!-- Slide 5: Market Opportunity -->
+    <section class="slide" data-slide="4">
+        <div class="slide-inner">
+            <h2>Market Opportunity</h2>
+            <p>Layer 8 sits at the intersection of three large markets that are converging as AI moves from coding assistance to system creation.</p>
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th>Market</th>
+                        <th>Why It Matters to Layer 8</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI-assisted software development</td>
+                        <td>AI can generate code, but without architecture it creates rework. Layer 8 provides the structural layer AI is missing.</td>
+                    </tr>
+                    <tr>
+                        <td>Enterprise development platforms</td>
+                        <td>Enterprises need production-grade systems with security, concurrency, observability, and portability&mdash;not just generated apps.</td>
+                    </tr>
+                    <tr>
+                        <td>Cloud / DevOps / platform engineering</td>
+                        <td>Layer 8 collapses coordination, integration, and operational drag by turning architecture into platform behavior.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Positioning:</strong> AI coding tools generate code. Layer 8 provides the architecture and runtime that make AI-generated systems deployable in production.</p>
+            <p><strong>Opportunity:</strong> capture spend from AI development tooling, enterprise platforms, and cloud/platform engineering by owning the architectural layer.</p>
+        </div>
+    </section>
+
+    <!-- Slide 6: The Solution -->
+    <section class="slide" data-slide="5">
+        <div class="slide-inner">
+            <h2>The Solution &mdash; Layer 8</h2>
+            <p>An architectural platform that <strong>removes entire cost centers by construction</strong>.</p>
+            <ul class="principle-list">
+                <li>
+                    <span class="principle-label">Explicit intent</span>
+                    <span class="principle-desc">Architecture is declared &amp; enforced, not inferred from code</span>
+                </li>
+                <li>
+                    <span class="principle-label">Enforced ownership</span>
+                    <span class="principle-desc">No ambiguous boundaries. No incident ping-pong</span>
+                </li>
+                <li>
+                    <span class="principle-label">Platformized concurrency</span>
+                    <span class="principle-desc">Concurrency handled by the platform, not reimplemented per service</span>
+                </li>
+                <li>
+                    <span class="principle-label">Security by authority</span>
+                    <span class="principle-desc">Built-in identity &amp; trust model. Not annotations, not middleware</span>
+                </li>
+                <li>
+                    <span class="principle-label">Platform agnostic</span>
+                    <span class="principle-desc">Runs on any cloud, bare metal, or edge device. Zero vendor lock-in</span>
+                </li>
+            </ul>
+            <p>Result: complexity stops compounding, time returns to execution, drag collapses. Not because people work harder&mdash;because the system stops taxing them.</p>
+        </div>
+    </section>
+
+    <!-- Slide 7: Product — What We Ship -->
+    <section class="slide" data-slide="6">
+        <div class="slide-inner">
+            <h2>Product</h2>
+            <p>Layer 8 is a complete, open-source architectural ecosystem.</p>
+            <div class="card-grid card-grid-3">
+                <div class="card">
+                    <h3>Networking</h3>
+                    <p>Intent-based virtual networking. No IPs, no ports, no topology leaking into app code.</p>
+                </div>
+                <div class="card">
+                    <h3>Security</h3>
+                    <p>Identity-based authority model. Security is structural, not a checklist.</p>
+                </div>
+                <div class="card">
+                    <h3>Runtime</h3>
+                    <p>Model-agnostic service runtime. Services operate on models they have never seen before.</p>
+                </div>
+                <div class="card">
+                    <h3>Serialization</h3>
+                    <p>Protocol-agnostic data exchange. No manual mapping, no schema drift.</p>
+                </div>
+                <div class="card">
+                    <h3>ORM &amp; Query</h3>
+                    <p>Unified query language across any storage backend. No SQL dialects, no vendor coupling.</p>
+                </div>
+                <div class="card">
+                    <h3>AI Rules Engine</h3>
+                    <p>Enforceable architecture rules for AI workflows. Turns code generators into system builders.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Slide 8: AI Multiplier -->
+    <section class="slide" data-slide="7">
+        <div class="slide-inner">
+            <h2>AI as Multiplier</h2>
+            <p><strong>AI effectiveness is limited by structure, not intelligence.</strong> Layer 8 is the structure that makes AI enterprise-ready.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>AI Without Architecture</h3>
+                    <p>Hallucinated abstractions. Copy-paste explosions. Architectural drift. Tools that demo well but create rework at production scale.</p>
+                </div>
+                <div class="card">
+                    <h3>AI With Layer 8</h3>
+                    <p>Architecture-aware generation with enforced constraints, explicit contracts, and production-ready system boundaries from the start.</p>
+                </div>
+            </div>
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="stat-number">10x</div>
+                    <div class="stat-label">Reduction in development effort</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Days</div>
+                    <div class="stat-label">From idea to production-grade system</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1 Engineer</div>
+                    <div class="stat-label">Can produce what previously required teams</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 9: Traction & Proof -->
+    <section class="slide" data-slide="8">
+        <div class="slide-inner">
+            <h2>Traction &amp; Proof</h2>
+            <p>Layer 8 is not a concept deck. It is a working system with demonstrated results.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Complete ERP System</h3>
+                    <p>A full enterprise resource planning system (12+ modules: HCM, Finance, SCM, Sales, CRM, Manufacturing, Projects, BI, Documents, E-Commerce, Compliance) built by one person + AI using Layer 8.</p>
+                </div>
+                <div class="card">
+                    <h3>Open Source Ecosystem</h3>
+                    <p>Networking, security, runtime, ORM, serialization, query language, and UI components&mdash;all open source, fully functional, and publicly available on GitHub.</p>
+                </div>
+            </div>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Published Book</h3>
+                    <p>"Radical Simplicity for Humans"&mdash;the complete architectural thesis, available in English, Hebrew, and Russian. Every claim is testable and falsifiable.</p>
+                </div>
+                <div class="card">
+                    <h3>AI Rules Library</h3>
+                    <p>100+ enforceable architecture rules embedded into AI coding workflows. Proven to eliminate hallucinations, drift, and rework.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+        <!-- Slide 10: Business Model -->
+    <section class="slide" data-slide="9">
+        <div class="slide-inner">
+            <h2>Business Model</h2>
+            <p>Open-source core with a platform-first commercial model for enterprise adoption.</p>
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th>Revenue Stream</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Enterprise Runtime Platform</td>
+                        <td>Managed Layer 8 platform with SLAs, support, governance, and compliance packaging for enterprise deployment</td>
+                    </tr>
+                    <tr>
+                        <td>Hosted Cloud Platform</td>
+                        <td>Commercial cloud offering for teams that want Layer 8 without managing infrastructure themselves</td>
+                    </tr>
+                    <tr>
+                        <td>Enterprise Support &amp; Services</td>
+                        <td>Migration, enablement, and design support that accelerate adoption of the platform</td>
+                    </tr>
+                    <tr>
+                        <td>Training &amp; Certification</td>
+                        <td>Developer and architect certification programs for the Layer 8 ecosystem</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p><strong>Wedge:</strong> teams adopt Layer 8 to make AI-generated enterprise software production-ready&mdash;then expand into the runtime platform and cloud offering.</p>
+        </div>
+    </section>
+
+        <!-- Slide 11: Competitive Advantage -->
+    <section class="slide" data-slide="10">
+        <div class="slide-inner">
+            <h2>Why Layer 8 Wins</h2>
+            <table class="impact-table">
+                <thead>
+                    <tr>
+                        <th>Alternative</th>
+                        <th>Why It Falls Short</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AI coding tools (Copilot, Codex, Claude-based workflows)</td>
+                        <td>Generate code without an architectural runtime. They improve syntax output, not system shape.</td>
+                    </tr>
+                    <tr>
+                        <td>Low-code / no-code platforms</td>
+                        <td>Speed through abstraction, but trade away flexibility, portability, and control. Poor fit for enterprise-grade distributed systems.</td>
+                    </tr>
+                    <tr>
+                        <td>Microservices frameworks</td>
+                        <td>Help teams build services, but still leave architecture, ownership, security, and coordination implicit.</td>
+                    </tr>
+                    <tr>
+                        <td>Legacy enterprise platforms</td>
+                        <td>Offer packaged functionality, but are expensive, rigid, and slow to evolve. Innovation remains vendor-controlled.</td>
+                    </tr>
+                </tbody>
+            </table>
+            <blockquote>
+                <p><strong>Layer 8 occupies a new layer in the stack:</strong> not AI coding, not low-code, not legacy enterprise software&mdash;the architectural operating system for AI-built software.</p>
+            </blockquote>
+        </div>
+    </section>
+
+        <!-- Slide 12: Team -->
+    <section class="slide" data-slide="11">
+        <div class="slide-inner">
+            <h2>Team</h2>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Sharon Aicler &mdash; Co-Founder</h3>
+                    <p>20+ years building large-scale distributed systems across networking, security, and platform infrastructure. Invented and built the core Layer 8 architecture and ecosystem. Author of "Radical Simplicity for Humans."</p>
+                </div>
+                <div class="card">
+                    <h3>Harold Lowenthal &mdash; Co-Founder</h3>
+                    <p>20+ years as a cloud, network, and platform architect across enterprise and service provider environments. Former Cisco and Sisense. Patent holder in network analytics. Specialist in customer-facing solution design, large-scale deployments, and operational readiness.</p>
+                </div>
+            </div>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Hiring With Investment</h3>
+                    <p>The platform is built. Capital is used to recruit the founding leadership team: CEO, CTO, VP Engineering, Head of Enterprise Sales, Developer Advocate. From there: scale.</p>
+                </div>
+                <div class="card">
+                    <h3>The Proof</h3>
+                    <p>The core Layer 8 ecosystem, AI rules engine, book, and reference implementations were built and proven at founder speed. The next step is building the commercial organization that can scale adoption globally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 13: The Ask -->
+    <section class="slide slide-cta" data-slide="12">
+        <div class="slide-inner">
+            <h2>The Ask</h2>
+            <p>Raising a seed round to commercialize the Layer 8 platform and capture the AI-assisted enterprise development market.</p>
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="stat-number">$3M</div>
+                    <div class="stat-label">Seed round</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">18 mo</div>
+                    <div class="stat-label">Runway</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3 hires</div>
+                    <div class="stat-label">Engineering, Sales, DevRel</div>
+                </div>
+            </div>
+            <p><strong>Use of funds:</strong> Enterprise platform packaging, first 5 enterprise customers, developer community, and go-to-market.</p>
+            <div class="cta-links" style="margin-top: 2rem;">
+                <a href="https://github.com/saichler" class="cta-btn">GitHub</a>
+                <a href="book/book.html" class="cta-btn secondary">Read the Book</a>
+                <a href="mailto:saichler@gmail.com" class="cta-btn secondary">Contact</a>
+            </div>
+            <div class="sponsor-section">
+                <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Navigation -->
+<button class="nav-arrow nav-prev" aria-label="Previous slide" disabled>&#9664;</button>
+<button class="nav-arrow nav-next" aria-label="Next slide">&#9654;</button>
+
+<div class="progress-bar" role="navigation" aria-label="Slide progress"></div>
+<div class="slide-counter"></div>
+
+<script>
+(function() {
+    var slides = document.querySelectorAll('.slide');
+    var total = slides.length;
+    var current = 0;
+
+    var prevBtn = document.querySelector('.nav-prev');
+    var nextBtn = document.querySelector('.nav-next');
+    var progressBar = document.querySelector('.progress-bar');
+    var counter = document.querySelector('.slide-counter');
+
+    // Build progress dots
+    for (var i = 0; i < total; i++) {
+        var dot = document.createElement('button');
+        dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.dataset.index = i;
+        dot.addEventListener('click', function() {
+            goTo(parseInt(this.dataset.index));
+        });
+        progressBar.appendChild(dot);
+    }
+
+    function goTo(n) {
+        if (n < 0 || n >= total) return;
+        slides[current].classList.remove('active');
+        progressBar.children[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        progressBar.children[current].classList.add('active');
+        // Scroll inner content to top when switching slides
+        var inner = slides[current].querySelector('.slide-inner');
+        if (inner) inner.scrollTop = 0;
+        updateNav();
+    }
+
+    function updateNav() {
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+        counter.textContent = (current + 1) + ' / ' + total;
+    }
+
+    prevBtn.addEventListener('click', function() { goTo(current - 1); });
+    nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            goTo(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            goTo(current - 1);
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goTo(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goTo(total - 1);
+        }
+    });
+
+    // Touch/swipe support
+    var touchStartX = 0;
+    var touchStartY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].screenX - touchStartX;
+        var dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            if (dx < 0) goTo(current + 1);
+            else goTo(current - 1);
+        }
+    }, { passive: true });
+
+    updateNav();
+})();
+</script>
+
+</body>
+</html>

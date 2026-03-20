@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: book
+  labels:
+    name: book
+
+---
+
+apiVersion: apps/v1
+kind: DaemonSet 
+metadata:
+  namespace: book
+  name: book
+  labels:
+    app: book
+spec:
+  selector:
+    matchLabels:
+      app: book
+  template:
+    metadata:
+      labels:
+        app: book
+    spec:
+      hostNetwork: true
+      containers:
+        - name: book
+          image: saichler/book:latest
+          imagePullPolicy: Always
+          env:
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+          volumeMounts:
+            - name: hdata
+              mountPath: /data
+      volumes:
+        - name: hdata
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate

@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Layer 8 — Radical Simplicity for Humans. When architecture is implicit, organizations spend human effort compensating for structural absence.">
+    <meta name="author" content="Sharon Aicler">
+    <title>Layer 8 | Radical Simplicity for Humans</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-background: #fdfbf7;
+            --color-text: #333333;
+            --color-accent: #8b4049;
+            --color-link: #1a4480;
+            --color-link-hover: #0d2d5a;
+            --color-blockquote-bg: #f5f0e6;
+            --color-blockquote-border: #8b4049;
+            --color-divider: #d4cfc5;
+            --color-muted: #666666;
+            --color-card-bg: #f8f5ef;
+            --color-card-bg-end: #f3efe7;
+
+            --font-body: Georgia, "Times New Roman", serif;
+            --font-heading: "Palatino Linotype", Palatino, "Book Antiqua", serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: var(--font-body);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ---- Deck Layout ---- */
+
+        .deck {
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4rem 6rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.45s ease, visibility 0.45s ease;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .slide-inner {
+            max-width: 960px;
+            width: 100%;
+        }
+
+        /* ---- Typography ---- */
+
+        .slide h1 {
+            font-family: var(--font-heading);
+            font-size: 3.4rem;
+            font-weight: 600;
+            line-height: 1.15;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.01em;
+        }
+
+        .slide h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            font-weight: 600;
+            line-height: 1.25;
+            margin-bottom: 1rem;
+            color: var(--color-accent);
+        }
+
+        .slide h3 {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            font-weight: 600;
+            margin-bottom: 0.4rem;
+        }
+
+        .slide p {
+            font-size: 1.2rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .slide ul {
+            font-size: 1.15rem;
+            line-height: 1.7;
+            margin: 0 0 1.2rem 1.5rem;
+        }
+
+        .slide ul li {
+            margin-bottom: 0.45rem;
+        }
+
+        blockquote {
+            background-color: var(--color-blockquote-bg);
+            border-left: 4px solid var(--color-blockquote-border);
+            margin: 1.2rem 0;
+            padding: 1rem 1.6rem;
+            font-style: italic;
+            font-size: 1.15rem;
+        }
+
+        blockquote p { margin-bottom: 0; }
+        blockquote strong { color: var(--color-accent); }
+
+        a {
+            color: var(--color-link);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+        }
+
+        a:hover { color: var(--color-link-hover); }
+
+        /* ---- Hero Slide ---- */
+
+        .slide-hero .slide-inner {
+            text-align: center;
+        }
+
+        .slide-hero .subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 2rem;
+        }
+
+        .slide-hero .tagline {
+            font-size: 1.15rem;
+            color: var(--color-muted);
+            max-width: 620px;
+            margin: 0 auto 1.8rem;
+            font-style: italic;
+        }
+
+        .slide-hero .author {
+            font-size: 1.05rem;
+            color: var(--color-muted);
+        }
+
+        /* ---- Formula ---- */
+
+        .formula {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            padding: 1.2rem;
+            margin: 1rem 0;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            letter-spacing: 0.04em;
+        }
+
+        /* ---- Timeline ---- */
+
+        .timeline {
+            margin: 1.2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 0.9rem;
+            align-items: flex-start;
+        }
+
+        .timeline-year {
+            flex-shrink: 0;
+            width: 66px;
+            font-family: var(--font-heading);
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #fff;
+            background-color: var(--color-accent);
+            text-align: center;
+            padding: 0.25rem 0;
+            border-radius: 4px;
+            margin-top: 0.15rem;
+        }
+
+        .timeline-content { flex: 1; }
+        .timeline-content strong { display: block; font-size: 1rem; margin-bottom: 0.1rem; }
+        .timeline-content p { margin-bottom: 0; font-size: 0.92rem; color: var(--color-muted); line-height: 1.5; }
+
+        /* ---- Table ---- */
+
+        .impact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        .impact-table th,
+        .impact-table td {
+            text-align: left;
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid var(--color-divider);
+        }
+
+        .impact-table th {
+            font-family: var(--font-heading);
+            font-weight: 600;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+        }
+
+        .impact-table td:first-child { font-weight: 600; width: 38%; }
+
+        /* ---- Cards ---- */
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 1.2rem 0;
+        }
+
+        .card {
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.1rem;
+        }
+
+        .card h3 { color: var(--color-accent); font-size: 1rem; margin-bottom: 0.3rem; }
+        .card p { font-size: 0.92rem; margin-bottom: 0; color: var(--color-muted); line-height: 1.55; }
+
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        /* ---- Tradeoff ---- */
+
+        .tradeoff {
+            text-align: center;
+            font-family: var(--font-heading);
+            font-size: 1.2rem;
+            padding: 0.5rem;
+            color: var(--color-muted);
+        }
+
+        .tradeoff strong { color: var(--color-text); }
+
+        /* ---- Principles ---- */
+
+        .principle-list {
+            list-style: none;
+            margin: 1rem 0;
+            padding: 0;
+        }
+
+        .principle-list li {
+            padding: 0.55rem 0;
+            border-bottom: 1px solid var(--color-divider);
+            display: flex;
+            gap: 0.8rem;
+            align-items: baseline;
+            font-size: 1.05rem;
+        }
+
+        .principle-list li:last-child { border-bottom: none; }
+        .principle-label { font-weight: 600; flex-shrink: 0; min-width: 180px; }
+        .principle-desc { color: var(--color-muted); }
+
+        /* ---- Stat Row ---- */
+
+        .stat-row {
+            display: flex;
+            gap: 1.2rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-card {
+            flex: 1;
+            text-align: center;
+            background: linear-gradient(180deg, var(--color-card-bg) 0%, var(--color-card-bg-end) 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.2rem 0.8rem;
+        }
+
+        .stat-number {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            line-height: 1.2;
+        }
+
+        .stat-label { font-size: 0.88rem; color: var(--color-muted); margin-top: 0.25rem; }
+
+        /* ---- CTA Slide ---- */
+
+        .slide-cta .slide-inner { text-align: center; }
+
+        .cta-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.8rem 0;
+            flex-wrap: wrap;
+        }
+
+        .cta-btn {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: var(--color-accent);
+            padding: 0.7rem 2rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .cta-btn:hover { background-color: #73343c; color: #fff; }
+
+        .cta-btn.secondary {
+            background-color: transparent;
+            color: var(--color-accent);
+            border: 2px solid var(--color-accent);
+        }
+
+        .cta-btn.secondary:hover { background-color: var(--color-accent); color: #fff; }
+
+        .sponsor-section { margin-top: 1.5rem; }
+
+        /* ---- Navigation Controls ---- */
+
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 100;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 1rem;
+            opacity: 0.35;
+            transition: opacity 0.2s ease;
+            font-size: 2rem;
+            color: var(--color-accent);
+            user-select: none;
+        }
+
+        .nav-arrow:hover { opacity: 0.8; }
+        .nav-arrow:disabled { opacity: 0.1; cursor: default; }
+
+        .nav-prev { left: 1rem; }
+        .nav-next { right: 1rem; }
+
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.8rem;
+            background: linear-gradient(transparent, rgba(253, 251, 247, 0.95));
+        }
+
+        .progress-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid var(--color-divider);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0;
+        }
+
+        .progress-dot.active {
+            background: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .progress-dot:hover {
+            border-color: var(--color-accent);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 0.8rem;
+            right: 1.5rem;
+            z-index: 100;
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--color-muted);
+        }
+
+        /* ---- Responsive ---- */
+
+        @media (max-width: 1024px) {
+            .slide { padding: 3rem 4rem; }
+            .slide h1 { font-size: 2.6rem; }
+            .slide h2 { font-size: 1.8rem; }
+            .card-grid-3 { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 768px) {
+            .slide { padding: 2.5rem 2rem; }
+            .slide h1 { font-size: 2rem; }
+            .slide h2 { font-size: 1.5rem; }
+            .slide p, .slide ul { font-size: 1rem; }
+            .hero .subtitle { font-size: 1.2rem; }
+            .card-grid, .card-grid-3 { grid-template-columns: 1fr; }
+            .stat-row { flex-direction: column; gap: 0.8rem; }
+            .principle-list li { flex-direction: column; gap: 0.15rem; font-size: 0.95rem; }
+            .principle-label { min-width: auto; }
+            .nav-arrow { font-size: 1.5rem; padding: 0.6rem; }
+            .nav-prev { left: 0.3rem; }
+            .nav-next { right: 0.3rem; }
+            .timeline-item { flex-direction: column; gap: 0.3rem; }
+            .timeline-year { width: auto; display: inline-block; padding: 0.2rem 0.7rem; }
+            .formula { font-size: 1.3rem; }
+            .cta-links { flex-direction: column; align-items: center; }
+        }
+
+        @media (max-width: 480px) {
+            .slide { padding: 2rem 1.2rem; }
+            .slide h1 { font-size: 1.7rem; }
+            .slide h2 { font-size: 1.3rem; }
+            .slide p, .slide ul { font-size: 0.95rem; }
+            blockquote { padding: 0.8rem 1rem; font-size: 0.95rem; }
+        }
+
+        /* ---- Overflow scroll for tall content ---- */
+        .slide-inner {
+            max-height: calc(100vh - 8rem);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--color-divider) transparent;
+        }
+
+        @media (max-width: 768px) {
+            .slide-inner {
+                max-height: calc(100vh - 5rem);
+            }
+        }
+
+        @media print {
+            html, body { height: auto; overflow: visible; }
+            .slide { position: relative; opacity: 1; visibility: visible; page-break-after: always; padding: 2rem; }
+            .nav-arrow, .progress-bar, .slide-counter { display: none; }
+            .slide-inner { max-height: none; overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="deck">
+
+
+    <!-- Slide 1: Title -->
+    <section class="slide slide-hero active" data-slide="0">
+        <div class="slide-inner">
+            <h1>Layer 8</h1>
+            <p class="subtitle">Radical Simplicity for Humans</p>
+            <p class="tagline">The platform that removes the complexity tax from enterprise software&mdash;so organizations can build faster, operate more simply, and let AI produce real systems instead of disconnected code.</p>
+            <p class="author">Executive Overview</p>
+        </div>
+    </section>
+
+    <!-- Slide 2: The Problem -->
+    <section class="slide" data-slide="1">
+        <div class="slide-inner">
+            <h2>The Problem</h2>
+            <p>Enterprise software is broken. Not because leaders lack vision and not because teams lack talent. It breaks because <strong>complexity grows faster than organizations can manage it</strong>.</p>
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="stat-number">$1.7T</div>
+                    <div class="stat-label">Global enterprise software spend</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">70%</div>
+                    <div class="stat-label">Of digital transformations fail to meet goals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">3&ndash;5x</div>
+                    <div class="stat-label">Typical project overruns</div>
+                </div>
+            </div>
+            <blockquote>
+                <p><strong>Organizations do not lose to lack of software. They lose to software drag.</strong></p>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Slide 3: Why Complexity Happens -->
+    <section class="slide" data-slide="2">
+        <div class="slide-inner">
+            <h2>Why Complexity Happens</h2>
+            <p>Most enterprise systems evolve without a clear structural model. As the business grows, the software grows in a fragmented way.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>More Teams</h3>
+                    <p>Different groups build and operate different parts of the business, often with inconsistent patterns and priorities.</p>
+                </div>
+                <div class="card">
+                    <h3>More Systems</h3>
+                    <p>Every new application, workflow, and integration adds more moving parts and more failure points.</p>
+                </div>
+                <div class="card">
+                    <h3>More Coordination</h3>
+                    <p>Execution time becomes alignment time. Decisions slow down because change touches too many owners.</p>
+                </div>
+                <div class="card">
+                    <h3>More Fragility</h3>
+                    <p>Security, reliability, and compliance become extra layers of work instead of built-in behavior.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 4: The Complexity Tax -->
+    <section class="slide" data-slide="3">
+        <div class="slide-inner">
+            <h2>The Complexity Tax</h2>
+            <div class="formula">Complexity &times; Time = Drag</div>
+            <p>What begins as manageable software turns into an organizational tax:</p>
+            <ul>
+                <li>Engineering headcount rises faster than output</li>
+                <li>Projects take quarters or years instead of weeks or months</li>
+                <li>Innovation becomes risky because existing systems are fragile</li>
+                <li>Senior leaders fund stability work instead of growth</li>
+            </ul>
+            <blockquote>
+                <p><strong>Over time, complexity becomes a business problem&mdash;not just a technology problem.</strong></p>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Slide 5: The Opportunity -->
+    <section class="slide" data-slide="4">
+        <div class="slide-inner">
+            <h2>The Opportunity</h2>
+            <p>If the complexity tax is removed, executive leaders regain something more valuable than cost savings: <strong>speed</strong>.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Faster Execution</h3>
+                    <p>Move from long delivery cycles to rapid iteration.</p>
+                </div>
+                <div class="card">
+                    <h3>Smaller, Higher-Leverage Teams</h3>
+                    <p>Fewer people can deliver more because the platform carries structural work.</p>
+                </div>
+                <div class="card">
+                    <h3>Lower Operating Cost</h3>
+                    <p>Less coordination, less rework, and less infrastructure sprawl.</p>
+                </div>
+                <div class="card">
+                    <h3>Greater Strategic Agility</h3>
+                    <p>New products, markets, and workflows can be launched without massive software programs.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Slide 6: What Layer 8 Is -->
+    <section class="slide" data-slide="5">
+        <div class="slide-inner">
+            <h2>What Layer 8 Is</h2>
+            <p>Layer 8 is the platform that makes system structure explicit and consistent from the start.</p>
+            <ul class="principle-list">
+                <li>
+                    <span class="principle-label">Clear structure</span>
+                    <span class="principle-desc">The system is organized by design, not patched together over time.</span>
+                </li>
+                <li>
+                    <span class="principle-label">Built-in trust</span>
+                    <span class="principle-desc">Security and authority are part of the platform, not separate projects.</span>
+                </li>
+                <li>
+                    <span class="principle-label">Less coordination</span>
+                    <span class="principle-desc">Teams spend less time aligning across handoffs and boundaries.</span>
+                </li>
+                <li>
+                    <span class="principle-label">Portable deployment</span>
+                    <span class="principle-desc">The platform runs across environments without locking the business into one vendor.</span>
+                </li>
+            </ul>
+            <p>In business terms: <strong>Layer 8 reduces the organizational work required to build and change software.</strong></p>
+        </div>
+    </section>
+
+    <!-- Slide 7: Why AI Needs Layer 8 -->
+    <section class="slide" data-slide="6">
+        <div class="slide-inner">
+            <h2>Why AI Needs Layer 8</h2>
+            <p>AI can produce code quickly, but code alone is not a reliable enterprise system. Without structure, AI accelerates the creation of more complexity.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>AI Without Structure</h3>
+                    <p>Fast output, but inconsistent systems, more rework, and growing operational risk.</p>
+                </div>
+                <div class="card">
+                    <h3>AI With Layer 8</h3>
+                    <p>AI works within an enforced model, so it can build systems that are coherent, governable, and ready for the enterprise.</p>
+                </div>
+            </div>
+            <blockquote>
+                <p><strong>Layer 8 turns AI from a code generator into a system builder.</strong></p>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Slide 8: Proof -->
+    <section class="slide" data-slide="7">
+        <div class="slide-inner">
+            <h2>Proof</h2>
+            <p>Layer 8 is not just a concept. It has already been used to build a full enterprise resource planning system.</p>
+            <div class="card-grid">
+                <div class="card">
+                    <h3>Complete ERP</h3>
+                    <p>Finance, HR, CRM, sales, supply chain, manufacturing, analytics, documents, e-commerce, and compliance.</p>
+                </div>
+                <div class="card">
+                    <h3>Founder Speed</h3>
+                    <p>Built by one engineer with AI assistance&mdash;demonstrating what happens when architecture stops slowing the work down.</p>
+                </div>
+            </div>
+            <blockquote>
+                <p><strong>Systems that normally require large teams can be built dramatically faster when complexity is removed by design.</strong></p>
+            </blockquote>
+        </div>
+    </section>
+
+    <!-- Slide 9: Business Impact -->
+    <section class="slide" data-slide="8">
+        <div class="slide-inner">
+            <h2>Business Impact</h2>
+            <div class="stat-row">
+                <div class="stat-card">
+                    <div class="stat-number">Faster</div>
+                    <div class="stat-label">Time from idea to production system</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Leaner</div>
+                    <div class="stat-label">Delivery teams with higher output</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">Safer</div>
+                    <div class="stat-label">Stronger control, trust, and consistency</div>
+                </div>
+            </div>
+            <p>For executive leaders, the value of Layer 8 is simple:</p>
+            <ul>
+                <li>Lower cost of software change</li>
+                <li>Higher organizational speed</li>
+                <li>More reliable use of AI in enterprise environments</li>
+                <li>Greater freedom to evolve systems without starting over</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Slide 10: The Executive Message -->
+    <section class="slide slide-cta" data-slide="9">
+        <div class="slide-inner">
+            <h2>The Executive Message</h2>
+            <p>Layer 8 solves the problem that executive leaders feel every day but rarely name directly:</p>
+            <div class="formula">Software complexity is slowing the business down</div>
+            <p>Layer 8 removes that drag by making software simpler to build, simpler to change, and far more useful in the age of AI.</p>
+            <div class="cta-links">
+                <a href="https://github.com/saichler" class="cta-btn">GitHub</a>
+                <a href="mailto:saichler@gmail.com" class="cta-btn secondary">Contact</a>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- Navigation -->
+<button class="nav-arrow nav-prev" aria-label="Previous slide" disabled>&#9664;</button>
+<button class="nav-arrow nav-next" aria-label="Next slide">&#9654;</button>
+
+<div class="progress-bar" role="navigation" aria-label="Slide progress"></div>
+<div class="slide-counter"></div>
+
+<script>
+(function() {
+    var slides = document.querySelectorAll('.slide');
+    var total = slides.length;
+    var current = 0;
+
+    var prevBtn = document.querySelector('.nav-prev');
+    var nextBtn = document.querySelector('.nav-next');
+    var progressBar = document.querySelector('.progress-bar');
+    var counter = document.querySelector('.slide-counter');
+
+    // Build progress dots
+    for (var i = 0; i < total; i++) {
+        var dot = document.createElement('button');
+        dot.className = 'progress-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+        dot.dataset.index = i;
+        dot.addEventListener('click', function() {
+            goTo(parseInt(this.dataset.index));
+        });
+        progressBar.appendChild(dot);
+    }
+
+    function goTo(n) {
+        if (n < 0 || n >= total) return;
+        slides[current].classList.remove('active');
+        progressBar.children[current].classList.remove('active');
+        current = n;
+        slides[current].classList.add('active');
+        progressBar.children[current].classList.add('active');
+        // Scroll inner content to top when switching slides
+        var inner = slides[current].querySelector('.slide-inner');
+        if (inner) inner.scrollTop = 0;
+        updateNav();
+    }
+
+    function updateNav() {
+        prevBtn.disabled = current === 0;
+        nextBtn.disabled = current === total - 1;
+        counter.textContent = (current + 1) + ' / ' + total;
+    }
+
+    prevBtn.addEventListener('click', function() { goTo(current - 1); });
+    nextBtn.addEventListener('click', function() { goTo(current + 1); });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+            e.preventDefault();
+            goTo(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+            e.preventDefault();
+            goTo(current - 1);
+        } else if (e.key === 'Home') {
+            e.preventDefault();
+            goTo(0);
+        } else if (e.key === 'End') {
+            e.preventDefault();
+            goTo(total - 1);
+        }
+    });
+
+    // Touch/swipe support
+    var touchStartX = 0;
+    var touchStartY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+        var dx = e.changedTouches[0].screenX - touchStartX;
+        var dy = e.changedTouches[0].screenY - touchStartY;
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+            if (dx < 0) goTo(current + 1);
+            else goTo(current - 1);
+        }
+    }, { passive: true });
+
+    updateNav();
+})();
+</script>
+
+</body>
+</html>

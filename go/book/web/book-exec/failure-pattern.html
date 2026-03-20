@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Part IV: The Failure Pattern | Radical Simplicity for Humans - Executive Edition by Sharon Aicler">
+    <meta name="author" content="Sharon Aicler">
+    <title>The Failure Pattern | Radical Simplicity for Humans</title>
+    <link rel="stylesheet" href="css/book.css">
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <div class="site-container">
+        <nav class="sidebar" role="navigation" aria-label="Table of Contents">
+            <header class="site-header">
+                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <p class="book-subtitle">Executive Edition</p>
+                <div class="author-info">
+                    <p>Sharon Aicler</p>
+                    <p><a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+                </div>
+                <div class="sponsor-button">
+                    <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                </div>
+            </header>
+
+            <h2 class="nav-title">Contents</h2>
+            <ul class="chapter-list">
+                <li><a href="book.html">Home</a></li>
+                <li><a href="human-problem.html">I. The Human Problem</a></li>
+                <li><a href="hidden-cause.html">II. The Hidden Cause</a></li>
+                <li><a href="economics.html">III. The Economics</a></li>
+                <li><a href="failure-pattern.html" class="active">IV. The Failure Pattern</a></li>
+                <li><a href="radical-simplicity.html">V. Radical Simplicity</a></li>
+                <li><a href="technical-translated.html">VI. Technical Chapters Translated</a></li>
+                <li><a href="ai-economics.html">VII. AI and the New Economics</a></li>
+                <li><a href="migration.html">VIII. Migration and Adoption</a></li>
+                <li><a href="executive-summary.html">IX. Executive Summary</a></li>
+            </ul>
+
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-divider);">
+                <p style="font-size: 0.8rem; color: var(--color-muted); padding: 0 0.75rem;">
+                    <a href="../book/book.html" style="text-decoration: none;">Read the full technical book &rarr;</a>
+                </p>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <article>
+                    <h1>Part IV &mdash; The Failure Pattern</h1>
+
+                    <h2>10. The Five Repeating Failure Modes</h2>
+
+                    <p>The original book identifies five structural failure modes that appear when architecture is implicit. For non-technical readers, they can be understood like this:</p>
+
+                    <h3>1. Accidental coupling</h3>
+                    <p>Different parts of the business become tied together in hidden ways. A local change causes a broad blast radius.</p>
+
+                    <h3>2. Implicit ownership</h3>
+                    <p>No one clearly owns the truth. When something breaks, responsibility is negotiated socially.</p>
+
+                    <h3>3. Concurrency leakage</h3>
+                    <p>Correctness depends on timing, sequencing, and conditions that application teams should not have to manage manually.</p>
+
+                    <h3>4. Test fragility</h3>
+                    <p>Validation becomes unreliable. Teams start trusting production behavior more than test results.</p>
+
+                    <h3>5. Security by annotation</h3>
+                    <p>Security exists only where someone remembered to add it. Trust is fragmented and inconsistent.</p>
+
+                    <p>These failures are important because they do not stay isolated. Each one enables the next. That is why complexity compounds.</p>
+
+                    <hr>
+
+                    <h2>11. Why These Failures Repeat Across the Industry</h2>
+
+                    <p>These problems show up across languages, clouds, frameworks, company sizes, and sectors.</p>
+
+                    <p>That is a strong sign the issue is structural, not fashionable.</p>
+
+                    <p>Layer 8's position is that the industry normalized procedural workarounds for problems that should have been solved architecturally.</p>
+
+                    <p>Instead of deleting failure modes, most systems: detect them later, patch around them, document them, review them, train people not to trigger them.</p>
+
+                    <p>That approach creates recurring cost forever.</p>
+
+                    <blockquote>
+                        <p>Layer 8 is built around a different goal: make the failure mode impossible by construction.</p>
+                    </blockquote>
+
+                    <nav class="chapter-nav">
+                        <a href="economics.html" class="prev">The Economics</a>
+                        <a href="radical-simplicity.html" class="next">Radical Simplicity</a>
+                    </nav>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/book.js"></script>
+</body>
+</html>

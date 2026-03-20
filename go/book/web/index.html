@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Radical Simplicity for Humans - A book about architectural clarity and reducing complexity by Sharon Aicler">
+    <meta name="author" content="Sharon Aicler">
+    <title>Radical Simplicity for Humans | Layer 8</title>
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --color-background: #fdfbf7;
+            --color-text: #333333;
+            --color-accent: #8b4049;
+            --color-link: #1a4480;
+            --color-link-hover: #0d2d5a;
+            --color-blockquote-bg: #f5f0e6;
+            --color-blockquote-border: #8b4049;
+            --color-divider: #d4cfc5;
+            --color-muted: #666666;
+
+            --font-body: Georgia, "Times New Roman", serif;
+            --font-heading: "Palatino Linotype", Palatino, "Book Antiqua", serif;
+
+            --content-max-width: 760px;
+            --font-size-base: 19px;
+            --line-height: 1.9;
+        }
+
+        html {
+            font-size: var(--font-size-base);
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            line-height: var(--line-height);
+            color: var(--color-text);
+            background-color: var(--color-background);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .page {
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
+
+        /* ---- Hero ---- */
+
+        .hero {
+            text-align: center;
+            padding-bottom: 3rem;
+            border-bottom: 2px solid var(--color-divider);
+        }
+
+        .hero h1 {
+            font-family: var(--font-heading);
+            font-size: 2.8rem;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 0.4rem;
+            letter-spacing: 0.01em;
+        }
+
+        .hero .subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero .tagline {
+            font-size: 1.1rem;
+            color: var(--color-muted);
+            max-width: 540px;
+            margin: 0 auto 2rem;
+        }
+
+        .read-btn {
+            display: inline-block;
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            color: #fff;
+            background-color: var(--color-accent);
+            padding: 0.85rem 2.4rem;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.2s ease;
+        }
+
+        .read-btn:hover {
+            background-color: #73343c;
+            color: #fff;
+        }
+
+        .presentation-banners {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem auto 1rem;
+            max-width: 580px;
+        }
+
+        .presentation-banner {
+            display: block;
+            flex: 1;
+            background: linear-gradient(180deg, #f8f5ef 0%, #f3efe7 100%);
+            border: 2px solid var(--color-accent);
+            border-radius: 6px;
+            padding: 0.5rem 1.8rem;
+            text-align: center;
+            text-decoration: none;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .presentation-banner:hover {
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
+        }
+
+        .presentation-banner .banner-title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.3rem;
+        }
+
+        .presentation-banner:hover .banner-title {
+            color: #fff;
+        }
+
+        .presentation-banner .banner-desc {
+            font-size: 0.9rem;
+            color: var(--color-muted);
+            margin-bottom: 0;
+        }
+
+        .presentation-banner:hover .banner-desc {
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .lang-links {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        .lang-links a {
+            color: var(--color-link);
+            text-decoration: none;
+        }
+
+        .lang-links a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---- Sections ---- */
+
+        section {
+            padding-top: 3rem;
+        }
+
+        section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 600;
+            line-height: 1.3;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--color-divider);
+        }
+
+        section p {
+            margin-bottom: 1.5rem;
+        }
+
+        blockquote {
+            background-color: var(--color-blockquote-bg);
+            border-left: 4px solid var(--color-blockquote-border);
+            margin: 2rem 0;
+            padding: 1.5rem 2rem;
+            font-style: italic;
+        }
+
+        blockquote p {
+            margin-bottom: 0;
+        }
+
+        blockquote strong {
+            color: var(--color-accent);
+        }
+
+        a {
+            color: var(--color-link);
+            text-decoration: underline;
+            text-decoration-thickness: 1px;
+            text-underline-offset: 2px;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: var(--color-link-hover);
+        }
+
+        /* ---- Highlights ---- */
+
+        .highlights {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-card {
+            background: linear-gradient(180deg, #f8f5ef 0%, #f3efe7 100%);
+            border: 1px solid var(--color-divider);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .highlight-card h3 {
+            font-family: var(--font-heading);
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: var(--color-accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-card p {
+            font-size: 0.95rem;
+            margin-bottom: 0;
+            color: var(--color-muted);
+            line-height: 1.7;
+        }
+
+        /* ---- Author ---- */
+
+        .author-section {
+            display: flex;
+            gap: 2rem;
+            align-items: flex-start;
+            margin-top: 1.5rem;
+        }
+
+        .author-initials {
+            flex-shrink: 0;
+            width: 80px;
+            height: 80px;
+            background-color: var(--color-accent);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--font-heading);
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .author-bio p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* ---- Footer ---- */
+
+        .site-footer {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid var(--color-divider);
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--color-muted);
+        }
+
+        .site-footer .sponsor-button {
+            margin-top: 1rem;
+        }
+
+        .site-footer a {
+            color: var(--color-link);
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            text-decoration: underline;
+        }
+
+        /* ---- Responsive ---- */
+
+        @media (max-width: 768px) {
+            :root {
+                --font-size-base: 17px;
+            }
+
+            .page {
+                padding: 2.5rem 1.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1.2rem;
+            }
+
+            .highlights {
+                grid-template-columns: 1fr;
+            }
+
+            .author-section {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .presentation-banners {
+                flex-direction: column;
+            }
+
+            :root {
+                --font-size-base: 16px;
+            }
+
+            .page {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+
+            .hero .subtitle {
+                font-size: 1rem;
+            }
+
+            .read-btn {
+                display: block;
+                text-align: center;
+            }
+
+            blockquote {
+                padding: 1rem 1.25rem;
+            }
+        }
+
+        @media print {
+            body {
+                font-size: 12pt;
+                line-height: 1.6;
+                color: black;
+                background: white;
+            }
+
+            a { color: black; text-decoration: none; }
+            .read-btn { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="hero">
+            <h1>Radical Simplicity<br>for Humans</h1>
+            <p class="subtitle">Layer 8</p>
+            <p class="tagline">A book about making architectural intent explicit, so systems scale without coordination overhead, heroics, or compounding complexity.</p>
+            <div class="presentation-banners">
+                <a href="ec.html" class="presentation-banner">
+                    <div class="banner-title">Executive Presentation</div>
+                    <div class="banner-desc">Vision, economics, and proof</div>
+                </a>
+                <a href="vc.html" class="presentation-banner">
+                    <div class="banner-title">Investor Presentation</div>
+                    <div class="banner-desc">Opportunity, market, and returns</div>
+                </a>
+            </div>
+            <div class="presentation-banners">
+                <a href="book-exec/book.html" class="presentation-banner">
+                    <div class="banner-title">Executive Edition</div>
+                    <div class="banner-desc">The full book for non-technical readers</div>
+                </a>
+            </div>
+            <a href="book/book.html" class="read-btn">Start Reading</a>
+            <p class="lang-links">
+                <a href="book/book.html">English</a> &middot; <a href="book-heb/book.html">&#1506;&#1489;&#1512;&#1497;&#1514;</a> &middot; <a href="book-rus/book.html">Русский</a>
+            </p>
+        </header>
+
+        <section>
+            <h2>About the Book</h2>
+            <p>Most technology initiatives fail economically before they fail technically. Costs rise, delivery slows, and teams burn out, not because of talent or effort, but because architectural intent is left implicit.</p>
+            <p><strong>Radical Simplicity for Humans</strong> examines why this happens and presents <em>Layer 8</em> as a structural response: an architectural model that encodes guarantees into the system itself, removing entire categories of failure by construction rather than by convention.</p>
+
+            <div class="highlights">
+                <div class="highlight-card">
+                    <h3>Architecture as Alignment</h3>
+                    <p>Good architecture is the primary alignment between company goals, system behavior, and human effort.</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Failure by Design</h3>
+                    <p>When architecture is implicit, organizations spend human effort compensating for structural absence.</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Economics, Not Aesthetics</h3>
+                    <p>The focus is not optimization. It is removing costs that should not exist.</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Proof, Not Theory</h3>
+                    <p>Layer 8 is a working model, every claim in the book is testable and falsifiable.</p>
+                </div>
+            </div>
+
+            <blockquote>
+                <p><strong>Radical simplicity is architectural, not aesthetic.</strong> It reduces the things that can go wrong by construction, making intent explicit so the system enforces what convention cannot.</p>
+            </blockquote>
+        </section>
+
+        <section>
+            <h2>About the Author</h2>
+            <div class="author-section">
+                <div class="author-initials">SA</div>
+                <div class="author-bio">
+                    <p><strong>Sharon Aicler</strong> is a software architect with more than two decades of experience building and operating large-scale distributed systems. Working across networking, security, and platform infrastructure, he observed that most technology initiatives fail economically before they fail technically.</p>
+                    <p>This book is written from that perspective, connecting architecture to cost, risk, and organizational drag, and presenting Layer 8 as a structural response.</p>
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <p>Sharon Aicler &middot; <a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+            <div class="sponsor-button">
+                <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Part VI: Technical Chapters Translated | Radical Simplicity for Humans - Executive Edition by Sharon Aicler">
+    <meta name="author" content="Sharon Aicler">
+    <title>Technical Chapters Translated | Radical Simplicity for Humans</title>
+    <link rel="stylesheet" href="css/book.css">
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Toggle navigation">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <div class="site-container">
+        <nav class="sidebar" role="navigation" aria-label="Table of Contents">
+            <header class="site-header">
+                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <p class="book-subtitle">Executive Edition</p>
+                <div class="author-info">
+                    <p>Sharon Aicler</p>
+                    <p><a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+                </div>
+                <div class="sponsor-button">
+                    <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                </div>
+            </header>
+
+            <h2 class="nav-title">Contents</h2>
+            <ul class="chapter-list">
+                <li><a href="book.html">Home</a></li>
+                <li><a href="human-problem.html">I. The Human Problem</a></li>
+                <li><a href="hidden-cause.html">II. The Hidden Cause</a></li>
+                <li><a href="economics.html">III. The Economics</a></li>
+                <li><a href="failure-pattern.html">IV. The Failure Pattern</a></li>
+                <li><a href="radical-simplicity.html">V. Radical Simplicity</a></li>
+                <li><a href="technical-translated.html" class="active">VI. Technical Chapters Translated</a></li>
+                <li><a href="ai-economics.html">VII. AI and the New Economics</a></li>
+                <li><a href="migration.html">VIII. Migration and Adoption</a></li>
+                <li><a href="executive-summary.html">IX. Executive Summary</a></li>
+            </ul>
+
+            <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid var(--color-divider);">
+                <p style="font-size: 0.8rem; color: var(--color-muted); padding: 0 0.75rem;">
+                    <a href="../book/book.html" style="text-decoration: none;">Read the full technical book &rarr;</a>
+                </p>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <article>
+                    <h1>Part VI &mdash; Translating the Technical Chapters for Non-Technical Readers</h1>
+
+                    <h2>15. Security: Trust Must Be Architectural</h2>
+
+                    <p>The original security chapter makes a clear distinction:</p>
+                    <ul>
+                        <li><strong>security by annotation</strong>: security is added around the system</li>
+                        <li><strong>security by authority</strong>: security is owned by the system structure itself</li>
+                    </ul>
+
+                    <p>In non-technical language, the point is simple: if security depends on people remembering to do the right thing in every place, forever, it will fail.</p>
+
+                    <p>Layer 8 moves security from memory and configuration into architecture. That means: identity is handled centrally, access is evaluated structurally, there is no "insecure mode," trust is explicit not assumed, even powerful actors are constrained.</p>
+
+                    <p>Business effect: fewer broad incidents, less credential sprawl, smaller blast radius, less audit pain, lower insider risk, less recurring security drag.</p>
+
+                    <p>Security is no longer an optional layer. It becomes part of the foundation.</p>
+
+                    <hr>
+
+                    <h2>16. Networking: Communication Should Not Expose Complexity</h2>
+
+                    <p>Modern organizations spend huge effort making software components discover each other, route to each other, secure communication, and survive failure.</p>
+
+                    <p>Layer 8 reframes communication so the application expresses intent, while the platform handles delivery.</p>
+
+                    <p>For a non-technical reader, the business meaning is: teams should not manually manage the complexity of how components find and trust each other, topology should not become business logic, communication should be secure, controlled, discoverable, and resilient by default.</p>
+
+                    <p>This reduces a large class of operational burden and makes the system easier to evolve.</p>
+
+                    <hr>
+
+                    <h2>17. Serialization and Runtime: Data Should Travel Without Reinventing the Rules</h2>
+
+                    <p>Organizations repeatedly waste time rebuilding translation layers between components.</p>
+
+                    <p>Different teams define similar things differently. Different systems represent the same business truth in incompatible ways. Every boundary becomes another place for confusion and rework.</p>
+
+                    <p>Layer 8 tries to collapse that repetition. It aims for a model where: data exchange is consistent, services do not have to reinvent shared concepts repeatedly, runtime behavior does not require each team to solve the same systemic problems again.</p>
+
+                    <p>The business effect is less duplication, less inconsistency, and less coordination.</p>
+
+                    <hr>
+
+                    <h2>18. Service as a Contract: Capability Over Implementation</h2>
+
+                    <p>A central idea in the original book is that a true service should expose capability, not implementation details.</p>
+
+                    <p>In business language: a team should not have to understand the internal machinery of another team just to use its capability.</p>
+
+                    <p>That principle sounds obvious, but it is violated constantly. Consumers are exposed to internal data models, they depend on specific technologies, they compensate for provider failure themselves, they work around provider limitations directly.</p>
+
+                    <p>That creates dependency, fragility, and long-term lock-in.</p>
+
+                    <p>Layer 8 argues that a service should be defined by: what it promises, who owns it, what guarantees it provides, how others interact with it safely. This improves ownership clarity and reduces blast radius from change.</p>
+
+                    <hr>
+
+                    <h2>19. API and Query Language: Communication Is a Shared Language</h2>
+
+                    <p>Another chapter in the original book argues that an API is not just an interface. It is a language.</p>
+
+                    <p>That matters because if every service invents its own language, the organization creates fragmentation.</p>
+
+                    <p>Business translation: every team inventing different terms and behaviors creates cognitive overhead, inconsistency increases learning cost, the company pays a coordination tax every time people move between systems.</p>
+
+                    <p>Layer 8 pushes toward a smaller, more consistent way for services to express meaning. That consistency is not cosmetic. It reduces long-term complexity.</p>
+
+                    <hr>
+
+                    <h2>20. Object Relation Mapping and Web: Repetition Is Not a Business Advantage</h2>
+
+                    <p>The original technical chapters on persistence and web interfaces make a broader point: many common software layers are repetitive forms of translation.</p>
+
+                    <p>Teams repeatedly write glue logic to connect: data, services, web surfaces, representations, validation.</p>
+
+                    <p>That repetition is rarely a strategic differentiator.</p>
+
+                    <p>Layer 8 attempts to reduce the amount of repeated infrastructure work teams must perform before they can express actual business intent.</p>
+
+                    <blockquote>
+                        <p>If a company spends most of its engineering budget rebuilding the same connective tissue as everyone else, it is not spending that budget on differentiation.</p>
+                    </blockquote>
+
+                    <hr>
+
+                    <h2>21. Quality: Correctness Should Be Structural</h2>
+
+                    <p>Traditional systems often treat quality as a process problem. More reviews. More tests. More staging. More checklists. More caution.</p>
+
+                    <p>Layer 8 argues that quality improves more reliably when the architecture makes incorrect behavior harder to express in the first place.</p>
+
+                    <p>That does not eliminate the need for testing. It changes what testing is for. Instead of using tests to compensate for unclear architecture, teams use them to validate behavior inside a clearer structural model.</p>
+
+                    <p>The business effect is confidence. Confidence shortens cycles. Shorter cycles increase adaptability.</p>
+
+                    <hr>
+
+                    <h2>22. Practice: Making Architecture Explicit</h2>
+
+                    <p>The original book includes a practice chapter because this is not meant to remain philosophical.</p>
+
+                    <p>The practical meaning is straightforward: if a company wants to reduce software drag, it must start making hidden assumptions visible.</p>
+
+                    <p>That means asking: who owns this capability? What is the contract? Where is authority located? What guarantees are structural? Where are we depending on discipline instead of design?</p>
+
+                    <p>This chapter matters because it turns the book from diagnosis into method.</p>
+
+                    <nav class="chapter-nav">
+                        <a href="radical-simplicity.html" class="prev">Radical Simplicity</a>
+                        <a href="ai-economics.html" class="next">AI and the New Economics</a>
+                    </nav>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/book.js"></script>
+</body>
+</html>

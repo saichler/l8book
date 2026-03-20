@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Практика: Делаем архитектуру явной | Радикальная простота для людей — Шарон Айхлер">
+    <meta name="author" content="Sharon Aicler">
+    <title>Практика: Делаем архитектуру явной | Радикальная простота для людей</title>
+    <link rel="stylesheet" href="css/book.css">
+</head>
+<body>
+    <button class="mobile-nav-toggle" aria-label="Переключить навигацию">
+        <span></span>
+        <span></span>
+        <span></span>
+    </button>
+    <div class="sidebar-overlay"></div>
+
+    <div class="site-container">
+        <nav class="sidebar" role="navigation" aria-label="Оглавление">
+            <header class="site-header">
+                <h1 class="book-title">Радикальная простота<br>для людей</h1>
+                <p class="book-subtitle">Layer 8</p>
+                <div class="author-info">
+                    <p>Sharon Aicler</p>
+                    <p><a href="mailto:saichler@gmail.com">saichler@gmail.com</a></p>
+                </div>
+                <div class="sponsor-button">
+                    <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                </div>
+            </header>
+
+            <h2 class="nav-title">Содержание</h2>
+            <ul class="chapter-list">
+                <li><a href="book.html">Главная</a></li>
+                <li><a href="about.html">Об авторе</a></li>
+                <li><a href="introduction.html">Введение</a></li>
+                <li><a href="thoughts.html">Размышления</a></li>
+                <li><a href="ground-rules.html">Основные правила</a></li>
+                <li><a href="architecture.html">Архитектура как механизм согласования</a></li>
+                <li><a href="failure-modes.html">Режимы отказа</a></li>
+                <li><a href="economics.html">Экономика</a></li>
+                <li><a href="security.html">Безопасность</a></li>
+                <li><a href="networking.html">Сетевое взаимодействие</a></li>
+                <li><a href="serialization.html">Сериализация</a></li>
+                <li><a href="model-agnostic-runtime.html">Модельно-агностичная среда выполнения</a></li>
+                <li><a href="service-as-contract.html">Сервис как контракт</a></li>
+                <li><a href="api-query-language.html">API и язык запросов</a></li>
+                <li><a href="object-relation-mapping.html">Объектно-реляционное отображение</a></li>
+                <li><a href="web-server.html">Веб-сервер</a></li>
+                <li><a href="quality.html">Качество</a></li>
+                <li><a href="practice.html" class="active">Практика</a></li>
+                <li><a href="radical-simplicity-ai.html">Радикальная простота для ИИ</a></li>
+                <li><span class="coming-soon">Миграция</span></li>
+            </ul>
+        </nav>
+
+        <main class="main-content">
+            <div class="content-wrapper">
+                <article>
+                    <h1>Практика: Делаем архитектуру явной</h1>
+
+                    <p>На этом этапе у вас есть набор сообщений Protocol Buffer, и вы уже определили <strong>Первичные объекты</strong> в вашей модели.</p>
+
+                    <p>Используя пример из предыдущей главы, следующий фрагмент показывает упрощённое представление сгенерированных определений protobuf:</p>
+
+<pre><code>message EmployeeList {
+  repeated Employee list = 1;
+  l8api.L8MetaData metadata = 2;
+}
+
+// Первичный объект
+message Employee {
+  string id = 1;
+  string name = 2;
+  repeated Addr addresses = 3;
+}
+
+message AddressList {
+  repeated Employee list = 1;
+  l8api.L8MetaData metadata = 2;
+}
+
+// Первичный объект
+message Addr {
+  string line1 = 1;
+  string line2 = 2;
+  int32 zip = 3;
+}</code></pre>
+
+                    <p>На этом этапе важно не синтаксис сообщений, а <strong>явная идентификация Первичных объектов</strong>. Первичные объекты определяют владение жизненным циклом, границы конкурентности и ответственность сервиса в Layer 8.</p>
+
+                    <blockquote><strong>Примечание:</strong> Layer 8 включает скрипт, упрощающий генерацию привязок Protocol Buffer для рабочих процессов с ИИ-ассистентом. Этот скрипт будет рассмотрен в следующей главе.</blockquote>
+
+                    <hr>
+
+                    <h2>Определение и активация SLA</h2>
+
+                    <p>В этом примере мы используем <strong>распределённый кеш-сервис</strong>. Использование персистентного сервиса следует тому же паттерну, с единственным отличием — инъекцией реализации слоя персистентности.</p>
+
+                    <p>Ниже приведён метод активации для сервиса <code>Employee</code>. Здесь архитектура становится явной.</p>
+
+<pre><code>package employees
+
+import (
+    "github.com/saichler/l8erp/go/types/hcm"
+    "github.com/saichler/l8services/go/services/base"
+    "github.com/saichler/l8types/go/ifs"
+    "github.com/saichler/l8types/go/types/l8api"
+    "github.com/saichler/l8types/go/types/l8web"
+    "github.com/saichler/l8utils/go/utils/web"
+)
+
+func ActivateEmployees(vnic ifs.IVNic) {
+    // Логическое имя сервиса, используемое другими сервисами для ссылки на этот сервис
+    serviceName := "Employee"
+
+    // Область сервиса обеспечивает вертикальное масштабирование (например, несколько изолированных кешей в одном процессе)
+    serviceArea := byte(0)
+
+    sla := ifs.NewServiceLevelAgreement(
+        &base.BaseService{},      // Базовая реализация сервиса Layer 8
+        serviceName, serviceArea, // Логическая идентичность сервиса
+        true,                     // Сервис с состоянием (кеш в памяти)
+        nil,                      // Опциональный callback для валидации или предобработки
+    )
+
+    // Определяем Первичный объект и его коллекцию
+    sla.SetServiceItem(&hcm.Employee{})
+    sla.SetServiceItemList(&hcm.EmployeeList{})
+
+    // Определяем первичный ключ, уникально идентифицирующий Первичный объект
+    sla.SetPrimaryKeys("EmployeeId")
+
+    // Выбираем модель конкурентности
+    sla.SetTransactional(true) // Транзакционная vs best-effort конкурентность
+
+    // Отключаем репликацию; все экземпляры поддерживают идентичное состояние
+    sla.SetReplication(false)
+
+    // Определяем поверхность Web API для этого сервиса
+    ws := web.New(serviceName, serviceArea, 0)
+
+    // CRUD-стиль эндпоинты, отображённые на семантику Первичного объекта
+    ws.AddEndpoint(&hcm.Employee{}, ifs.POST, &l8web.L8Empty{})
+    ws.AddEndpoint(&hcm.EmployeeList{}, ifs.POST, &l8web.L8Empty{})
+    ws.AddEndpoint(&hcm.Employee{}, ifs.PUT, &l8web.L8Empty{})
+    ws.AddEndpoint(&hcm.Employee{}, ifs.PATCH, &l8web.L8Empty{})
+    ws.AddEndpoint(&l8api.L8Query{}, ifs.DELETE, &l8web.L8Empty{})
+    ws.AddEndpoint(&l8api.L8Query{}, ifs.GET, &hcm.EmployeeList{})
+
+    sla.SetWebService(ws)
+
+    // Активируем сервис в контексте виртуальной сети
+    vnic.Resources().Services().Activate(sla, vnic)
+}</code></pre>
+
+                    <p>Здесь важна не механика API, а <strong>архитектурная декларация</strong>:</p>
+
+                    <ul>
+                        <li>Первичный объект явен</li>
+                        <li>Модель конкурентности явна</li>
+                        <li>Жизненный цикл сервиса явен</li>
+                        <li>Поверхность API выводится из модели, а не из ручной логики</li>
+                    </ul>
+
+                    <p>На этом этапе система больше не полагается на неявные соглашения. Архитектура декларирована, обеспечена и наблюдаема.</p>
+
+                    <hr>
+
+                    <h2>Создание ресурсов</h2>
+
+                    <p><code>Resources</code> инкапсулируют экосистемные сервисы, требуемые системой на базе Layer 8. Они формируют фундамент времени выполнения, на котором строятся сетевое взаимодействие, безопасность, управление сервисами и наблюдаемость.</p>
+
+                    <p>В большинстве проектов создание ресурсов централизовано в одном статическом или bootstrap-методе, аналогично примеру ниже. Этот метод обычно вызывается один раз при инициализации процесса.</p>
+
+<pre><code>// CreateResources инициализирует и связывает все основные экосистемные сервисы,
+// требуемые этим проектом.
+func CreateResources(alias string) ifs.IResources {
+    // Создаём и конфигурируем логгер
+    log := logger.NewLoggerImpl(&logger.FmtLogMethod{})
+    log.SetLogLevel(ifs.Info_Level)
+
+    // Создаём контейнер Resources
+    res := resources.NewResources(log)
+
+    // Регистрируем реестр сервисов
+    res.Set(registry.NewRegistry())
+
+    // Загружаем и инициализируем провайдера безопасности
+    sec, err := ifs.LoadSecurityProvider(res)
+    if err != nil {
+        // Задержка для сброса логов перед крахом
+        time.Sleep(time.Second * 10)
+        panic(err.Error())
+    }
+    res.Set(sec)
+
+    // Конфигурируем сетевое взаимодействие с использованием значений по умолчанию
+    conf := &l8sysconfig.L8SysConfig{
+        MaxDataSize:               resources.DEFAULT_MAX_DATA_SIZE,
+        RxQueueSize:               resources.DEFAULT_QUEUE_SIZE,
+        TxQueueSize:               resources.DEFAULT_QUEUE_SIZE,
+        LocalAlias:                alias,        // Идентификатор пода или процесса для наблюдаемости
+        VnetPort:                  uint32(20201), // Порт виртуальной сети
+        KeepAliveIntervalSeconds:  30,            // Интервал heartbeat к vNet
+    }
+    res.Set(conf)
+
+    // Включаем интроспекцию времени выполнения
+    res.Set(introspecting.NewIntrospect(res.Registry()))
+
+    // Инициализируем менеджер сервисов
+    res.Set(manager.NewServices(res))
+
+    return res
+}</code></pre>
+
+                    <hr>
+
+                    <h2>Содержащий процесс</h2>
+
+                    <p><strong>Содержащий процесс</strong> отвечает за создание виртуального сетевого интерфейса (vNic) и активацию сервисов в этом контексте времени выполнения.</p>
+
+                    <p>С точки зрения приложения этот процесс следует маленькой и детерминированной последовательности: инициализация ресурсов, установление сетевого взаимодействия, активация сервисов и ожидание.</p>
+
+<pre><code>func main() {
+    // Создаём и инициализируем все экосистемные ресурсы
+    res := CreateResources("pod name / process name / container name")
+
+    // Выбираем режим сетевого взаимодействия.
+    // При работе под Kubernetes это включает нативную интеграцию.
+    // Если Kubernetes отсутствует, фреймворк автоматически
+    // переключается на сетевое взаимодействие уровня контейнера, затем процесса.
+    ifs.SetNetworkMode(ifs.NETWORK_K8s)
+
+    // Создаём виртуальный сетевой интерфейс (vNic)
+    nic := vnic.NewVirtualNetworkInterface(res, nil)
+
+    // Запускаем vNic и его базовый сетевой стек
+    nic.Start()
+
+    // Блокируемся до подключения и готовности vNic
+    nic.WaitForConnection()
+
+    // Активируем сервисы в этом сетевом контексте
+    employees.ActivateEmployees(nic)
+
+    // Блокируемся до получения сигнала завершения
+    // (например, SIGTERM, SIGINT). Очистка обрабатывается фреймворком.
+    common.WaitForSignal(res)
+}</code></pre>
+
+                    <hr>
+
+                    <h2>Запуск веб-сервера</h2>
+
+                    <p>Запуск веб-сервера для предоставления Web API, включая эндпоинты аутентификации, намеренно так же прост, как активация любого другого сервиса.</p>
+
+                    <p>Он следует <strong>точно такому же архитектурному паттерну</strong>: определяется SLA, активируется и привязывается к контексту виртуальной сети с небольшим числом специфичных для веба шагов конфигурации.</p>
+
+                    <p>Следующий пример можно использовать <strong>вместо</strong> вызова <code>employees.ActivateEmployees(nic)</code>, когда процесс отвечает за обслуживание HTTP-эндпоинтов.</p>
+
+<pre><code>func startWebServer(nic ifs.IVNic, httpPort int, cert string) {
+    // Конфигурируем REST-сервер
+    serverConfig := &server.RestServerConfig{
+        Host:           ipsegment.MachineIP, // Определяем IP машины и привязываемся к нему
+        Port:           httpPort,            // HTTP/HTTPS порт прослушивания
+        Authentication: true,                // Включаем безопасную коммуникацию
+        CertName:       cert,                // Идентификатор TLS-сертификата
+        Prefix:         "/myApp/",            // Префикс URL приложения
+    }
+
+    // Создаём экземпляр REST-сервера
+    svr, err := server.NewRestServer(serverConfig)
+    if err != nil {
+        panic(err)
+    }
+
+    // Регистрируем встроенные эндпоинты health-сервиса
+    hs, ok := nic.Resources().Services().ServiceHandler(health.ServiceName, 0)
+    if ok {
+        ws := hs.WebService()
+        svr.RegisterWebService(ws, nic)
+    }
+
+    // Активируем веб-сервис как первоклассный сервис Layer 8
+    sla := ifs.NewServiceLevelAgreement(
+        &server.WebService{},
+        ifs.WebService,
+        0,
+        false,
+        nil,
+    )
+    sla.SetArgs(svr)
+
+    nic.Resources().Services().Activate(sla, nic)
+
+    nic.Resources().Logger().Info("Web server started")
+
+    // Начинаем принимать HTTP-запросы
+    svr.Start()
+}</code></pre>
+
+                    <blockquote>Вот и всё. Если это кажется простым, это потому что сложность была перемещена туда, где ей место, <strong>в архитектуру.</strong></blockquote>
+
+                    <nav class="chapter-nav">
+                        <a href="quality.html" class="prev">Качество</a>
+                        <a href="radical-simplicity-ai.html" class="next">Радикальная простота для ИИ</a>
+                    </nav>
+                </article>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/book.js"></script>
+</body>
+</html>
