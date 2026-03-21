@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Components - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="company.html">Company</a></li>
+      <li><a href="how.html">Technology</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">Components</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <g class="illus-gear-cw" style="transform-origin: 70px 30px;">
+            <circle cx="70" cy="30" r="14" stroke="#000" stroke-width="1.5" fill="none"/>
+            <circle cx="70" cy="30" r="4" fill="#000"/>
+            <line x1="70" y1="14" x2="70" y2="20" stroke="#000" stroke-width="3"/>
+            <line x1="70" y1="40" x2="70" y2="46" stroke="#000" stroke-width="3"/>
+            <line x1="54" y1="30" x2="60" y2="30" stroke="#000" stroke-width="3"/>
+            <line x1="80" y1="30" x2="86" y2="30" stroke="#000" stroke-width="3"/>
+          </g>
+          <g class="illus-gear-ccw" style="transform-origin: 120px 30px;">
+            <circle cx="120" cy="30" r="10" stroke="#666" stroke-width="1.5" fill="none"/>
+            <circle cx="120" cy="30" r="3" fill="#666"/>
+            <line x1="120" y1="18" x2="120" y2="22" stroke="#666" stroke-width="2.5"/>
+            <line x1="120" y1="38" x2="120" y2="42" stroke="#666" stroke-width="2.5"/>
+            <line x1="108" y1="30" x2="112" y2="30" stroke="#666" stroke-width="2.5"/>
+            <line x1="128" y1="30" x2="132" y2="30" stroke="#666" stroke-width="2.5"/>
+          </g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">The building blocks.</h1>
+    <p class="reveal">22 components. Each with a single responsibility.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="components-section">
+
+      <div class="category-header reveal"><h3>Foundational Infrastructure</h3></div>
+      <div class="component-grid reveal">
+        <a href="components/l8types.html" class="component-card">
+          <div class="component-card-name">l8types</div>
+          <div class="component-card-display">Type System</div>
+          <div class="component-card-desc">Service interfaces and core type definitions.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8types','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8utils.html" class="component-card">
+          <div class="component-card-name">l8utils</div>
+          <div class="component-card-display">Utilities</div>
+          <div class="component-card-desc">Shared utilities: logging, caching, configuration.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8utils','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8reflect.html" class="component-card">
+          <div class="component-card-name">l8reflect</div>
+          <div class="component-card-display">Introspection</div>
+          <div class="component-card-desc">Model-agnostic runtime reflection and change tracking.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8reflect','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8srlz.html" class="component-card">
+          <div class="component-card-name">l8srlz</div>
+          <div class="component-card-display">Serialization</div>
+          <div class="component-card-desc">High-performance cross-platform object serialization.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8srlz','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8ql.html" class="component-card">
+          <div class="component-card-name">l8ql</div>
+          <div class="component-card-display">Query Language</div>
+          <div class="component-card-desc">SQL-like query language for Go data structures.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8ql','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8bus.html" class="component-card">
+          <div class="component-card-name">l8bus</div>
+          <div class="component-card-display">Virtual Network</div>
+          <div class="component-card-desc">Overlay networking with routing, health, and leader election.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8bus','_blank');">GitHub</span></div>
+        </a>
+      </div>
+
+      <div class="category-header reveal"><h3>Services &amp; Persistence</h3></div>
+      <div class="component-grid reveal">
+        <a href="components/l8services.html" class="component-card">
+          <div class="component-card-name">l8services</div>
+          <div class="component-card-display">Service Framework</div>
+          <div class="component-card-desc">Distributed services with SLA, transactions, and replication.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8services','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8orm.html" class="component-card">
+          <div class="component-card-name">l8orm</div>
+          <div class="component-card-display">ORM</div>
+          <div class="component-card-desc">Object-relational mapping as a service.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8orm','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8web.html" class="component-card">
+          <div class="component-card-name">l8web</div>
+          <div class="component-card-display">Web Server</div>
+          <div class="component-card-desc">REST web server framework for Layer 8 services.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8web','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8test.html" class="component-card">
+          <div class="component-card-name">l8test</div>
+          <div class="component-card-display">Testing</div>
+          <div class="component-card-desc">Integration testing with full distributed topology.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8test','_blank');">GitHub</span></div>
+        </a>
+      </div>
+
+      <div class="category-header reveal"><h3>Feature Libraries</h3></div>
+      <div class="component-grid reveal">
+        <a href="components/l8notify.html" class="component-card">
+          <div class="component-card-name">l8notify</div>
+          <div class="component-card-display">Notifications</div>
+          <div class="component-card-desc">Multi-channel notification dispatch with throttling and escalation.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8notify','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8agent.html" class="component-card">
+          <div class="component-card-name">l8agent</div>
+          <div class="component-card-display">AI Agent</div>
+          <div class="component-card-desc">AI-powered chat orchestration with data masking.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8agent','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8ui.html" class="component-card">
+          <div class="component-card-name">l8ui</div>
+          <div class="component-card-display">UI Library</div>
+          <div class="component-card-desc">Shared desktop and mobile UI component library.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8ui','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8events.html" class="component-card">
+          <div class="component-card-name">l8events</div>
+          <div class="component-card-display">Events</div>
+          <div class="component-card-desc">Event processing and distribution.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8events','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8topology.html" class="component-card">
+          <div class="component-card-name">l8topology</div>
+          <div class="component-card-display">Topology</div>
+          <div class="component-card-desc">Network topology modeling and visualization.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8topology','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8traffic.html" class="component-card">
+          <div class="component-card-name">l8traffic</div>
+          <div class="component-card-display">Traffic</div>
+          <div class="component-card-desc">Traffic engineering and SR policy management.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8traffic','_blank');">GitHub</span></div>
+        </a>
+      </div>
+
+      <div class="category-header reveal"><h3>Data Pipeline</h3></div>
+      <div class="component-grid reveal">
+        <a href="components/l8collector.html" class="component-card">
+          <div class="component-card-name">l8collector</div>
+          <div class="component-card-display">Collector</div>
+          <div class="component-card-desc">Multi-protocol network data collection (SNMP, SSH, K8s, REST).</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8collector','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8parser.html" class="component-card">
+          <div class="component-card-name">l8parser</div>
+          <div class="component-card-display">Parser</div>
+          <div class="component-card-desc">Model-agnostic data parsing with vendor configs.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8parser','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8inventory.html" class="component-card">
+          <div class="component-card-name">l8inventory</div>
+          <div class="component-card-display">Inventory</div>
+          <div class="component-card-desc">Distributed cache for parsed infrastructure data.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8inventory','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8pollaris.html" class="component-card">
+          <div class="component-card-name">l8pollaris</div>
+          <div class="component-card-display">Polling Config</div>
+          <div class="component-card-desc">Advanced polling configuration and target management.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8pollaris','_blank');">GitHub</span></div>
+        </a>
+        <a href="components/l8logfusion.html" class="component-card">
+          <div class="component-card-name">l8logfusion</div>
+          <div class="component-card-display">Log Fusion</div>
+          <div class="component-card-desc">Distributed log aggregation and centralized storage.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8logfusion','_blank');">GitHub</span></div>
+        </a>
+      </div>
+
+      <div class="category-header reveal"><h3>Simulation</h3></div>
+      <div class="component-grid reveal">
+        <a href="components/l8opensim.html" class="component-card">
+          <div class="component-card-name">l8opensim</div>
+          <div class="component-card-display">Network Simulator</div>
+          <div class="component-card-desc">Scalable simulator for 25,000+ devices across 28 types.</div>
+          <div class="component-card-links"><span class="component-card-github" onclick="event.preventDefault(); window.open('https://github.com/saichler/l8opensim','_blank');">GitHub</span></div>
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/reveal.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

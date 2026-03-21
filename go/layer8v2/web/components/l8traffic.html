@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traffic - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8traffic</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <circle cx="10" cy="30" r="4" fill="#000"/>
+          <circle cx="70" cy="12" r="3" fill="#000"/>
+          <circle cx="130" cy="48" r="3" fill="#000"/>
+          <circle cx="190" cy="30" r="4" fill="#000"/>
+          <line x1="14" y1="30" x2="186" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <line x1="14" y1="28" x2="68" y2="13" stroke="#E5E5E5" stroke-width="1"/>
+          <line x1="73" y1="14" x2="186" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <line x1="14" y1="32" x2="128" y2="47" stroke="#E5E5E5" stroke-width="1"/>
+          <line x1="133" y1="47" x2="186" y2="32" stroke="#E5E5E5" stroke-width="1"/>
+          <g class="illus-travel-1"><circle cx="20" cy="30" r="2.5" fill="#000"/></g>
+          <g class="illus-travel-2"><circle cx="20" cy="30" r="2" fill="#666"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Traffic</h1>
+    <p>Traffic engineering and SR policy management.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8traffic" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>A UDP/TCP traffic generator for testing Kubernetes Network Policies. Runs in two modes: service mode (listeners) and client mode (traffic generation). Deploy listener pods across a cluster as a DaemonSet, then issue traffic commands from any pod to verify that network policies permit or block the expected traffic.</p>
+
+    <h2>How It Works</h2>
+    <ol>
+      <li>Service pods run on every node via a DaemonSet, each listening on UDP and TCP ports.</li>
+      <li>A client sends a command via UDP to any service pod, specifying target destination, port, protocol, and packet count.</li>
+      <li>The service pod generates traffic to the target. UDP mode allocates ephemeral sockets with throttling at 5K packets (250ms pause). TCP mode uses a pool of 100 concurrent HTTP workers.</li>
+      <li>The service pod reports results back: sent count, OK count, error count, timeout status, and elapsed time.</li>
+    </ol>
+
+    <h2>Usage</h2>
+
+    <h3>Start a Listener</h3>
+    <p><code>./generator Start Udp_port=15000 Tcp_port=16000</code></p>
+    <p>Starts both a UDP listener and a TCP (HTTP) echo server.</p>
+
+    <h3>Generate Traffic</h3>
+    <p><code>./generator Do Udp_port=15000 Destination=10.0.0.5 Port=16000 Quantity=1000</code></p>
+    <p>Arguments: <code>Udp_port</code> (local service port), <code>Tcp_port</code> (if set, use TCP instead of UDP), <code>Destination</code> (target IP), <code>Port</code> (target port), <code>Quantity</code> (packet count), <code>Timeout</code> (seconds, auto-calculated if 0).</p>
+
+    <h3>Report Output</h3>
+    <p>Results are reported as: <code>Total UDP Sent:1000 OK:1000 Err:0 Timeout:false Took:2 seconds</code></p>
+
+    <h2>Kubernetes Deployment</h2>
+    <p>Apply <code>k8s/deploy.yaml</code> to deploy into namespace <code>traffic-01</code>:</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">DaemonSet</div>
+        <div class="def-desc">listener pod on every node (UDP 15000, TCP 16000)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">ClusterIP Service</div>
+        <div class="def-desc">internal access</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">NodePort Service</div>
+        <div class="def-desc">external access (ports 30000, 30001)</div>
+      </div>
+    </div>
+
+    <h2>Testing Network Policies</h2>
+    <p>From any pod, test connectivity to the traffic service. If the NetworkPolicy allows traffic, all packets succeed. If blocked, all packets error with a timeout.</p>
+
+    <h2>Wire Protocol</h2>
+    <p>Messages use a pipe-delimited format: <code>id|action|dest|port|qty|text|timeout</code>. Actions include <code>sendUdp</code>, <code>sendTcp</code>, <code>request</code>, and <code>response</code>.</p>
+
+    <h2>Docker</h2>
+    <p>Cross-compiles for <code>linux/amd64</code>. Image: <code>saichler/traffic-generator:latest</code>. Run with environment variables <code>CMD=Start</code>, <code>Udp_port</code>, and <code>Tcp_port</code>.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

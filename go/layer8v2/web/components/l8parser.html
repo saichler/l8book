@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Parser - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8parser</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <line x1="10" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <rect x="6" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="92" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="178" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <g class="illus-dot-flow-1"><circle cx="30" cy="30" r="3" fill="#000"/></g>
+          <g class="illus-dot-flow-2"><circle cx="30" cy="30" r="2.5" fill="#555"/></g>
+          <g class="illus-dot-flow-3"><circle cx="30" cy="30" r="2" fill="#999"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Parser</h1>
+    <p>Model-agnostic data parsing with vendor configs.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8parser" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Parser is a model-agnostic parsing engine. It processes raw data collected by l8collector -- SNMP walks, SSH command outputs, REST API responses, and kubectl queries -- and transforms it into structured protobuf objects using a configurable rule-based framework. Parsed objects are sent to l8inventory via PATCH operations.</p>
+
+    <h2>Processing Flow</h2>
+    <ol>
+      <li><strong>Job Reception</strong> -- Parser receives completed collection jobs from l8collector</li>
+      <li><strong>Rule Application</strong> -- Applies parsing rules based on l8pollaris configuration</li>
+      <li><strong>Data Transformation</strong> -- Transforms raw data into structured protobuf objects via PropertyId injection</li>
+      <li><strong>Inventory Update</strong> -- Sends parsed objects to l8inventory</li>
+    </ol>
+
+    <h2>Parsing Rules</h2>
+    <p>18 parsing rules covering four collection protocols:</p>
+
+    <h3>Generic Rules</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Contains</div>
+        <div class="def-desc">Text pattern matching in collected data</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Set</div>
+        <div class="def-desc">Direct value assignment to object properties</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">NormalizeEnum</div>
+        <div class="def-desc">Raw values to enum constants</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">MapToDeviceStatus</div>
+        <div class="def-desc">Protocol-specific status codes to device status</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SetTimeSeries</div>
+        <div class="def-desc">Time-series metric injection</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">InferDeviceType</div>
+        <div class="def-desc">Device type from sysOID enterprise prefix</div>
+      </div>
+    </div>
+
+    <h3>SNMP Rules</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">StringToCTable</div>
+        <div class="def-desc">SNMP table walks to columnar tables</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">CTableToMapProperty</div>
+        <div class="def-desc">Columnar tables to map properties</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">EntityMibToPhysicals</div>
+        <div class="def-desc">Entity MIB to physical components</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">IfTableToPhysicals</div>
+        <div class="def-desc">ifTable to logical interfaces</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SnmpGpuTable</div>
+        <div class="def-desc">GPU tables (NVIDIA enterprise MIB)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SnmpOspfToVrf / SnmpBgpToVrf</div>
+        <div class="def-desc">Routing MIBs to VRF structures</div>
+      </div>
+    </div>
+
+    <h3>SSH Rules</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">SshNvidiaSmiParse</div>
+        <div class="def-desc"><code>nvidia-smi</code> output (utilization, temperature, power)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">SshVrfParse</div>
+        <div class="def-desc"><code>show vrf</code> output across 9 vendor formats</div>
+      </div>
+    </div>
+
+    <h3>REST Rules</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">RestJsonParse</div>
+        <div class="def-desc">Generic JSON response parser</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">RestGpuParse</div>
+        <div class="def-desc">NVIDIA DCGM REST API (topology, health, NVLink)</div>
+      </div>
+    </div>
+
+    <h2>Vendor Support</h2>
+    <p>15 vendors with automatic detection by sysOID enterprise prefix: Cisco, Juniper, Palo Alto, Fortinet, Arista, Nokia, Huawei, Dell, HPE, IBM, Check Point, SonicWall, D-Link, Extreme, NEC. Each vendor configuration polls for system information, interface monitoring, hardware inventory, and performance metrics.</p>
+
+    <h3>NVIDIA GPU (Three-Protocol Stack)</h3>
+    <p>Full GPU monitoring via SNMP (7 polls), SSH (5 polls), and REST (4 polls). Covers system info, per-GPU metrics, utilization, temperature, power, NVLink topology, and health.</p>
+
+    <h3>Kubernetes</h3>
+    <p>Resource monitoring via kubectl: Nodes, Pods, Deployments, StatefulSets, DaemonSets, Services, Namespaces, NetworkPolicies. Includes log collection and multi-cluster support.</p>
+
+    <h3>Routing Protocols</h3>
+    <p>OSPF and BGP via standard MIB-II OIDs (vendor-agnostic). VRF via SSH <code>show vrf</code> parsing for 9 vendor-specific formats.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

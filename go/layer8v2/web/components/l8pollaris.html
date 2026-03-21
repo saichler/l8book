@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Polling Config - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8pollaris</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <line x1="10" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <rect x="6" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="92" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="178" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <g class="illus-dot-flow-1"><circle cx="30" cy="30" r="3" fill="#000"/></g>
+          <g class="illus-dot-flow-2"><circle cx="30" cy="30" r="2.5" fill="#555"/></g>
+          <g class="illus-dot-flow-3"><circle cx="30" cy="30" r="2" fill="#999"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Polling Config</h1>
+    <p>Advanced polling configuration and target management.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8pollaris" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8 Pollaris is the polling, parsing, and populating model service for the Layer 8 data pipeline. It provides centralized configuration for how devices are polled, what data is collected, and how results are routed. Supports SNMP v2/v3, SSH, RESTCONF, NETCONF, gRPC, Kubernetes, and GraphQL.</p>
+
+    <h2>Core Components</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">PollarisService</div>
+        <div class="def-desc">Service handling CRUD operations for polling configurations with distributed caching.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">PollarisCenter</div>
+        <div class="def-desc">Central management hub with logging, initialization tracking, and cache synchronization.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TargetService</div>
+        <div class="def-desc">ORM-based persistent target management with PostgreSQL backend.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TargetCallback</div>
+        <div class="def-desc">Lifecycle hooks for target state changes with validation and collector routing.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">TargetLinks</div>
+        <div class="def-desc">Abstraction layer routing targets to collectors, parsers, caches, and persistence.</div>
+      </div>
+    </div>
+
+    <h2>Polling Configuration</h2>
+    <p>An <code>L8Pollaris</code> configuration defines a polling strategy for a device class: vendor, series, family, software, hardware, version. Contains a map of <code>L8Poll</code> entries with execution order.</p>
+    <p>Each poll specifies: what to collect (<code>what</code> -- OID, command, or endpoint), which protocol, operation type (GET, MAP, TABLE), cadence plan, timeout, and attribute mappings with parsing rules.</p>
+    <p>Multi-model attribute mapping allows a single poll to target multiple device models simultaneously via <code>map&lt;string, string&gt;</code> PropertyId fields.</p>
+
+    <h2>Target Management</h2>
+    <p>Targets represent polled devices. Each target has a state (Down, Up, Maintenance, Offline), an inventory type (Network Device, GPU, K8s Cluster, etc.), and a map of hosts with protocol-specific connections.</p>
+    <div class="clean-list">
+      <div class="clean-row">Round-robin load balancing to collectors</div>
+      <div class="clean-row">Bulk start/stop operations by type</div>
+      <div class="clean-row">Automatic recovery on restart</div>
+      <div class="clean-row">Address validation</div>
+      <div class="clean-row">PostgreSQL-backed persistent storage</div>
+    </div>
+
+    <h2>Target Types</h2>
+    <div class="clean-list">
+      <div class="clean-row">Network Devices -- Routers, switches, firewalls</div>
+      <div class="clean-row">GPUs -- GPU computing resources</div>
+      <div class="clean-row">Hosts -- Physical and virtual servers</div>
+      <div class="clean-row">Virtual Machines</div>
+      <div class="clean-row">Kubernetes Clusters</div>
+      <div class="clean-row">Storage -- Arrays and systems</div>
+      <div class="clean-row">Power -- PDUs and UPS</div>
+    </div>
+
+    <h2>Collection Jobs</h2>
+    <p><code>CJob</code> tracks individual collection operations. Features include hash-based change detection (FNV-1a) to avoid reprocessing identical results, consecutive error counting, always-run flags, and per-job arguments for parameter substitution.</p>
+
+    <h2>Supported Protocols</h2>
+    <div class="clean-list">
+      <div class="clean-row">SNMP v2/v3</div>
+      <div class="clean-row">SSH</div>
+      <div class="clean-row">RESTCONF</div>
+      <div class="clean-row">NETCONF</div>
+      <div class="clean-row">gRPC</div>
+      <div class="clean-row">Kubernetes (kubectl)</div>
+      <div class="clean-row">GraphQL</div>
+    </div>
+
+    <h2>Operations</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>L8C_Get</code></div>
+        <div class="def-desc">Simple get for single values</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>L8C_Map</code></div>
+        <div class="def-desc">Key-value mapping for structured data</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>L8C_Table</code></div>
+        <div class="def-desc">Tabular collection for bulk retrieval</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technology - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="company.html">Company</a></li>
+      <li><a href="how.html">Technology</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">Technology</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect class="illus-layer-1" x="4" y="2" width="190" height="8" rx="1" fill="#CCC" transform-origin="99 6"/>
+          <rect class="illus-layer-2" x="4" y="14" width="155" height="8" rx="1" fill="#999" transform-origin="81 18"/>
+          <rect class="illus-layer-3" x="4" y="26" width="125" height="8" rx="1" fill="#777" transform-origin="66 30"/>
+          <rect class="illus-layer-4" x="4" y="38" width="100" height="8" rx="1" fill="#444" transform-origin="54 42"/>
+          <rect class="illus-layer-5" x="4" y="50" width="70" height="8" rx="1" fill="#000" transform-origin="39 54"/>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">How Layer 8 turns architecture<br>into platform behavior.</h1>
+    <p class="reveal">
+      Layer 8 is an intent-driven architecture for building complex distributed systems
+      with explicit contracts, secure communication, and portable deployment across environments.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="pipeline-grid">
+      <div class="pipeline-step reveal">
+        <span class="pipeline-number">01</span>
+        <h3>Service</h3>
+        <p>Define a service around a Prime Object, an entity with its own lifecycle and clear ownership boundary.</p>
+      </div>
+      <div class="pipeline-step reveal">
+        <span class="pipeline-number">02</span>
+        <h3>Contract</h3>
+        <p>Declare its SLA: concurrency model, replication behavior, web exposure, and failure handling.</p>
+      </div>
+      <div class="pipeline-step reveal">
+        <span class="pipeline-number">03</span>
+        <h3>Runtime</h3>
+        <p>The platform activates it: discovery, routing, persistence, security, and service coordination.</p>
+      </div>
+      <div class="pipeline-step reveal">
+        <span class="pipeline-number">04</span>
+        <h3>Exposure</h3>
+        <p>Web APIs are exposed from declared contracts rather than hand-wired endpoint sprawl.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2 class="reveal">What you define vs what the platform carries.</h2>
+    <div class="split-compare reveal">
+      <div class="split-side split-you">
+        <div class="split-header">You write</div>
+        <div class="split-items">
+          <div class="split-item">
+            <h3>Service definition</h3>
+            <p>Define a Prime Object and its behavior.</p>
+          </div>
+          <div class="split-item">
+            <h3>SLA declaration</h3>
+            <p>Declare concurrency, replication, failure handling, and web exposure.</p>
+          </div>
+        </div>
+      </div>
+      <div class="split-side split-platform">
+        <div class="split-header">Platform handles</div>
+        <div class="split-items">
+          <div class="split-item">
+            <h3>Discovery</h3>
+            <p>Service registration with no manual configuration.</p>
+          </div>
+          <div class="split-item">
+            <h3>Concurrency</h3>
+            <p>Locking, leader election, transactions by SLA.</p>
+          </div>
+          <div class="split-item">
+            <h3>Replication</h3>
+            <p>Data replicated across nodes per contract.</p>
+          </div>
+          <div class="split-item">
+            <h3>Security</h3>
+            <p>Encrypted by default. Policy-enforced. Zero-trust.</p>
+          </div>
+          <div class="split-item">
+            <h3>Persistence</h3>
+            <p>ORM maps models to storage via introspection.</p>
+          </div>
+          <div class="split-item">
+            <h3>Query</h3>
+            <p>L8Query operates on nested models. No table abstractions.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <h2 class="reveal">Go deeper</h2>
+    <div class="section-nav-grid">
+      <a href="problem.html" class="section-nav-card reveal">
+        <span class="mono">01</span>
+        <h3>The Problem</h3>
+        <p>Why software slows down, and why teams can't stop it.</p>
+      </a>
+      <a href="shift.html" class="section-nav-card reveal">
+        <span class="mono">02</span>
+        <h3>The Shift</h3>
+        <p>Six ground rules that eliminate complexity by construction.</p>
+      </a>
+      <a href="architecture.html" class="section-nav-card reveal">
+        <span class="mono">03</span>
+        <h3>Architecture</h3>
+        <p>The layered structure from networking to web exposure.</p>
+      </a>
+      <a href="components.html" class="section-nav-card reveal">
+        <span class="mono">04</span>
+        <h3>Components</h3>
+        <p>22 building blocks. Each with a single responsibility.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/reveal.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

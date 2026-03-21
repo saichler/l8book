@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Events - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8events</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <circle cx="40" cy="30" r="4" fill="#000"/>
+          <ellipse cx="40" cy="30" rx="20" ry="15" fill="none" stroke="#000" stroke-width="1" class="illus-beacon-1"/>
+          <ellipse cx="40" cy="30" rx="20" ry="15" fill="none" stroke="#000" stroke-width="1" class="illus-beacon-2"/>
+          <line x1="65" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="0.5"/>
+          <rect x="80" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+          <rect x="120" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+          <rect x="160" y="24" width="30" height="12" rx="2" fill="#000" opacity="0.1"/>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Events</h1>
+    <p>Event processing and distribution.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8events" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>l8events is a shared event, alarm, and maintenance library for Layer 8 projects. It provides generic protobuf types, Go backend packages, and reusable l8ui components that any consumer project can import. Like l8notify, it depends only on <code>google.golang.org/protobuf</code> -- no l8orm, l8services, l8bus, or consumer project dependencies.</p>
+
+    <h2>Core Types</h2>
+
+    <h3>EventRecord</h3>
+    <p>Immutable after creation. Captures a single occurrence with category, severity, source information, timestamps, and extensible attributes. Events can generate alarms via the <code>generatedAlarmId</code> field.</p>
+
+    <h3>AlarmRecord</h3>
+    <p>State machine lifecycle. Alarms progress through states: Active, Acknowledged, Cleared, Suppressed. Each state change is recorded in a <code>stateHistory</code> audit trail. Supports deduplication via <code>dedupKey</code>, occurrence counting, severity changes, and attached notes.</p>
+
+    <h3>MaintenanceWindow</h3>
+    <p>Time-bounded suppression windows. Supports recurrence patterns (daily, weekly, monthly) with scope filtering by entity IDs and types.</p>
+
+    <h2>Enums</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Severity</code></div>
+        <div class="def-desc">INFO, WARNING, MINOR, MAJOR, CRITICAL</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>AlarmState</code></div>
+        <div class="def-desc">ACTIVE, ACKNOWLEDGED, CLEARED, SUPPRESSED</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>EventState</code></div>
+        <div class="def-desc">NEW, PROCESSED, DISCARDED, ARCHIVED</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>EventCategory</code></div>
+        <div class="def-desc">17 categories: Audit, System, Monitoring, Security, Integration, Custom, Network, Kubernetes, Performance, Syslog, Trap, Compute, Storage, Power, GPU, Topology, Automation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>MaintenanceStatus</code></div>
+        <div class="def-desc">SCHEDULED, ACTIVE, COMPLETED, CANCELLED</div>
+      </div>
+    </div>
+
+    <h2>Category Event Messages</h2>
+    <p>16 typed event messages, one per <code>EventCategory</code>. Each shares common fields (<code>eventId</code>, <code>propertyId</code>, <code>sourceId</code>, <code>sourceType</code>) and adds domain-specific parsed fields. The <code>propertyId</code> references the exact attribute in a source model via l8reflect property paths.</p>
+    <p>Examples: <code>AuditEvent</code> (login, config change), <code>NetworkEvent</code> (BGP, OSPF, interface), <code>KubernetesEvent</code> (pod, node, deployment), <code>GpuEvent</code> (temperature, utilization, memory).</p>
+
+    <h2>Go Packages</h2>
+
+    <h3><span class="mono">state</span> -- Alarm State Machine</h3>
+    <p>Validates alarm state transitions. Enforces the allowed transition graph and returns errors for invalid transitions.</p>
+
+    <h3><span class="mono">archive</span> -- Archive Engine</h3>
+    <p>Generic archive engine for moving resolved events and alarms to cold storage.</p>
+
+    <h3><span class="mono">maintenance</span> -- Window Evaluator</h3>
+    <p>Evaluates whether a given entity at a given time falls within an active maintenance window. Handles recurrence expansion.</p>
+
+    <h3><span class="mono">convert</span> -- Event Converter</h3>
+    <p>Converter engine with a <code>Parser</code> interface and dispatch system. Ships with 16 built-in parsers covering all event categories: Audit, System, Monitoring, Security, Integration, Performance, Syslog, Trap, Automation (ops), Network, Kubernetes, Compute, Storage, Power, GPU, Topology (infra).</p>
+
+    <h2>l8ui Components</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Alarm Table</div>
+        <div class="def-desc">Column definitions and form for alarm records</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Alarm Detail</div>
+        <div class="def-desc">State history and notes renderer</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Event Viewer</div>
+        <div class="def-desc">Event table columns and form</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Archive Viewer</div>
+        <div class="def-desc">Archive table columns for both alarms and events</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Maintenance Windows</div>
+        <div class="def-desc">Columns and form for maintenance window management</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">State Actions</div>
+        <div class="def-desc">Acknowledge, Clear, and Suppress action buttons</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Shared Enums</div>
+        <div class="def-desc">Severity, alarm state, event category enums with renderers</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

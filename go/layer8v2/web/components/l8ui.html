@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UI Library - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8ui</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect class="illus-block-1" x="10" y="8" width="28" height="44" rx="2" fill="#000"/>
+          <rect class="illus-block-2" x="44" y="14" width="28" height="32" rx="2" fill="#333"/>
+          <rect class="illus-block-3" x="78" y="10" width="28" height="40" rx="2" fill="#555"/>
+          <rect class="illus-block-4" x="112" y="16" width="28" height="28" rx="2" fill="#888"/>
+          <rect class="illus-block-5" x="146" y="12" width="28" height="36" rx="2" fill="#BBB"/>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">UI Library</h1>
+    <p>Shared desktop and mobile UI component library.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8ui" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>l8ui is a configuration-driven JavaScript/CSS component library for building enterprise web applications. It provides both desktop and mobile surfaces with full feature parity. Modules supply only data (configs, enums, columns, forms) while all behavioral logic lives in shared library components.</p>
+
+    <h2>Architecture</h2>
+    <p>Desktop components use the <code>Layer8D*</code> prefix. Mobile components use <code>Layer8M*</code>. Both follow the same configuration-driven module pattern: a module is bootstrapped by a single factory call (desktop) or registry registration (mobile). All CRUD, navigation, table rendering, and form handling is handled by the library.</p>
+
+    <h2>Desktop Components</h2>
+    <h3>Core</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DConfig</code></div>
+        <div class="def-desc">Application configuration (API prefix, auth)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DUtils</code></div>
+        <div class="def-desc">Shared utilities (fetch wrappers, formatting)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DRenderers</code></div>
+        <div class="def-desc">Enum, status, date, and boolean renderers</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DNotification</code></div>
+        <div class="def-desc">Toast notification system</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DPopup</code></div>
+        <div class="def-desc">Stacked modal system</div>
+      </div>
+    </div>
+
+    <h3>Factories</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8EnumFactory</code></div>
+        <div class="def-desc">Enum map creation from value arrays</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8ColumnFactory</code></div>
+        <div class="def-desc">Column definition builder (text, number, date, enum, status, money, custom)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8FormFactory</code></div>
+        <div class="def-desc">Form definition builder (sections, fields, inline tables)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8RefFactory</code></div>
+        <div class="def-desc">Reference registry entry builder</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8SvgFactory</code></div>
+        <div class="def-desc">SVG illustration generator for section headers</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8ModuleConfigFactory</code></div>
+        <div class="def-desc">Module configuration builder</div>
+      </div>
+    </div>
+
+    <h3>Data and Tables</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DTable</code></div>
+        <div class="def-desc">Full-featured data table with sorting, filtering, pagination, and server-side data</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DDataSource</code></div>
+        <div class="def-desc">Shared fetch and pagination engine for all view types</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DReferencePicker</code></div>
+        <div class="def-desc">Searchable reference lookup for form fields</div>
+      </div>
+    </div>
+
+    <h3>View System</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DViewFactory</code></div>
+        <div class="def-desc">Registry for view types (table is auto-registered)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8ViewSwitcher</code></div>
+        <div class="def-desc">Dropdown UI for switching between view types</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DChart</code></div>
+        <div class="def-desc">Bar, line, and pie charts with theme-aware colors</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DKanban</code></div>
+        <div class="def-desc">Kanban board with configurable lanes</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DTimeline</code></div>
+        <div class="def-desc">Timeline view</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DCalendar</code></div>
+        <div class="def-desc">Calendar view</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DGantt</code></div>
+        <div class="def-desc">Gantt chart</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DTreeGrid</code></div>
+        <div class="def-desc">Hierarchical tree grid</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DWizard</code></div>
+        <div class="def-desc">Multi-step wizard</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DDashboard</code></div>
+        <div class="def-desc">Dashboard with KPI widget cards</div>
+      </div>
+    </div>
+
+    <h3>Module System</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DModuleFactory</code></div>
+        <div class="def-desc">Orchestrates module initialization from a config object</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DModuleNavigation</code></div>
+        <div class="def-desc">Sidebar navigation, tabs, and sub-navigation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DModuleCRUD</code></div>
+        <div class="def-desc">Add, edit, delete operations</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DServiceRegistry</code></div>
+        <div class="def-desc">Service endpoint resolution</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8DModuleFilter</code></div>
+        <div class="def-desc">Module enable/disable toggle tree</div>
+      </div>
+    </div>
+
+    <h2>Mobile Components</h2>
+    <p>Mobile equivalents provide card-based responsive layouts with hierarchical drill-down navigation:</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MConfig</code>, <code>Layer8MAuth</code>, <code>Layer8MUtils</code></div>
+        <div class="def-desc">Core mobile infrastructure</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MTable</code></div>
+        <div class="def-desc">Card-based data table with swipe actions</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MPopup</code></div>
+        <div class="def-desc">Mobile modal system</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MForms</code></div>
+        <div class="def-desc">Mobile form rendering and data collection</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MModuleRegistry</code></div>
+        <div class="def-desc">Module registration and navigation</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>Layer8MEditTable</code></div>
+        <div class="def-desc">Inline editing table for mobile</div>
+      </div>
+    </div>
+
+    <h2>Module Pattern</h2>
+    <p>A module consists of configuration-only files:</p>
+    <div class="clean-list">
+      <div class="clean-row">A config file defining services, models, and endpoints</div>
+      <div class="clean-row">Enum definitions with renderers</div>
+      <div class="clean-row">Column definitions using <code>Layer8ColumnFactory</code></div>
+      <div class="clean-row">Form definitions using <code>Layer8FormFactory</code></div>
+      <div class="clean-row">An init file that calls <code>Layer8DModuleFactory.create()</code> (~10 lines)</div>
+    </div>
+    <p>No behavioral code. No CRUD handlers. No navigation logic. Configuration only.</p>
+
+    <h2>Theming</h2>
+    <p>All components use <code>--layer8d-*</code> CSS custom properties defined in <code>layer8d-theme.css</code>. Dark mode is handled centrally via <code>[data-theme="dark"]</code> overrides. Components never define their own dark mode blocks.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

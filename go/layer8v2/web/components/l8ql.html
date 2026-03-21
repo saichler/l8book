@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Query Language - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8ql</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <line x1="10" y1="14" x2="190" y2="14" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="10" y1="26" x2="190" y2="26" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="10" y1="38" x2="190" y2="38" stroke="#E5E5E5" stroke-width="0.5"/>
+          <line x1="10" y1="50" x2="190" y2="50" stroke="#E5E5E5" stroke-width="0.5"/>
+          <g class="illus-scan"><rect x="10" y="8" width="30" height="48" rx="1" fill="#000" opacity="0.1"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Query Language</h1>
+    <p>SQL-like query language for Go data structures.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8ql" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8QL is a pure-Go, reflection-based SQL-like query language for filtering Go data structures in memory. No database, no ORM, just struct filtering via reflection. It provides a single, common API to query graph model data of any Go struct at runtime.</p>
+
+    <h2>Two-Stage Compilation</h2>
+    <p>Queries compile in two stages.</p>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">Parser</div>
+        <div class="def-desc">Takes a query string and produces an <code>L8Query</code> protobuf message. Validates syntax only.</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Interpreter</div>
+        <div class="def-desc">Takes the parsed protobuf and an <code>IResources</code> instance. Resolves field names against the introspected type schema. Produces an executable <code>Query</code>.</div>
+      </div>
+    </div>
+
+    <h2>Query Syntax</h2>
+    <pre><code>select &lt;columns&gt; from &lt;type&gt;
+  [where &lt;conditions&gt;]
+  [sort-by &lt;column&gt;] [ascending|descending]
+  [limit &lt;number&gt;] [page &lt;number&gt;]
+  [match-case]
+  [mapreduce]
+  [group-by &lt;columns&gt;] [having &lt;conditions&gt;]</code></pre>
+
+    <h2>Operators</h2>
+    <h3>Comparison</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>=</code></div>
+        <div class="def-desc">Equal (supports wildcards: <code>name='J*'</code>)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>!=</code></div>
+        <div class="def-desc">Not equal</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></div>
+        <div class="def-desc">Ordering</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>in</code>, <code>not in</code></div>
+        <div class="def-desc">Membership tests</div>
+      </div>
+    </div>
+    <h3>Logical</h3>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>and</code>, <code>or</code></div>
+        <div class="def-desc">Boolean connectives</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>()</code></div>
+        <div class="def-desc">Parentheses for grouping</div>
+      </div>
+    </div>
+
+    <h2>Aggregation</h2>
+    <p>Aggregate functions: <code>count(*)</code>, <code>count(field)</code>, <code>sum(field)</code>, <code>avg(field)</code>, <code>min(field)</code>, <code>max(field)</code>. Combine with <code>group-by</code> and <code>having</code> for grouped analytics.</p>
+
+    <h2>Deep Path Navigation</h2>
+    <p>Query nested objects, arrays, and maps seamlessly.</p>
+    <pre><code>select name from Employee where addresses.country = 'USA'</code></pre>
+
+    <h2>Key Features</h2>
+    <div class="clean-list">
+      <div class="clean-row">Wildcard pattern matching (<code>J*</code> matches <code>John</code>, <code>Jane</code>)</div>
+      <div class="clean-row">Case sensitivity control via <code>match-case</code></div>
+      <div class="clean-row">Sorting with <code>sort-by</code> and <code>ascending</code>/<code>descending</code></div>
+      <div class="clean-row">Pagination with <code>limit</code> and <code>page</code></div>
+      <div class="clean-row">MapReduce mode for distributed query execution</div>
+      <div class="clean-row">MD5 hash generation for query caching and deduplication</div>
+      <div class="clean-row">Type-safe comparators for strings, integers, unsigned integers, booleans, and pointers</div>
+    </div>
+
+    <h2>API</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>query.Match(obj)</code></div>
+        <div class="def-desc">Test a single object against the query</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>query.Filter(list, onlySelected)</code></div>
+        <div class="def-desc">Filter a list, optionally projecting selected columns</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>query.Aggregate(list)</code></div>
+        <div class="def-desc">Execute aggregation and return grouped results</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>query.Hash()</code></div>
+        <div class="def-desc">MD5 hash for caching</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>query.Properties()</code></div>
+        <div class="def-desc">Selected columns as property accessors</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

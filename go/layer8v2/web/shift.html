@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Shift - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/sections.css">
+  <link rel="stylesheet" href="css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="products.html">Products</a></li>
+      <li><a href="services.html">Services</a></li>
+      <li><a href="company.html">Company</a></li>
+      <li><a href="how.html">Technology</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">The Shift</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect x="8" y="15" width="50" height="30" rx="2" stroke="#999" stroke-width="1" fill="none" stroke-dasharray="3 2"/>
+          <text x="33" y="34" text-anchor="middle" font-size="8" font-family="Inter" fill="#999">IMPLICIT</text>
+          <g class="illus-shift">
+            <line x1="68" y1="30" x2="120" y2="30" stroke="#000" stroke-width="1.5"/>
+            <polygon points="118,26 126,30 118,34" fill="#000"/>
+          </g>
+          <rect x="136" y="15" width="56" height="30" rx="2" stroke="#000" stroke-width="1.5" fill="none"/>
+          <text x="164" y="34" text-anchor="middle" font-size="8" font-weight="600" font-family="Inter" fill="#000">EXPLICIT</text>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);" class="reveal">Explicit architecture.<br>By construction.</h1>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="shift-grid">
+      <div class="shift-item reveal">
+        <h3>Intent-Driven Services</h3>
+        <p>Services declare what they do through contracts. The platform handles how.</p>
+      </div>
+      <div class="shift-item reveal">
+        <h3>Runtime API Discovery</h3>
+        <p>No predefined endpoints. APIs emerge from service declarations at runtime.</p>
+      </div>
+      <div class="shift-item reveal">
+        <h3>Deterministic Execution</h3>
+        <p>Same inputs produce same outputs. Every time. On every machine.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="alt">
+  <div class="container">
+    <h2 class="reveal">The six ground rules.</h2>
+    <div class="rules-grid">
+      <div class="rule-card reveal">
+        <h3>Intent over tools</h3>
+        <p>Design driven by intent, not by current tool limits.</p>
+      </div>
+      <div class="rule-card reveal">
+        <h3>Radical simplicity</h3>
+        <p>Oversimplification is mandatory. If it can't be oversimplified, it's not yet understood.</p>
+      </div>
+      <div class="rule-card reveal">
+        <h3>Topology-free</h3>
+        <p>Serverless by design. Topology never leaks into architecture.</p>
+      </div>
+      <div class="rule-card reveal">
+        <h3>Design-first</h3>
+        <p>Never let implementation influence design.</p>
+      </div>
+      <div class="rule-card reveal">
+        <h3>Interface, not instance</h3>
+        <p>"As a Service" means interface, not instance.</p>
+      </div>
+      <div class="rule-card reveal">
+        <h3>Platform agnostic</h3>
+        <p>Scale down as easily as up.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="js/reveal.js"></script>
+<script src="js/nav.js"></script>
+</body>
+</html>

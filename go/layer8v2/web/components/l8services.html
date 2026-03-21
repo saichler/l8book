@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Service Framework - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8services</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <rect x="30" y="8" width="1" height="44" fill="#E5E5E5"/>
+          <rect x="60" y="8" width="1" height="44" fill="#E5E5E5"/>
+          <rect x="90" y="8" width="1" height="44" fill="#E5E5E5"/>
+          <rect x="120" y="8" width="1" height="44" fill="#E5E5E5"/>
+          <rect x="150" y="8" width="1" height="44" fill="#E5E5E5"/>
+          <g class="illus-stream-1"><circle cx="30" cy="30" r="3" fill="#000"/></g>
+          <g class="illus-stream-2"><circle cx="60" cy="30" r="3" fill="#000"/></g>
+          <g class="illus-stream-3"><circle cx="90" cy="30" r="3" fill="#555"/></g>
+          <g class="illus-stream-1"><circle cx="120" cy="30" r="3" fill="#555"/></g>
+          <g class="illus-stream-2"><circle cx="150" cy="30" r="3" fill="#999"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Service Framework</h1>
+    <p>Distributed services with SLA, transactions, and replication.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8services" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Services is the core services framework for Layer 8. It provides SLA-based service management, distributed caching, leader election, ACID transactions, Map-Reduce, data import/export, file storage, and replication.</p>
+
+    <h2>Base Service</h2>
+    <p>Foundation CRUD handler implementing Post, Put, Patch, Delete, and Get. Integrated cache interaction with SLA-based Before/After callbacks. Query support with pagination. Async notification queue with 50,000 capacity.</p>
+
+    <h2>Distributed Cache</h2>
+    <p>Thread-safe distributed cache with persistent storage backends, property change listeners, paginated fetch, metadata collection, and replication-aware operations.</p>
+
+    <h2>Service Manager</h2>
+    <p>Central orchestrator handling registration, discovery, request routing, and transaction coordination. Leader election uses the bully algorithm with 3-second election timeout and 5-second heartbeat timeout. Election debouncing (500ms window) prevents storms. Service grouping reduces election traffic by roughly 80%.</p>
+
+    <h2>Transaction Engine</h2>
+    <p>Six-state machine for ACID 2-phase commit: Create, Queue, Run, Commit (or Rollback), Cleanup. Optimized rollback targets only peers that committed. Proper PreCommit map cleanup.</p>
+
+    <h2>Map-Reduce</h2>
+    <p>Distributed parallel processing across service nodes. Implement <code>IMapReduceService.Merge()</code> to combine results from all participants. Supports all five actions: MapR_POST, MapR_GET, MapR_PUT, MapR_PATCH, MapR_DELETE.</p>
+
+    <h2>Data Import</h2>
+    <p>Full import pipeline with four sub-handlers: AI-based field mapping, import execution with validation, model metadata queries, and template transfer/export. Includes heuristic field matching, multi-format file parsing, value transformation, and typed record building.</p>
+
+    <h2>Additional Components</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">CSV Export</div>
+        <div class="def-desc">Stateless export service returning formatted CSV data</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">File Store</div>
+        <div class="def-desc">Upload/download with configurable size limits (default 5MB) and storage root</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Replication</div>
+        <div class="def-desc">Tracks which nodes store which data via <code>L8ReplicationIndex</code></div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Recovery</div>
+        <div class="def-desc">Synchronizes data from leader to followers in pages of 500 elements</div>
+      </div>
+    </div>
+
+    <h2>Architecture</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>services/base/</code></div>
+        <div class="def-desc">CRUD service foundation (5 files, ~470 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/dcache/</code></div>
+        <div class="def-desc">Distributed cache (10 files, ~405 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/manager/</code></div>
+        <div class="def-desc">Service orchestration (10 files, ~1,970 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/transaction/</code></div>
+        <div class="def-desc">ACID transactions (10 files, ~834 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/dataimport/</code></div>
+        <div class="def-desc">Import pipeline (9 files, ~1,265 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/csvexport/</code></div>
+        <div class="def-desc">CSV export (4 files, ~350 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/filestore/</code></div>
+        <div class="def-desc">File storage (5 files, ~330 lines)</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/replication/</code></div>
+        <div class="def-desc">Replication tracking</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>services/recovery/</code></div>
+        <div class="def-desc">Data synchronization</div>
+      </div>
+    </div>
+
+    <h2>Testing</h2>
+    <p>Tests use the <code>l8test</code> framework with a 4-node topology across 3 VNets. Coverage includes base service CRUD, distributed cache, Map-Reduce with 9 participants, transaction coordination, replication, notification delivery, and service manager operations. Roughly 5,900 lines of service code across 55 files, plus 1,500 lines of tests across 12 test files.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Introspection - Layer 8</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/sections.css">
+  <link rel="stylesheet" href="../css/detail.css">
+  <link rel="stylesheet" href="../css/illustrations.css">
+</head>
+<body>
+<nav>
+  <div class="container">
+    <a href="../index.html" class="nav-logo">Layer 8</a>
+    <ul class="nav-links">
+      <li><a href="../products.html">Products</a></li>
+      <li><a href="../services.html">Services</a></li>
+      <li><a href="../company.html">Company</a></li>
+      <li><a href="../how.html">Technology</a></li>
+      <li><a href="../contact.html">Contact</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero" style="min-height: auto; padding-top: 96px; padding-bottom: 30px;">
+  <div class="container">
+    <div class="hero-title-row reveal">
+      <p class="mono">l8reflect</p>
+      <div class="hero-illustration">
+        <svg width="200" height="60" viewBox="0 0 200 60" fill="none">
+          <line x1="10" y1="30" x2="190" y2="30" stroke="#E5E5E5" stroke-width="1"/>
+          <rect x="6" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="92" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <rect x="178" y="22" width="16" height="16" rx="2" stroke="#000" stroke-width="1" fill="none"/>
+          <g class="illus-dot-flow-1"><circle cx="30" cy="30" r="3" fill="#000"/></g>
+          <g class="illus-dot-flow-2"><circle cx="30" cy="30" r="2.5" fill="#555"/></g>
+          <g class="illus-dot-flow-3"><circle cx="30" cy="30" r="2" fill="#999"/></g>
+        </svg>
+      </div>
+    </div>
+    <h1 style="font-size: clamp(32px, 4vw, 56px);">Introspection</h1>
+    <p>Model-agnostic runtime reflection and change tracking.</p>
+    <div class="hero-cta" style="margin-top: 24px;">
+      <a href="https://github.com/saichler/l8reflect" class="btn btn-primary">View on GitHub</a>
+      <a href="../components.html" class="btn btn-secondary">All Components</a>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+
+    <h2>Overview</h2>
+    <p>L8Reflect reads the blueprint of your data automatically. It can clone, compare, update, and navigate any Go data structure, even ones it has never seen before. No code generation. No manual mapping. Just pass a struct and the library figures out the rest.</p>
+
+    <h2>Introspection</h2>
+    <p>Struct analysis builds a node-based type tree with caching. A decorator system marks primary keys, unique fields, and always-overwrite semantics. The registry is thread-safe with mutex protection.</p>
+
+    <h2>Deep Cloning</h2>
+    <p>Type-safe deep clone of any Go struct including pointers, slices, maps, and nested types. Internal fields (<code>XXX</code>, <code>DoNotCompare</code>, <code>DoNotCopy</code>) are automatically filtered. Deep equality comparison is built in.</p>
+
+    <h2>Property Navigation</h2>
+    <p>Path-based get/set on arbitrarily nested structs using dot-delimited paths with map key syntax. For example: <code>order.lines&lt;key&gt;.amount</code>. Supports maps, slices, and struct fields. Includes <code>Collect</code> and <code>ForEachValue</code> traversal.</p>
+
+    <h2>Change Tracking</h2>
+    <p>Differential comparison between two instances of the same type. Records property-level <code>Change</code> objects with old and new values. Supports dry-run mode (detect changes without mutating the original), nil-is-valid semantics, and full-replacement mode.</p>
+
+    <h2>Decorators</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term">PrimaryKey</div>
+        <div class="def-desc">Identifies instances, used by the updater for matching</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">AlwaysOverwrite</div>
+        <div class="def-desc">Replace entire map instead of merging keys</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Non</div>
+        <div class="def-desc">Exclude a field from cloning and comparison</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term">Unique</div>
+        <div class="def-desc">Mark a field as unique within a collection</div>
+      </div>
+    </div>
+
+    <h2>Time Series Support</h2>
+    <p>Append-only slice semantics for time series fields. Thread-safe setters with mutex protection. Memory-leak-safe lifecycle management.</p>
+
+    <h2>Architecture</h2>
+    <div class="def-list">
+      <div class="def-row">
+        <div class="def-term"><code>go/reflect/introspecting/</code></div>
+        <div class="def-desc">Type introspection, L8Node tree, decorator registry</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/reflect/cloning/</code></div>
+        <div class="def-desc">Deep clone and deep equality</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/reflect/properties/</code></div>
+        <div class="def-desc">Path-based get/set, collect, traversal</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/reflect/updating/</code></div>
+        <div class="def-desc">Differential update, dry-run, change recording</div>
+      </div>
+      <div class="def-row">
+        <div class="def-term"><code>go/reflect/helping/</code></div>
+        <div class="def-desc">Value extraction, filtering utilities</div>
+      </div>
+    </div>
+
+    <h2>Testing</h2>
+    <p>The test suite covers roughly 6,200 lines across 26 test files. Coverage includes introspection, cloning, property get/set, map operations, updater diffs, dry-run updates, time series setters, and boolean edge cases.</p>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-content">
+      <p>&copy; 2025 Layer 8. Open-source platform, commercial system delivery.</p>
+      <ul class="footer-links">
+        <li><a href="https://github.com/saichler">GitHub</a></li>
+        <li><a href="../products.html">Products</a></li>
+        <li><a href="../contact.html">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script src="../js/reveal.js"></script>
+<script src="../js/nav.js"></script>
+</body>
+</html>
