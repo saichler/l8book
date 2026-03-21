@@ -93,7 +93,7 @@ h3 {
 }
 
 p {
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.7;
   color: var(--color-text-secondary);
   max-width: 680px;
@@ -132,10 +132,25 @@ nav .container {
 }
 
 .nav-logo {
-  font-size: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
   font-weight: 700;
   color: var(--color-text);
   text-decoration: none;
+}
+
+.nav-logo::before {
+  content: "";
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  background-image: url("../images/layer8-logo.gif");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  flex-shrink: 0;
 }
 
 .nav-links {
@@ -145,7 +160,7 @@ nav .container {
 }
 
 .nav-links a {
-  font-size: 14px;
+  font-size: 16px;
   color: var(--color-text-secondary);
   text-decoration: none;
   transition: color 0.2s;

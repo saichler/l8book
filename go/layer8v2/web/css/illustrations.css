@@ -48,24 +48,59 @@
 
 /* ── Products: Horizontal Stacking Blocks ── */
 @keyframes stack-right {
-  0%   { transform: translateX(-10px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+  0%, 10%   { transform: translateX(-10px); opacity: 0; }
+  22%, 72%  { transform: translateX(0); opacity: 1; }
+  100%      { transform: translateX(8px); opacity: 0; }
 }
-.illus-block-1 { animation: stack-right 0.6s ease-out 0.1s both; }
-.illus-block-2 { animation: stack-right 0.6s ease-out 0.3s both; }
-.illus-block-3 { animation: stack-right 0.6s ease-out 0.5s both; }
-.illus-block-4 { animation: stack-right 0.6s ease-out 0.7s both; }
-.illus-block-5 { animation: stack-right 0.6s ease-out 0.9s both; }
+.illus-block-1 { animation: stack-right 5s ease-in-out 0.1s infinite; }
+.illus-block-2 { animation: stack-right 5s ease-in-out 0.3s infinite; }
+.illus-block-3 { animation: stack-right 5s ease-in-out 0.5s infinite; }
+.illus-block-4 { animation: stack-right 5s ease-in-out 0.7s infinite; }
+.illus-block-5 { animation: stack-right 5s ease-in-out 0.9s infinite; }
 
-/* ── Services: Sequential Step Highlight ── */
-@keyframes fade-step {
-  0%, 100% { opacity: 0.25; }
-  25%      { opacity: 1; }
+/* ── Services: Delivery Artifacts ── */
+@keyframes service-scope {
+  0%, 10%   { transform: translateX(-10px); opacity: 0; }
+  18%, 78%  { transform: translateX(0); opacity: 1; }
+  100%      { transform: translateX(0); opacity: 0.75; }
 }
-.illus-step-1 { animation: fade-step 8s ease-in-out 0s infinite; }
-.illus-step-2 { animation: fade-step 8s ease-in-out 2s infinite; }
-.illus-step-3 { animation: fade-step 8s ease-in-out 4s infinite; }
-.illus-step-4 { animation: fade-step 8s ease-in-out 6s infinite; }
+
+@keyframes service-arch {
+  0%, 20%   { transform: scale(0.92); opacity: 0; }
+  30%, 80%  { transform: scale(1); opacity: 1; }
+  100%      { transform: scale(1); opacity: 0.78; }
+}
+
+@keyframes service-drop {
+  0%, 34%   { transform: translateY(8px) scale(0.9); opacity: 0; }
+  46%       { transform: translateY(-2px) scale(1.04); opacity: 1; }
+  56%, 82%  { transform: translateY(0) scale(1); opacity: 1; }
+  100%      { transform: translateY(0) scale(1); opacity: 0.88; }
+}
+
+@keyframes service-expand {
+  0%, 52%   { transform: translateX(-8px); opacity: 0; }
+  64%, 84%  { transform: translateX(0); opacity: 1; }
+  100%      { transform: translateX(0); opacity: 0.82; }
+}
+
+.illus-service-scope {
+  animation: service-scope 5.6s ease-in-out infinite;
+}
+
+.illus-service-arch {
+  transform-origin: center;
+  animation: service-arch 5.6s ease-in-out infinite;
+}
+
+.illus-service-drop {
+  transform-origin: center;
+  animation: service-drop 5.6s ease-in-out infinite;
+}
+
+.illus-service-expand {
+  animation: service-expand 5.6s ease-in-out infinite;
+}
 
 /* ── Company: Chaos to Order ── */
 /* Dots start at chaos positions, move to center (AI), then to grid positions */
@@ -121,14 +156,15 @@
 
 /* ── Technology: Layer Bars Building ── */
 @keyframes layer-slide {
-  0%   { transform: scaleX(0); opacity: 0; }
-  100% { transform: scaleX(1); opacity: 1; }
+  0%, 10%   { transform: scaleX(0); opacity: 0; }
+  22%, 72%  { transform: scaleX(1); opacity: 1; }
+  100%      { transform: scaleX(0); opacity: 0; }
 }
-.illus-layer-1 { animation: layer-slide 0.5s ease-out 0.1s both; }
-.illus-layer-2 { animation: layer-slide 0.5s ease-out 0.3s both; }
-.illus-layer-3 { animation: layer-slide 0.5s ease-out 0.5s both; }
-.illus-layer-4 { animation: layer-slide 0.5s ease-out 0.7s both; }
-.illus-layer-5 { animation: layer-slide 0.5s ease-out 0.9s both; }
+.illus-layer-1 { animation: layer-slide 5s ease-in-out 0.1s infinite; }
+.illus-layer-2 { animation: layer-slide 5s ease-in-out 0.3s infinite; }
+.illus-layer-3 { animation: layer-slide 5s ease-in-out 0.5s infinite; }
+.illus-layer-4 { animation: layer-slide 5s ease-in-out 0.7s infinite; }
+.illus-layer-5 { animation: layer-slide 5s ease-in-out 0.9s infinite; }
 
 /* ── Contact: Horizontal Beacon ── */
 @keyframes beacon-pulse {
@@ -159,14 +195,15 @@
 
 /* ── Architecture: Cascade Down ── */
 @keyframes cascade {
-  0%   { transform: translateY(-6px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0%, 10%   { transform: translateY(-6px); opacity: 0; }
+  22%, 72%  { transform: translateY(0); opacity: 1; }
+  100%      { transform: translateY(6px); opacity: 0; }
 }
-.illus-cas-1 { animation: cascade 0.5s ease-out 0.1s both; }
-.illus-cas-2 { animation: cascade 0.5s ease-out 0.3s both; }
-.illus-cas-3 { animation: cascade 0.5s ease-out 0.5s both; }
-.illus-cas-4 { animation: cascade 0.5s ease-out 0.7s both; }
-.illus-cas-5 { animation: cascade 0.5s ease-out 0.9s both; }
+.illus-cas-1 { animation: cascade 5s ease-in-out 0.1s infinite; }
+.illus-cas-2 { animation: cascade 5s ease-in-out 0.3s infinite; }
+.illus-cas-3 { animation: cascade 5s ease-in-out 0.5s infinite; }
+.illus-cas-4 { animation: cascade 5s ease-in-out 0.7s infinite; }
+.illus-cas-5 { animation: cascade 5s ease-in-out 0.9s infinite; }
 
 /* ── Components: Spinning Gear ── */
 @keyframes gear-spin {

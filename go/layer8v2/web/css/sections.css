@@ -14,11 +14,50 @@
   background: var(--color-bg);
   padding: 32px;
   text-decoration: none;
-  transition: background 0.2s;
+  position: relative;
+  overflow: hidden;
+  transform: translateY(0);
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
+  transition:
+    background 0.2s,
+    transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1),
+    box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.section-nav-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 3px;
+  width: 100%;
+  background: var(--color-text);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .section-nav-card:hover {
   background: var(--color-bg-alt);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
+}
+
+.section-nav-card:hover::before,
+.section-nav-card:focus-visible::before {
+  transform: scaleX(1);
+}
+
+.section-nav-card:focus-visible {
+  outline: none;
+  background: var(--color-bg-alt);
+  transform: translateY(-6px);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.10);
+}
+
+.section-nav-card:active {
+  transform: translateY(-2px) scale(0.985);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .section-nav-card .mono {
@@ -29,6 +68,13 @@
 .section-nav-card h3 {
   color: var(--color-text);
   margin-bottom: 8px;
+  transform: translateX(0);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.section-nav-card:hover h3,
+.section-nav-card:focus-visible h3 {
+  transform: translateX(6px);
 }
 
 .section-nav-card p {
