@@ -187,7 +187,7 @@ echo ""
 echo "=== Step 9: Clone repositories ==="
 cd "$PROJECT_DIR"
 
-for repo in l8erp l8book; do
+for repo in l8book l8nasfile l8erp l8orm l8ui l8agent l8web l8reflect l8types l8events l8bus l8myfamiliy l8services l8opensim l8collector l8topology l8-site-base l8utils l8ql l8srlz l8finplan l8inventory l8logfusion l8bugs l8test l8traffic l8alarms l8notify l8pollaris l8parser probler; do
     if [ -d "$PROJECT_DIR/$repo" ]; then
         echo "$repo already cloned."
     else
