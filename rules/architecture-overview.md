@@ -139,12 +139,10 @@ l8ui/
 
 ### Usage
 
-l8ui is added to each Layer8 project as a git submodule under the `web/` directory. Copy `setup-l8ui-submodule.sh` from the l8ui project into the new project's `web/` directory and run it:
+l8ui is designed to be copied into each Layer8 project's web directory:
 
 ```bash
-cp <path-to-l8ui>/setup-l8ui-submodule.sh <project>/go/<module>/ui/web/
-cd <project>/go/<module>/ui/web/
-./setup-l8ui-submodule.sh
+cp -r l8ui/ <project>/go/<module>/ui/web/l8ui/
 ```
 
 ### Theming
