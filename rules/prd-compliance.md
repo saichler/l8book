@@ -1,12 +1,15 @@
 # PRD Compliance (CRITICAL)
 
-All PRDs must comply with global rules, follow the l8erp project structure, and use the l8ui library guide.
+All PRDs must:
+- Comply with all the rules at `../l8book/rules`
+- Comply with the Layer 8 Ecosystem architecture, with example at the `../l8erp` project
+- Include a detailed compliance checklist covering protobuf design, service design, UI design, mock data, deployment, and configuration
 
 ---
 
-## Rule 1: PRD Must Be Compliant with Global Rules
+## Rule 1: PRD Must Be Compliant with Rules
 
-Every PRD MUST be reviewed against ALL active global rules before it is considered complete. If a PRD contradicts or omits requirements from a global rule, it must be corrected before approval.
+Every PRD MUST be reviewed against ALL rules at `../l8book/rules` before it is considered complete. If a PRD contradicts or omits requirements from a rule, it must be corrected before approval.
 
 ### Compliance Checklist
 
@@ -47,16 +50,16 @@ Every PRD MUST be reviewed against ALL active global rules before it is consider
 - ModConfig handling is addressed (modconfig-failure-no-logout)
 
 ### Process
-1. After drafting a PRD, review it against `~/.claude/rules/*.md`
+1. After drafting a PRD, review it against all rules at `../l8book/rules`
 2. Flag any conflicts or omissions
 3. Update the PRD to comply before writing it to `./plans/`
-4. If a global rule does not apply to the project, note the exemption explicitly in the PRD
+4. If a rule does not apply to the project, note the exemption explicitly in the PRD
 
 ---
 
-## Rule 2: PRD Must Follow L8ERP Project Structure and Architecture
+## Rule 2: PRD Must Follow the Layer 8 Ecosystem Architecture
 
-Every PRD MUST follow the project structure and architecture established in `l8erp`. Do NOT invent new directory structures, naming conventions, or architectural patterns.
+Every PRD MUST follow the project structure and architecture established in the Layer 8 Ecosystem, with `../l8erp` as the canonical example. Do NOT invent new directory structures, naming conventions, or architectural patterns.
 
 ### Project Structure to Follow
 
@@ -139,7 +142,7 @@ proto/
 - Vnet main starts the virtual network layer
 
 ### Process
-1. Before writing a PRD, read the l8erp directory structure: `ls -R l8erp/go/` and `ls -R l8erp/proto/`
+1. Before writing a PRD, read the l8erp directory structure: `ls -R ../l8erp/go/` and `ls -R ../l8erp/proto/`
 2. Map your new project's components to the l8erp equivalents
 3. Use the same directory names, file naming conventions, and organizational patterns
 4. If a structural deviation is genuinely needed, document the reason explicitly in the PRD
