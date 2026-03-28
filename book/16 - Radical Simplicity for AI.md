@@ -110,153 +110,141 @@ This guide walks you through creating your first project from scratch using Laye
 
 ---
 
-## Setting Up the Development Environment
-You will need a linux Arch, Ubuntu or Mint machine or a Mac machine. 
-**Sorry, Windows is just not build for development**. 
-You can install Virtualbox and one of the distribution above.
+## Environment Requirements
 
-On your linux machine, download the following script:
+Layer 8 assumes a development environment that is deterministic, scriptable, and aligned with production behavior.
 
-### 1. Install Go, wget & Docker/Docker desktop
+Use one of the following:
+- Linux (**Arch**, **Ubuntu**, or **Mint** recommended)
+- macOS
 
-Download and install Go for your platform:  
-https://go.dev/dl/
-
-Download and install Docker on linux for your distribution or Docker desktop from https://docs.docker.com/get-started/ if you are on windows/mac.
-
-If your system does not contain **wget** (cli tool), please install it.
-
-### 2. Open a terminal and move to your home directory
-```bash
-cd ~
-```
-
-### 3. Extract the Go archive
-```bash
-tar -zxvf ~/Downloads/<golang file name>
-```
-
-### 4. Configure environment variables
-
-Add the following to your shell configuration file (for example ~/.bashrc):
-
-```bash
-export GOROOT=~/go
-export GOPATH=~/proj
-export GOBIN=~/proj/bin
-export PATH=~/.local/bin:~/go/bin:$GOBIN:$PATH
-
-alias ll="ls -lt"
-
-git config --global user.email "<your email address>"
-git config --global user.name "<your name>"
-
-export DOCKER_BUILDKIT=1
-```
-
-Reload your shell:
-```bash
-source ~/.bashrc
-```
-
-### 5. Create your development workspace
-```bash
-mkdir -p ~/proj/src/github.com/<your github username>
-```
-
-This directory will contain all your Layer 8 projects.
+Windows is not recommended for this workflow.  
+If needed, run Linux via a virtual machine (e.g., VirtualBox).
 
 ---
 
-## Creating and Cloning Your Project
+## Bootstrap the Environment
 
-### 1. Create a new repository on GitHub
-Create a repository at:
-```
-github.com/<your github username>/<your project name>
-```
+Download the setup script:
 
-### 2. Clone your project locally
+https://raw.githubusercontent.com/saichler/l8book/refs/heads/main/setup/setup.sh
+
+Make it executable:
+
 ```bash
-cd ~/proj/src/github.com/<your github username>
-git clone https://github.com/<your github username>/<your project name>
+chmod +x setup.sh
 ```
 
-### 3. Clone the Layer 8 ERP reference implementation
+Run it:
+
 ```bash
-git clone https://github.com/saichler/l8erp
+./setup.sh
 ```
 
-The `l8erp` project serves as a complete working example of a Layer 8 system.
+This script will:
+- Install all required dependencies
+- Clone the Layer 8 ecosystem projects
+- Apply the Layer 8 architectural rules
+
+At completion, your workspace will be initialized at:
+
+```
+~/proj/src/github.com/saichler/my-project
+```
 
 ---
 
-## Install Your AI Coding Assistant
+## Running Claude Code
 
-Install one of the supported AI coding tools:
+Start Claude:
 
-Claude Code:  
-https://code.claude.com/docs/en/setup
-
-or ChatGPT Codex (or equivalent coding agent).
-
-These tools generate architecture, code, and documentation while following Layer 8 rules.
-
----
-
-## Create Your Product Requirements Document (PRD)
-
-### 1. Navigate to your project
-```bash
-cd ~/proj/src/github.com/<your github username>/<your project name>
-```
-
-### 2. Start your AI coding session
 ```bash
 claude
 ```
-or
+
+Follow the prompts to authenticate and connect your account.
+
+---
+
+## Creating a PRD (Product Requirements Document)
+
+Layer 8 starts with intent, not code.
+
+In Claude, define your product:
+
 ```bash
-codex
+Create a PRD using the Layer 8 Ecosystem Architecture for <your idea in 2–3 sentences>
 ```
 
-### 3. Use the following prompts
-Please copy & past the following prompts to setup the Layer 8 ecosystem rules and guides for the AI:
+Once the PRD is generated, validate it:
 
----
->\> Please install to your memory the following Layer 8 global rules so it will 
-> be available in every session: ./l8erp/plans/global-rules-all.md and make sure any
-> PRD is in compliance to those rules.
----
+```bash
+Do you have any concerns or gaps in the PRD based on the Layer 8 Ecosystem?
+```
 
----
->\> The following ../l8erp/go/erp/ui/web/l8ui/GUIDE.md is a guide for the Layer 8 UI/UX 
-> generic components, please add it to your memory and use it whenever 
-> panning or implementing PRD with UI section.
----
+If gaps are identified:
 
----
->\> An example project built using the Layer 8 ecosystem is in ../l8erp. Please following this project 
-> structure and architecture whenever you create a PRD for a new project.
----
+```bash
+Do any of the projects in the ../ directory address these concerns?
+```
 
----
->\> Create a PRD in the directory plans that comply with the global rules 
-> and follows the Layer 8 architecture for \<your project/system idea\>
----
-
-The AI will generate a complete PRD aligned with Layer 8 architecture and constraints.
+This step ensures reuse before creation — a core Layer 8 principle.
 
 ---
 
-## Start Implementation
+## Executing the PRD
 
-Once the PRD is created:
+Once the PRD is validated:
 
-1. Follow the implementation phases defined in the PRD.
-2. Let the AI assistant generate code and structure for each phase.
-3. Ensure all generated components comply with Layer 8 global rules.
-4. Continue iterating until the PRD is fully implemented.
+```bash
+PRD approved. Please implement it.
+```
 
-From this point forward, development becomes a guided execution of the PRD — with Layer 8 enforcing architectural consistency and AI accelerating delivery.
+Claude will generate a full, production-grade distributed system aligned with Layer 8 constraints.
 
+---
+
+## Running the System Locally
+
+After implementation completes:
+
+```bash
+cd go
+./run-local.sh
+```
+
+This launches the full distributed system locally using the deterministic Layer 8 environment.
+
+---
+
+## Building and Deploying
+
+Before building images:
+
+- Obtain the secure base images (security + PostgreSQL)
+- Replace any references to external repositories with your own container registry
+
+Then build all images:
+
+```bash
+go/build-all-images.sh
+```
+
+Deploy to Kubernetes:
+
+```bash
+cd k8s
+./deploy.sh
+```
+
+Your system is now running on your cluster.
+
+---
+
+## Closing Note
+
+This is not a development setup.  
+This is a system production pipeline.
+
+You are not writing code.  
+You are defining intent — and the system materializes from it.
