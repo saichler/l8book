@@ -111,6 +111,11 @@ This guide walks you through creating your first project from scratch using Laye
 ---
 
 ## Setting Up the Development Environment
+You will need a linux Arch, Ubuntu or Mint machine or a Mac machine. 
+**Sorry, Windows is just not build for development**. 
+You can install Virtualbox and one of the distribution above.
+
+On your linux machine, download the following script:
 
 ### 1. Install Go, wget & Docker/Docker desktop
 
