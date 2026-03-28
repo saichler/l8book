@@ -175,6 +175,7 @@ add_to_bashrc 'export GOPATH=~/proj'
 add_to_bashrc 'export GOBIN=~/proj/bin'
 add_to_bashrc 'export PATH=$GOROOT/bin:$PATH'
 add_to_bashrc 'alias ll="ls -lt"'
+add_to_bashrc 'alias proj="cd ~/proj/src/github.com/saichler"'
 
 # Source the updated bashrc for the rest of this script
 export GOROOT="$HOME/go"
@@ -189,12 +190,46 @@ cd "$PROJECT_DIR"
 
 for repo in l8book l8nasfile l8erp l8orm l8ui l8agent l8web l8reflect l8types l8events l8bus l8myfamiliy l8services l8opensim l8collector l8topology l8-site-base l8utils l8ql l8srlz l8finplan l8inventory l8logfusion l8bugs l8test l8traffic l8alarms l8notify l8pollaris l8parser probler; do
     if [ -d "$PROJECT_DIR/$repo" ]; then
-        echo "$repo already cloned."
+        echo "$repo already cloned, pulling latest..."
+        git -C "$PROJECT_DIR/$repo" pull
     else
         echo "Cloning $repo..."
         git clone "https://github.com/saichler/${repo}.git"
     fi
 done
+
+# ─── 10. Install Claude Code global rules ─────────────────────────────────
+echo ""
+echo "=== Step 10: Claude Code global rules ==="
+CLAUDE_RULES_DIR="$HOME/.claude/rules"
+L8BOOK_RULES_DIR="$PROJECT_DIR/l8book/rules"
+mkdir -p "$CLAUDE_RULES_DIR"
+
+if [ -d "$L8BOOK_RULES_DIR" ]; then
+    echo "Symlinking rules from l8book/rules into ~/.claude/rules/..."
+    for rule in "$L8BOOK_RULES_DIR"/*.md; do
+        [ -f "$rule" ] || continue
+        name=$(basename "$rule")
+        if [ -L "$CLAUDE_RULES_DIR/$name" ] || [ -f "$CLAUDE_RULES_DIR/$name" ]; then
+            rm -f "$CLAUDE_RULES_DIR/$name"
+        fi
+        ln -s "$rule" "$CLAUDE_RULES_DIR/$name"
+    done
+    echo "  $(ls "$L8BOOK_RULES_DIR"/*.md 2>/dev/null | wc -l) rules linked."
+else
+    echo "WARNING: l8book/rules directory not found at $L8BOOK_RULES_DIR"
+fi
+
+# ─── 11. Create new project directory ─────────────────────────────────────
+echo ""
+echo "=== Step 11: Create new project directory ==="
+MY_PROJECT_DIR="$PROJECT_DIR/my-project"
+if [ -d "$MY_PROJECT_DIR" ]; then
+    echo "Project directory already exists: $MY_PROJECT_DIR"
+else
+    echo "Creating $MY_PROJECT_DIR..."
+    mkdir -p "$MY_PROJECT_DIR"
+fi
 
 # ─── Done ────────────────────────────────────────────────────────────────────
 echo ""
@@ -205,4 +240,7 @@ echo ""
 echo "Next steps:"
 echo "  1. Log out and back in (for docker group and shell changes)"
 echo "  2. Run 'source ~/.bashrc' or open a new terminal"
+echo "  3. cd $MY_PROJECT_DIR"
+echo ""
+echo "You can now execute claude in this directory and create a PRD for your idea."
 echo ""
