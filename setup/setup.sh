@@ -187,12 +187,13 @@ GO_URL="https://go.dev/dl/${GO_ARCHIVE}"
 if [ -d "$HOME/go" ] && "$HOME/go/bin/go" version &>/dev/null; then
     echo "Go is already installed: $($HOME/go/bin/go version)"
 else
-    echo "Downloading Go ${GO_VERSION}..."
+    echo "Downloading Go ${GO_VERSION} from $GO_URL ..."
     cd /tmp
-    if command -v wget &>/dev/null; then
-        wget -q "$GO_URL"
+    rm -f "$GO_ARCHIVE"
+    if command -v curl &>/dev/null; then
+        curl -fSL --progress-bar -o "$GO_ARCHIVE" "$GO_URL"
     else
-        curl -fsSLO "$GO_URL"
+        wget --progress=bar:force -O "$GO_ARCHIVE" "$GO_URL"
     fi
     echo "Extracting Go to $HOME/go..."
     rm -rf "$HOME/go"

@@ -165,137 +165,124 @@
 
                     <hr>
 
-                    <h2>הגדרת סביבת הפיתוח</h2>
+                    <h2>דרישות סביבה</h2>
 
-                    <h3>1. התקנת Go, wget ו-Docker/Docker desktop</h3>
+                    <p>שכבה 8 מניחה סביבת פיתוח דטרמיניסטית, ניתנת לסקריפט ומיושרת עם התנהגות ייצור.</p>
 
-                    <p>הורידו והתקינו Go לפלטפורמה שלכם:<br>
-                    https://go.dev/dl/</p>
+                    <p>השתמשו באחת מהאפשרויות הבאות:</p>
+                    <ul>
+                        <li>לינוקס (<strong>Arch</strong>, <strong>Ubuntu</strong> או <strong>Mint</strong> מומלצים)</li>
+                        <li>macOS</li>
+                    </ul>
 
-                    <p>הורידו והתקינו Docker בלינוקס עבור ההפצה שלכם או Docker desktop מ-https://docs.docker.com/get-started/ אם אתם על windows/mac.</p>
-
-                    <p>אם המערכת שלכם אינה מכילה את <strong>wget</strong> (כלי שורת פקודה), אנא התקינו אותו.</p>
-
-                    <h3>2. פתחו טרמינל ועברו לספריית הבית</h3>
-
-<pre><code>cd ~</code></pre>
-
-                    <h3>3. חלצו את ארכיון Go</h3>
-
-<pre><code>tar -zxvf ~/Downloads/&lt;golang file name&gt;</code></pre>
-
-                    <h3>4. הגדרת משתני סביבה</h3>
-
-                    <p>הוסיפו את הדברים הבאים לקובץ הגדרות ה-shell שלכם (לדוגמה ~/.bashrc):</p>
-
-<pre><code>export GOROOT=~/go
-export GOPATH=~/proj
-export GOBIN=~/proj/bin
-export PATH=~/.local/bin:~/go/bin:$GOBIN:$PATH
-
-alias ll="ls -lt"
-
-git config --global user.email "&lt;your email address&gt;"
-git config --global user.name "&lt;your name&gt;"
-
-export DOCKER_BUILDKIT=1</code></pre>
-
-                    <p>טענו מחדש את ה-shell:</p>
-
-<pre><code>source ~/.bashrc</code></pre>
-
-                    <h3>5. יצירת סביבת העבודה לפיתוח</h3>
-
-<pre><code>mkdir -p ~/proj/src/github.com/&lt;your github username&gt;</code></pre>
-
-                    <p>ספרייה זו תכיל את כל פרויקטי שכבה 8 שלכם.</p>
+                    <p>Windows אינו מומלץ לזרימת עבודה זו. במידת הצורך, הריצו לינוקס דרך מכונה וירטואלית (למשל VirtualBox).</p>
 
                     <hr>
 
-                    <h2>יצירה ושכפול הפרויקט</h2>
+                    <h2>אתחול הסביבה</h2>
 
-                    <h3>1. יצירת מאגר חדש ב-GitHub</h3>
+                    <p>הורידו את סקריפט ההתקנה:</p>
 
-                    <p>צרו מאגר ב:</p>
+                    <p>https://raw.githubusercontent.com/saichler/l8book/refs/heads/main/setup/setup.sh</p>
 
-<pre><code>github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+                    <p>הפכו אותו לבר-הרצה:</p>
 
-                    <h3>2. שכפול הפרויקט מקומית</h3>
+<pre><code>chmod +x setup.sh</code></pre>
 
-<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;
-git clone https://github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+                    <p>הריצו אותו:</p>
 
-                    <h3>3. שכפול מימוש הייחוס של שכבה 8 ERP</h3>
+<pre><code>./setup.sh</code></pre>
 
-<pre><code>git clone https://github.com/saichler/l8erp</code></pre>
+                    <p>סקריפט זה:</p>
+                    <ul>
+                        <li>יתקין את כל התלויות הנדרשות</li>
+                        <li>ישכפל את פרויקטי אקוסיסטם שכבה 8</li>
+                        <li>יחיל את הכללים הארכיטקטוניים של שכבה 8</li>
+                    </ul>
 
-                    <p>פרויקט <code>l8erp</code> משמש כדוגמה עובדת מלאה של מערכת שכבה 8.</p>
+                    <p>בסיום, סביבת העבודה שלכם תאותחל ב:</p>
 
-                    <hr>
-
-                    <h2>התקנת עוזר הקידוד בבינה מלאכותית</h2>
-
-                    <p>התקינו אחד מכלי הקידוד הנתמכים בבינה מלאכותית:</p>
-
-                    <p>Claude Code:<br>
-                    https://code.claude.com/docs/en/setup</p>
-
-                    <p>או ChatGPT Codex (או סוכן קידוד שווה ערך).</p>
-
-                    <p>כלים אלה מייצרים ארכיטקטורה, קוד ותיעוד תוך מעקב אחר כללי שכבה 8.</p>
+<pre><code>~/proj/src/github.com/saichler/my-project</code></pre>
 
                     <hr>
 
-                    <h2>יצירת מסמך דרישות מוצר (PRD)</h2>
+                    <h2>הרצת Claude Code</h2>
 
-                    <h3>1. נווטו לפרויקט שלכם</h3>
-
-<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
-
-                    <h3>2. התחילו את סשן הקידוד בבינה מלאכותית</h3>
+                    <p>הפעילו את Claude:</p>
 
 <pre><code>claude</code></pre>
 
-                    <p>או</p>
-
-<pre><code>codex</code></pre>
-
-                    <h3>3. השתמשו בפרומפטים הבאים</h3>
-
-                    <p>אנא העתיקו והדביקו את הפרומפטים הבאים כדי להגדיר את כללי ומדריכי אקוסיסטם שכבה 8 עבור הבינה המלאכותית:</p>
-
-                    <blockquote>
-                        <p>Please install to your memory the following Layer 8 global rules so it will be available in every session: ./l8erp/plans/global-rules-all.md and make sure any PRD is in compliance to those rules.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>The following ../l8erp/go/erp/ui/web/l8ui/GUIDE.md is a guide for the Layer 8 UI/UX generic components, please add it to your memory and use it whenever planning or implementing PRD with UI section.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>An example project built using the Layer 8 ecosystem is in ../l8erp. Please follow this project structure and architecture whenever you create a PRD for a new project.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>Create a PRD in the directory plans that comply with the global rules and follows the Layer 8 architecture for &lt;your project/system idea&gt;</p>
-                    </blockquote>
-
-                    <p>הבינה המלאכותית תייצר PRD מלא המיושר עם ארכיטקטורת שכבה 8 ואילוציה.</p>
+                    <p>עקבו אחר ההנחיות לאימות וחיבור החשבון שלכם.</p>
 
                     <hr>
 
-                    <h2>התחלת המימוש</h2>
+                    <h2>יצירת PRD (מסמך דרישות מוצר)</h2>
 
-                    <p>לאחר יצירת ה-PRD:</p>
+                    <p>שכבה 8 מתחילה עם כוונה, לא עם קוד.</p>
 
-                    <ol>
-                        <li>עקבו אחר שלבי המימוש המוגדרים ב-PRD.</li>
-                        <li>תנו לעוזר הבינה המלאכותית לייצר קוד ומבנה לכל שלב.</li>
-                        <li>ודאו שכל הרכיבים שנוצרו עומדים בכללים הגלובליים של שכבה 8.</li>
-                        <li>המשיכו לחזור על התהליך עד שה-PRD ממומש במלואו.</li>
-                    </ol>
+                    <p>ב-Claude, הגדירו את המוצר שלכם:</p>
 
-                    <p>מנקודה זו ואילך, הפיתוח הופך לביצוע מודרך של ה-PRD &mdash; כששכבה 8 אוכפת עקביות ארכיטקטונית ובינה מלאכותית מאיצה את האספקה.</p>
+<pre><code>Create a PRD using the Layer 8 Ecosystem Architecture for &lt;הרעיון שלכם ב-2-3 משפטים&gt;</code></pre>
+
+                    <p>לאחר שה-PRD נוצר, אמתו אותו:</p>
+
+<pre><code>Do you have any concerns or gaps in the PRD based on the Layer 8 Ecosystem?</code></pre>
+
+                    <p>אם זוהו פערים:</p>
+
+<pre><code>Do any of the projects in the ../ directory address these concerns?</code></pre>
+
+                    <p>שלב זה מבטיח שימוש חוזר לפני יצירה &mdash; עיקרון ליבה של שכבה 8.</p>
+
+                    <hr>
+
+                    <h2>ביצוע ה-PRD</h2>
+
+                    <p>לאחר שה-PRD אומת:</p>
+
+<pre><code>PRD approved. Please implement it.</code></pre>
+
+                    <p>Claude תייצר מערכת מבוזרת מלאה, ברמת ייצור, המיושרת עם אילוצי שכבה 8.</p>
+
+                    <hr>
+
+                    <h2>הרצת המערכת מקומית</h2>
+
+                    <p>לאחר השלמת המימוש:</p>
+
+<pre><code>cd go
+./run-local.sh</code></pre>
+
+                    <p>זה משגר את המערכת המבוזרת המלאה מקומית באמצעות סביבת שכבה 8 הדטרמיניסטית.</p>
+
+                    <hr>
+
+                    <h2>בנייה ופריסה</h2>
+
+                    <p>לפני בניית images:</p>
+                    <ul>
+                        <li>השיגו את ה-base images המאובטחים (אבטחה + PostgreSQL)</li>
+                        <li>החליפו כל הפניות למאגרים חיצוניים עם רישום הקונטיינרים שלכם</li>
+                    </ul>
+
+                    <p>לאחר מכן בנו את כל ה-images:</p>
+
+<pre><code>go/build-all-images.sh</code></pre>
+
+                    <p>פרסו ל-Kubernetes:</p>
+
+<pre><code>cd k8s
+./deploy.sh</code></pre>
+
+                    <p>המערכת שלכם פועלת כעת על האשכול שלכם.</p>
+
+                    <hr>
+
+                    <h2>הערת סיום</h2>
+
+                    <p>זו אינה הגדרת פיתוח. זהו צינור ייצור מערכתי.</p>
+
+                    <p>אתם לא כותבים קוד. אתם מגדירים כוונה &mdash; והמערכת מתממשת ממנה.</p>
 
                     <nav class="chapter-nav">
                         <a href="practice.html" class="prev">תרגול</a>

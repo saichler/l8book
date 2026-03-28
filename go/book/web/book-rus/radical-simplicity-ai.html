@@ -165,137 +165,124 @@
 
                     <hr>
 
-                    <h2>Настройка среды разработки</h2>
+                    <h2>Требования к среде</h2>
 
-                    <h3>1. Установка Go, wget и Docker/Docker desktop</h3>
+                    <p>Layer 8 предполагает среду разработки, которая является детерминированной, скриптуемой и согласованной с поведением в продакшене.</p>
 
-                    <p>Скачайте и установите Go для вашей платформы:<br>
-                    https://go.dev/dl/</p>
+                    <p>Используйте одно из следующего:</p>
+                    <ul>
+                        <li>Linux (<strong>Arch</strong>, <strong>Ubuntu</strong> или <strong>Mint</strong> рекомендуются)</li>
+                        <li>macOS</li>
+                    </ul>
 
-                    <p>Скачайте и установите Docker для Linux для вашего дистрибутива или Docker desktop с https://docs.docker.com/get-started/ если вы на windows/mac.</p>
-
-                    <p>Если в вашей системе нет <strong>wget</strong> (утилита командной строки), пожалуйста, установите его.</p>
-
-                    <h3>2. Откройте терминал и перейдите в домашнюю директорию</h3>
-
-<pre><code>cd ~</code></pre>
-
-                    <h3>3. Распакуйте архив Go</h3>
-
-<pre><code>tar -zxvf ~/Downloads/&lt;golang file name&gt;</code></pre>
-
-                    <h3>4. Настройка переменных окружения</h3>
-
-                    <p>Добавьте следующее в файл конфигурации вашей оболочки (например, ~/.bashrc):</p>
-
-<pre><code>export GOROOT=~/go
-export GOPATH=~/proj
-export GOBIN=~/proj/bin
-export PATH=~/.local/bin:~/go/bin:$GOBIN:$PATH
-
-alias ll="ls -lt"
-
-git config --global user.email "&lt;your email address&gt;"
-git config --global user.name "&lt;your name&gt;"
-
-export DOCKER_BUILDKIT=1</code></pre>
-
-                    <p>Перезагрузите оболочку:</p>
-
-<pre><code>source ~/.bashrc</code></pre>
-
-                    <h3>5. Создание рабочего пространства для разработки</h3>
-
-<pre><code>mkdir -p ~/proj/src/github.com/&lt;your github username&gt;</code></pre>
-
-                    <p>Эта директория будет содержать все ваши проекты Layer 8.</p>
+                    <p>Windows не рекомендуется для этого рабочего процесса. При необходимости запустите Linux через виртуальную машину (например, VirtualBox).</p>
 
                     <hr>
 
-                    <h2>Создание и клонирование вашего проекта</h2>
+                    <h2>Инициализация среды</h2>
 
-                    <h3>1. Создайте новый репозиторий на GitHub</h3>
+                    <p>Скачайте скрипт установки:</p>
 
-                    <p>Создайте репозиторий по адресу:</p>
+                    <p>https://raw.githubusercontent.com/saichler/l8book/refs/heads/main/setup/setup.sh</p>
 
-<pre><code>github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+                    <p>Сделайте его исполняемым:</p>
 
-                    <h3>2. Клонируйте проект локально</h3>
+<pre><code>chmod +x setup.sh</code></pre>
 
-<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;
-git clone https://github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
+                    <p>Запустите его:</p>
 
-                    <h3>3. Клонируйте эталонную реализацию Layer 8 ERP</h3>
+<pre><code>./setup.sh</code></pre>
 
-<pre><code>git clone https://github.com/saichler/l8erp</code></pre>
+                    <p>Этот скрипт:</p>
+                    <ul>
+                        <li>Установит все необходимые зависимости</li>
+                        <li>Клонирует проекты экосистемы Layer 8</li>
+                        <li>Применит архитектурные правила Layer 8</li>
+                    </ul>
 
-                    <p>Проект <code>l8erp</code> служит полным рабочим примером системы Layer 8.</p>
+                    <p>По завершении ваше рабочее пространство будет инициализировано по пути:</p>
 
-                    <hr>
-
-                    <h2>Установка ИИ-ассистента для кодирования</h2>
-
-                    <p>Установите один из поддерживаемых ИИ-инструментов для кодирования:</p>
-
-                    <p>Claude Code:<br>
-                    https://code.claude.com/docs/en/setup</p>
-
-                    <p>или ChatGPT Codex (или эквивалентный кодирующий агент).</p>
-
-                    <p>Эти инструменты генерируют архитектуру, код и документацию, следуя правилам Layer 8.</p>
+<pre><code>~/proj/src/github.com/saichler/my-project</code></pre>
 
                     <hr>
 
-                    <h2>Создание документа требований к продукту (PRD)</h2>
+                    <h2>Запуск Claude Code</h2>
 
-                    <h3>1. Перейдите в ваш проект</h3>
-
-<pre><code>cd ~/proj/src/github.com/&lt;your github username&gt;/&lt;your project name&gt;</code></pre>
-
-                    <h3>2. Запустите сессию ИИ-кодирования</h3>
+                    <p>Запустите Claude:</p>
 
 <pre><code>claude</code></pre>
 
-                    <p>или</p>
-
-<pre><code>codex</code></pre>
-
-                    <h3>3. Используйте следующие промпты</h3>
-
-                    <p>Пожалуйста, скопируйте и вставьте следующие промпты для настройки правил и руководств экосистемы Layer 8 для ИИ:</p>
-
-                    <blockquote>
-                        <p>Please install to your memory the following Layer 8 global rules so it will be available in every session: ./l8erp/plans/global-rules-all.md and make sure any PRD is in compliance to those rules.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>The following ../l8erp/go/erp/ui/web/l8ui/GUIDE.md is a guide for the Layer 8 UI/UX generic components, please add it to your memory and use it whenever planning or implementing PRD with UI section.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>An example project built using the Layer 8 ecosystem is in ../l8erp. Please follow this project structure and architecture whenever you create a PRD for a new project.</p>
-                    </blockquote>
-
-                    <blockquote>
-                        <p>Create a PRD in the directory plans that comply with the global rules and follows the Layer 8 architecture for &lt;your project/system idea&gt;</p>
-                    </blockquote>
-
-                    <p>ИИ сгенерирует полный PRD, согласованный с архитектурой Layer 8 и её ограничениями.</p>
+                    <p>Следуйте подсказкам для аутентификации и подключения вашего аккаунта.</p>
 
                     <hr>
 
-                    <h2>Начало реализации</h2>
+                    <h2>Создание PRD (документа требований к продукту)</h2>
 
-                    <p>После создания PRD:</p>
+                    <p>Layer 8 начинается с намерения, а не с кода.</p>
 
-                    <ol>
-                        <li>Следуйте фазам реализации, определённым в PRD.</li>
-                        <li>Позвольте ИИ-ассистенту генерировать код и структуру для каждой фазы.</li>
-                        <li>Убедитесь, что все сгенерированные компоненты соответствуют глобальным правилам Layer 8.</li>
-                        <li>Продолжайте итерации до полной реализации PRD.</li>
-                    </ol>
+                    <p>В Claude определите ваш продукт:</p>
 
-                    <p>С этого момента разработка становится управляемым выполнением PRD &mdash; с Layer 8, обеспечивающим архитектурную согласованность, и ИИ, ускоряющим доставку.</p>
+<pre><code>Create a PRD using the Layer 8 Ecosystem Architecture for &lt;ваша идея в 2&ndash;3 предложениях&gt;</code></pre>
+
+                    <p>После генерации PRD проверьте его:</p>
+
+<pre><code>Do you have any concerns or gaps in the PRD based on the Layer 8 Ecosystem?</code></pre>
+
+                    <p>Если выявлены пробелы:</p>
+
+<pre><code>Do any of the projects in the ../ directory address these concerns?</code></pre>
+
+                    <p>Этот шаг обеспечивает повторное использование перед созданием &mdash; ключевой принцип Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Выполнение PRD</h2>
+
+                    <p>После валидации PRD:</p>
+
+<pre><code>PRD approved. Please implement it.</code></pre>
+
+                    <p>Claude сгенерирует полную распределённую систему продакшен-уровня, согласованную с ограничениями Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Запуск системы локально</h2>
+
+                    <p>После завершения реализации:</p>
+
+<pre><code>cd go
+./run-local.sh</code></pre>
+
+                    <p>Это запускает полную распределённую систему локально, используя детерминированную среду Layer 8.</p>
+
+                    <hr>
+
+                    <h2>Сборка и развёртывание</h2>
+
+                    <p>Перед сборкой образов:</p>
+                    <ul>
+                        <li>Получите защищённые базовые образы (безопасность + PostgreSQL)</li>
+                        <li>Замените все ссылки на внешние репозитории на ваш собственный реестр контейнеров</li>
+                    </ul>
+
+                    <p>Затем соберите все образы:</p>
+
+<pre><code>go/build-all-images.sh</code></pre>
+
+                    <p>Разверните в Kubernetes:</p>
+
+<pre><code>cd k8s
+./deploy.sh</code></pre>
+
+                    <p>Ваша система теперь работает на вашем кластере.</p>
+
+                    <hr>
+
+                    <h2>Заключительное замечание</h2>
+
+                    <p>Это не настройка среды разработки. Это конвейер системного производства.</p>
+
+                    <p>Вы не пишете код. Вы определяете намерение &mdash; и система материализуется из него.</p>
 
                     <nav class="chapter-nav">
                         <a href="practice.html" class="prev">Практика</a>
