@@ -159,7 +159,7 @@
 
                     <hr>
 
-                    <h1>בניית פרויקט הבינה המלאכותית הראשון שלך</h1>
+                    <h1>בניית מערכת הבינה המלאכותית הראשונה שלך</h1>
 
                     <p>פיתוח מערכת מונעת בינה מלאכותית משלך עם <strong>אקוסיסטם שכבה 8</strong> פשוט בכוונה. מדריך זה מוביל אותך ביצירת הפרויקט הראשון שלך מאפס באמצעות דפוסי שכבה 8 ופיתוח בסיוע בינה מלאכותית.</p>
 
@@ -262,7 +262,13 @@
                     <p>לפני בניית images:</p>
                     <ul>
                         <li>השיגו את ה-base images המאובטחים (אבטחה + PostgreSQL)</li>
-                        <li>החליפו כל הפניות למאגרים חיצוניים עם רישום הקונטיינרים שלכם</li>
+                        <li>או אם תרצו לבדוק ללא אבטחה, פשוט החליפו את כל:
+                            <ul>
+                                <li>base images של אבטחה עם <strong>alpine</strong></li>
+                                <li>base images של Postgres עם <strong>saichler/unsecure-postgres:latest</strong></li>
+                                <li>base images של Builder עם <strong>saichler/builder-ns:latest</strong></li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <p>לאחר מכן בנו את כל ה-images:</p>

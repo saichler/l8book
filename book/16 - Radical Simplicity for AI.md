@@ -103,7 +103,7 @@ AI does not replace architecture.
 **Rules are how architecture is enforced—at machine speed.**
 
 ---
-# Building Your First AI Project
+# Building Your First AI System
 
 Developing your own AI-driven system with the **Layer 8 Ecosystem** is intentionally simple.  
 This guide walks you through creating your first project from scratch using Layer 8 patterns and AI-assisted development.
@@ -222,7 +222,10 @@ This launches the full distributed system locally using the deterministic Layer 
 Before building images:
 
 - Obtain the secure base images (security + PostgreSQL)
-- Replace any references to external repositories with your own container registry
+- Or if you wish to test with unsecure, just replace all:
+  * Security base images with **alpine**
+  * Postgres base images with **saichler/unsecure-postgres:latest**
+  * Builder base images with **saichler/builder-ns:latest** 
 
 Then build all images:
 

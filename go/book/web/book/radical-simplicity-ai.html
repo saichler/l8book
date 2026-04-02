@@ -159,7 +159,7 @@
 
                     <hr>
 
-                    <h1>Building Your First AI Project</h1>
+                    <h1>Building Your First AI System</h1>
 
                     <p>Developing your own AI-driven system with the <strong>Layer 8 Ecosystem</strong> is intentionally simple. This guide walks you through creating your first project from scratch using Layer 8 patterns and AI-assisted development.</p>
 
@@ -262,7 +262,13 @@
                     <p>Before building images:</p>
                     <ul>
                         <li>Obtain the secure base images (security + PostgreSQL)</li>
-                        <li>Replace any references to external repositories with your own container registry</li>
+                        <li>Or if you wish to test with unsecure, just replace all:
+                            <ul>
+                                <li>Security base images with <strong>alpine</strong></li>
+                                <li>Postgres base images with <strong>saichler/unsecure-postgres:latest</strong></li>
+                                <li>Builder base images with <strong>saichler/builder-ns:latest</strong></li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <p>Then build all images:</p>

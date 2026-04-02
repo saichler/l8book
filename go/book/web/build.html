@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#fdfbf7">
+    <meta name="description" content="Build Your First AI-Driven System with the Layer 8 Ecosystem">
+    <meta name="author" content="Sharon Aicler">
+    <title>Build Your First AI-Driven System | Layer 8</title>
+    <link rel="stylesheet" href="book/css/book.css">
+    <script>
+        (function () {
+            const params = new URLSearchParams(window.location.search);
+            const forceDesktop = params.get('desktop') === '1';
+            const isMobileViewport = window.matchMedia('(max-width: 768px)').matches;
+
+            if (!forceDesktop && isMobileViewport) {
+                const target = 'build-mobile.html' + window.location.search + window.location.hash;
+                window.location.replace(target);
+            }
+        }());
+    </script>
+    <style>
+        body {
+            background:
+                radial-gradient(circle at top left, rgba(26, 68, 128, 0.08), transparent 34%),
+                radial-gradient(circle at bottom right, rgba(180, 120, 52, 0.10), transparent 30%),
+                var(--color-bg);
+        }
+
+        .deck-shell {
+            min-height: 100vh;
+        }
+
+        .deck-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 1.25rem;
+            background: rgba(253, 251, 247, 0.92);
+            border-bottom: 1px solid var(--color-divider);
+            backdrop-filter: blur(10px);
+        }
+
+        .deck-progress-bar {
+            position: sticky;
+            top: 4.55rem;
+            z-index: 9;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .deck-progress-fill {
+            width: 12.5%;
+            height: 100%;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+
+        .guide-back {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--color-link);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .guide-back:hover {
+            color: var(--color-link-hover);
+        }
+
+        .guide-back::before {
+            content: "\2190\00a0";
+        }
+
+        .deck-progress {
+            font-size: 0.82rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        .deck {
+            position: relative;
+            min-height: calc(100vh - 8.5rem);
+        }
+
+        .slide {
+            min-height: calc(100vh - 8.5rem);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1.25rem 3rem;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        .slide-card {
+            width: min(920px, 100%);
+            padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--color-divider);
+            border-radius: 20px;
+            box-shadow: 0 14px 40px rgba(31, 38, 50, 0.08);
+        }
+
+        .slide-card.hero {
+            text-align: center;
+            padding: 3.5rem 2.5rem;
+        }
+
+        .step-kicker {
+            display: inline-block;
+            margin-bottom: 1rem;
+            padding: 0.3rem 0.8rem;
+            border-radius: 999px;
+            background: var(--color-accent);
+            color: #fff;
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .slide h1,
+        .slide h2 {
+            font-family: var(--font-heading);
+            color: var(--color-text);
+            border: none;
+            padding: 0;
+            margin: 0 0 1rem;
+        }
+
+        .slide h1 {
+            font-size: 2.8rem;
+        }
+
+        .slide h2 {
+            font-size: 2rem;
+        }
+
+        .slide .subtitle {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-style: italic;
+            color: var(--color-accent);
+            margin-bottom: 1rem;
+        }
+
+        .slide .intro,
+        .slide p,
+        .slide li {
+            font-size: 1.03rem;
+        }
+
+        .slide .intro,
+        .slide p:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .slide ul {
+            margin: 1rem 0 0 1.25rem;
+        }
+
+        .slide li + li {
+            margin-top: 0.5rem;
+        }
+
+        .slide pre {
+            margin: 1.2rem 0;
+            border-radius: 14px;
+            padding: 1.1rem 1.2rem 1rem;
+            background: #11161d;
+            border: 1px solid #243244;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .slide pre::before {
+            content: "Terminal";
+            display: block;
+            margin-bottom: 0.8rem;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #9fb3c8;
+        }
+
+        .code-copy-btn {
+            position: absolute;
+            top: 0.85rem;
+            right: 0.85rem;
+            padding: 0.28rem 0.65rem;
+            border: 1px solid #3b4d63;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            color: #dce6f0;
+            font: inherit;
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            cursor: pointer;
+        }
+
+        .code-copy-btn:hover {
+            background: rgba(255, 255, 255, 0.14);
+            border-color: #5e7894;
+        }
+
+        .slide code {
+            font-family: "SFMono-Regular", "SF Mono", "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+            font-size: 0.95rem;
+        }
+
+        .slide pre code {
+            display: block;
+            color: #f3f7fb;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            line-height: 1.65;
+        }
+
+        .slide blockquote {
+            margin: 1.25rem 0 0;
+        }
+
+        .slide-note {
+            margin-top: 1rem;
+            color: var(--color-muted);
+            font-size: 0.95rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 2rem;
+        }
+
+        .hero-actions a,
+        .hero-actions button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.8rem 1.2rem;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font: inherit;
+        }
+
+        .hero-actions .primary {
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        .hero-actions .secondary {
+            border: 1px solid var(--color-divider);
+            color: var(--color-link);
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .deck-arrow {
+            position: fixed;
+            top: 50%;
+            z-index: 12;
+            transform: translateY(-50%);
+            width: 3rem;
+            height: 3rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.88);
+            color: var(--color-link);
+            cursor: pointer;
+            font: inherit;
+            font-size: 1.4rem;
+            line-height: 1;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 24px rgba(31, 38, 50, 0.08);
+        }
+
+        .deck-arrow:hover:not(:disabled) {
+            color: var(--color-link-hover);
+            border-color: var(--color-accent);
+        }
+
+        .deck-arrow:disabled {
+            opacity: 0.3;
+            cursor: default;
+        }
+
+        .deck-arrow.prev {
+            left: 1rem;
+        }
+
+        .deck-arrow.next {
+            right: 1rem;
+        }
+
+        .closing-copy {
+            text-align: center;
+        }
+
+        .closing-copy p {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .closing-copy strong {
+            color: var(--color-accent);
+        }
+
+        @media (max-width: 768px) {
+            .deck-topbar {
+                padding: 0.9rem 1rem;
+            }
+
+            .deck-progress-bar {
+                top: 4.35rem;
+            }
+
+            .slide {
+                min-height: calc(100vh - 9rem);
+                padding: 1rem 0.9rem 1.5rem;
+            }
+
+            .slide-card,
+            .slide-card.hero {
+                padding: 1.5rem 1.2rem;
+                border-radius: 14px;
+            }
+
+            .slide h1 {
+                font-size: 2rem;
+            }
+
+            .slide h2 {
+                font-size: 1.45rem;
+            }
+
+            .slide pre {
+                padding: 1rem;
+            }
+
+            .slide code {
+                font-size: 0.9rem;
+            }
+
+            .deck-arrow {
+                top: auto;
+                bottom: 1rem;
+                transform: none;
+                width: 2.75rem;
+                height: 2.75rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .deck-progress {
+                display: none;
+            }
+
+            .slide h1 {
+                font-size: 1.65rem;
+            }
+
+            .slide h2 {
+                font-size: 1.25rem;
+            }
+
+            .hero-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="deck-shell">
+        <header class="deck-topbar">
+            <a href="index.html" class="guide-back">Back to the Book</a>
+            <div class="deck-progress">Layer 8 Build Deck</div>
+        </header>
+        <div class="deck-progress-bar" aria-hidden="true">
+            <div class="deck-progress-fill" id="deck-progress-fill"></div>
+        </div>
+
+        <main class="deck">
+            <section class="slide active" id="slide-1">
+                <div class="slide-card hero">
+                    <span class="step-kicker">Overview</span>
+                    <h1>Build Your First AI-Driven System</h1>
+                    <p class="subtitle">Layer 8 Ecosystem</p>
+                    <p class="intro">A simple guided walkthrough for turning an idea into a working distributed system, one step at a time.</p>
+                    <div class="hero-actions">
+                        <button type="button" class="primary" data-action="next">Start Step 1</button>
+                        <a href="index.html" class="secondary">Return to Book</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-2">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 1</span>
+                    <h2>Prepare Your Computer</h2>
+                    <p>To get started, use a computer that can run the setup comfortably. One of these is recommended:</p>
+                    <ul>
+                        <li><strong>Linux</strong> &mdash; Arch, Ubuntu, or Mint recommended</li>
+                        <li><strong>macOS</strong></li>
+                    </ul>
+                    <blockquote>Windows is not recommended. If needed, run Linux in a virtual machine such as VirtualBox.</blockquote>
+                    <p class="slide-note">This step prepares your computer with the tools and folders needed for the guided workflow.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-3">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 2</span>
+                    <h2>Run the Setup</h2>
+                    <p>Download and run the setup script. It installs the main tools, brings in the Layer 8 projects, and prepares your workspace for the next steps.</p>
+<pre><code>curl -O https://raw.githubusercontent.com/saichler/l8book/refs/heads/main/setup/setup.sh
+chmod +x setup.sh
+./setup.sh</code></pre>
+                    <p class="slide-note">Think of this as preparing your workspace so the rest of the process feels structured and repeatable.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-4">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 2</span>
+                    <h2>Your Workspace Is Ready</h2>
+                    <p>When setup finishes, your new project workspace will be available at:</p>
+<pre><code>~/proj/src/github.com/saichler/my-project</code></pre>
+                    <p>That is the folder you will use for the rest of this guided flow.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-5">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 3</span>
+                    <h2>Start Claude Code</h2>
+                    <p>Launch Claude from within your project directory:</p>
+<pre><code>claude</code></pre>
+                    <p>Follow the prompts to authenticate and connect your account.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-6">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 4</span>
+                    <h2>Create Your PRD</h2>
+                    <p>Layer 8 starts with <strong>intent</strong>, not code. In Claude, describe what you want to build:</p>
+<pre><code>Create a PRD using the Layer 8 Ecosystem Architecture
+for &lt;your idea in 2&ndash;3 sentences&gt;</code></pre>
+                    <p>This gives Claude a clear starting point for turning your idea into a structured plan.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-7">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 4</span>
+                    <h2>Review the PRD</h2>
+                    <p>Once the PRD is generated, ask Claude to check it for gaps or concerns:</p>
+<pre><code>Do you have any concerns or gaps in the PRD
+based on the Layer 8 Ecosystem?</code></pre>
+                    <p>This helps you improve the plan before any implementation begins.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-8">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 4</span>
+                    <h2>Check for Reuse First</h2>
+                    <p>If gaps are identified, ask Claude whether existing projects already solve part of the problem:</p>
+<pre><code>Do any of the projects in the ../ directory
+address these concerns?</code></pre>
+                    <blockquote>This enforces <strong>reuse before creation</strong> &mdash; a core Layer 8 principle.</blockquote>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-9">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 5</span>
+                    <h2>Execute the PRD</h2>
+                    <p>Once the PRD is validated and approved:</p>
+<pre><code>PRD approved. Please implement it.</code></pre>
+                    <p>Claude will begin creating the system based on the plan you approved.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-10">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 6</span>
+                    <h2>Run the System Locally</h2>
+                    <p>After the build is complete, start the generated system on your own machine:</p>
+<pre><code>cd go
+./run-local.sh</code></pre>
+                    <p>This starts the system in the workspace you prepared earlier.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-11">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 7</span>
+                    <h2>Prepare for Deployment</h2>
+                    <p>Before creating deployment images, obtain the secure base images (security + PostgreSQL). For testing with unsecure images, replace all:</p>
+                    <ul>
+                        <li>Security base images with <code>alpine</code></li>
+                        <li>Postgres base images with <code>saichler/unsecure-postgres:latest</code></li>
+                        <li>Builder base images with <code>saichler/builder-ns:latest</code></li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-12">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 7</span>
+                    <h2>Build the Images</h2>
+                    <p>Once the base images are ready, build the full set of Docker images:</p>
+<pre><code>go/build-all-images.sh</code></pre>
+                    <p>This prepares the system components for deployment.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-13">
+                <div class="slide-card">
+                    <span class="step-kicker">Step 7</span>
+                    <h2>Deploy to Kubernetes</h2>
+                    <p>After the images are built, deploy the system to your Kubernetes cluster:</p>
+<pre><code>cd k8s
+./deploy.sh</code></pre>
+                    <p>This is the final step in taking the system from generated code to a running deployment.</p>
+                </div>
+            </section>
+
+            <section class="slide" id="slide-14">
+                <div class="slide-card">
+                    <span class="step-kicker">Complete</span>
+                    <h2>Enterprise-Ready From the Start</h2>
+                    <div class="closing-copy">
+                        <p>The outcome is not a prototype.</p>
+                        <p>It is a <strong>secure, scalable, enterprise-grade distributed system</strong>.</p>
+                        <p>Its architecture, trust, and operational guarantees are built in from the start, not assembled later.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <button type="button" class="deck-arrow prev" id="prev-slide" aria-label="Previous slide">&#8249;</button>
+        <button type="button" class="deck-arrow next" id="next-slide" aria-label="Next slide">&#8250;</button>
+    </div>
+    <script>
+        (function () {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            const progressFill = document.getElementById('deck-progress-fill');
+            let currentSlide = 0;
+
+            document.querySelectorAll('pre').forEach((block) => {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'code-copy-btn';
+                button.textContent = 'Copy';
+
+                button.addEventListener('click', async function () {
+                    const text = block.querySelector('code') ? block.querySelector('code').innerText : block.innerText;
+
+                    try {
+                        await navigator.clipboard.writeText(text);
+                        button.textContent = 'Copied';
+                        window.setTimeout(function () {
+                            button.textContent = 'Copy';
+                        }, 1500);
+                    } catch (error) {
+                        button.textContent = 'Failed';
+                        window.setTimeout(function () {
+                            button.textContent = 'Copy';
+                        }, 1500);
+                    }
+                });
+
+                block.appendChild(button);
+            });
+
+            function renderSlide(index) {
+                currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+
+                slides.forEach((slide, slideIndex) => {
+                    slide.classList.toggle('active', slideIndex === currentSlide);
+                });
+
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+                progressFill.style.width = (((currentSlide + 1) / slides.length) * 100) + '%';
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            }
+
+            prevButton.addEventListener('click', function () {
+                renderSlide(currentSlide - 1);
+            });
+
+            nextButton.addEventListener('click', function () {
+                renderSlide(currentSlide + 1);
+            });
+
+            document.querySelectorAll('[data-action="next"]').forEach((button) => {
+                button.addEventListener('click', function () {
+                    renderSlide(currentSlide + 1);
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+                    renderSlide(currentSlide + 1);
+                }
+
+                if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+                    renderSlide(currentSlide - 1);
+                }
+            });
+
+            renderSlide(0);
+        }());
+    </script>
+</body>
+</html>
