@@ -20,13 +20,14 @@
                 var(--color-bg);
         }
 
-        .mobile-shell {
+        .deck-shell {
+            min-height: 100vh;
             max-width: 560px;
             margin: 0 auto;
-            padding-bottom: 5rem;
+            padding-bottom: 5.5rem;
         }
 
-        .topbar {
+        .deck-topbar {
             position: sticky;
             top: 0;
             z-index: 20;
@@ -51,20 +52,62 @@
             content: "\2190\00a0";
         }
 
-        .hero {
-            padding: 1.3rem 1rem 0.8rem;
+        .deck-progress-bar {
+            position: sticky;
+            top: 4.15rem;
+            z-index: 19;
+            height: 3px;
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        .deck-progress-fill {
+            width: 7.14%;
+            height: 100%;
+            background: var(--color-accent);
+            transition: width 0.2s ease;
+        }
+
+        .deck-progress-copy {
+            padding: 0.7rem 1rem 0;
+            font-size: 0.78rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--color-muted);
+        }
+
+        .deck {
+            position: relative;
+            min-height: calc(100vh - 8.5rem);
+        }
+
+        .slide {
+            min-height: calc(100vh - 8.5rem);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 0.9rem 1rem 1.5rem;
+        }
+
+        .slide.active {
+            display: flex;
         }
 
         .hero-card,
         .slide-card {
+            width: 100%;
             background: rgba(255, 255, 255, 0.94);
             border: 1px solid var(--color-divider);
             border-radius: 20px;
             box-shadow: 0 14px 40px rgba(31, 38, 50, 0.08);
         }
 
+        .hero-card,
+        .slide-card {
+            padding: 1.35rem 1.05rem;
+        }
+
         .hero-card {
-            padding: 1.5rem 1.2rem;
+            text-align: left;
         }
 
         .hero h1,
@@ -100,7 +143,34 @@
             margin-top: 1.25rem;
         }
 
-        .hero-actions a {
+        .slide-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+            margin-bottom: 0.9rem;
+        }
+
+        .slide-hint {
+            flex-shrink: 0;
+            padding: 0.28rem 0.7rem;
+            border: 1px solid rgba(26, 68, 128, 0.2);
+            border-radius: 999px;
+            background: linear-gradient(135deg, rgba(26, 68, 128, 0.14), rgba(180, 120, 52, 0.18));
+            color: var(--color-text);
+            font-size: 0.72rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .slide-hint strong {
+            color: var(--color-accent);
+        }
+
+        .hero-actions a,
+        .hero-actions button {
             display: inline-flex;
             justify-content: center;
             align-items: center;
@@ -108,6 +178,12 @@
             border-radius: 999px;
             text-decoration: none;
             font-weight: 600;
+            font: inherit;
+            border: none;
+        }
+
+        .hero-actions button {
+            cursor: pointer;
         }
 
         .hero-actions .primary {
@@ -121,22 +197,8 @@
             color: var(--color-link);
         }
 
-        .steps {
-            padding: 0 1rem;
-        }
-
-        .slide {
-            margin-bottom: 1rem;
-            scroll-margin-top: 5rem;
-        }
-
-        .slide-card {
-            padding: 1.2rem 1rem;
-        }
-
         .step-kicker {
             display: inline-block;
-            margin-bottom: 0.9rem;
             padding: 0.28rem 0.72rem;
             border-radius: 999px;
             background: var(--color-accent);
@@ -225,11 +287,16 @@
             cursor: pointer;
         }
 
-        .mobile-jump {
+        .deck-controls {
             position: fixed;
             right: 0.85rem;
             bottom: 1rem;
             z-index: 25;
+            display: flex;
+            gap: 0.65rem;
+        }
+
+        .deck-arrow {
             width: 3rem;
             height: 3rem;
             display: inline-flex;
@@ -239,9 +306,16 @@
             border-radius: 999px;
             background: rgba(255, 255, 255, 0.92);
             color: var(--color-link);
-            text-decoration: none;
             box-shadow: 0 8px 24px rgba(31, 38, 50, 0.08);
             backdrop-filter: blur(10px);
+            font: inherit;
+            font-size: 1.2rem;
+            cursor: pointer;
+        }
+
+        .deck-arrow:disabled {
+            opacity: 0.3;
+            cursor: default;
         }
 
         .closing-copy {
@@ -257,32 +331,76 @@
         .closing-copy strong {
             color: var(--color-accent);
         }
+
+        @media (max-width: 420px) {
+            .deck-topbar {
+                padding: 0.9rem 0.85rem;
+            }
+
+            .deck-progress-copy {
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
+            }
+
+            .slide {
+                padding-left: 0.85rem;
+                padding-right: 0.85rem;
+            }
+
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+
+            .slide-card h2 {
+                font-size: 1.25rem;
+            }
+
+            .slide-meta {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 0.55rem;
+            }
+
+            .slide-hint {
+                white-space: normal;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="mobile-shell" id="top">
-        <header class="topbar">
+    <div class="deck-shell">
+        <header class="deck-topbar">
             <a href="index.html" class="guide-back">Back</a>
             <a href="build.html?desktop=1" class="desktop-link">Desktop</a>
         </header>
+        <div class="deck-progress-bar" aria-hidden="true">
+            <div class="deck-progress-fill" id="deck-progress-fill"></div>
+        </div>
+        <div class="deck-progress-copy" id="deck-progress-copy">Slide 1 of 14</div>
 
-        <section class="hero">
-            <div class="hero-card">
-                <span class="step-kicker">Mobile Guide</span>
-                <h1>Build Your First AI-Driven System</h1>
-                <p class="subtitle">Layer 8 Ecosystem</p>
-                <p class="intro">A simple mobile walkthrough for turning an idea into a working distributed system, one step at a time.</p>
-                <div class="hero-actions">
-                    <a href="#slide-1" class="primary">Start</a>
-                    <a href="build.html?desktop=1" class="secondary">Open Desktop Version</a>
+        <main class="deck" id="deck">
+            <section class="slide active hero" id="slide-1">
+                <div class="hero-card">
+                    <div class="slide-meta">
+                        <span class="step-kicker">Mobile Guide</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
+                    <h1>Build Your First AI-Driven System</h1>
+                    <p class="subtitle">Layer 8 Ecosystem</p>
+                    <p class="intro">A simple mobile walkthrough for turning an idea into a working distributed system, one step at a time.</p>
+                    <div class="hero-actions">
+                        <button type="button" class="primary" data-action="next">Start</button>
+                        <a href="build.html?desktop=1" class="secondary">Open Desktop Version</a>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <main class="steps">
-            <section class="slide" id="slide-1">
+            <section class="slide" id="slide-2">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 1</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 1</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Prepare Your Computer</h2>
                     <p>To get started, use a computer that can run the setup comfortably. One of these is recommended:</p>
                     <ul>
@@ -294,9 +412,12 @@
                 </div>
             </section>
 
-            <section class="slide" id="slide-2">
+            <section class="slide" id="slide-3">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 2</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 2</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Run the Setup</h2>
                     <p>Download and run the setup script. It installs the main tools, brings in the Layer 8 projects, and prepares your workspace for the next steps.</p>
 <pre><code>curl -O https://raw.githubusercontent.com/saichler/l8book/refs/heads/main/setup/setup.sh
@@ -306,9 +427,12 @@ chmod +x setup.sh
                 </div>
             </section>
 
-            <section class="slide" id="slide-3">
+            <section class="slide" id="slide-4">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 2</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 2</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Your Workspace Is Ready</h2>
                     <p>When setup finishes, your new project workspace will be available at:</p>
 <pre><code>~/proj/src/github.com/saichler/my-project</code></pre>
@@ -316,9 +440,12 @@ chmod +x setup.sh
                 </div>
             </section>
 
-            <section class="slide" id="slide-4">
+            <section class="slide" id="slide-5">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 3</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 3</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Start Claude Code</h2>
                     <p>Launch Claude from within your project directory:</p>
 <pre><code>claude</code></pre>
@@ -326,9 +453,12 @@ chmod +x setup.sh
                 </div>
             </section>
 
-            <section class="slide" id="slide-5">
+            <section class="slide" id="slide-6">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 4</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 4</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Create Your PRD</h2>
                     <p>Layer 8 starts with <strong>intent</strong>, not code. In Claude, describe what you want to build:</p>
 <pre><code>Create a PRD using the Layer 8 Ecosystem Architecture
@@ -337,9 +467,12 @@ for &lt;your idea in 2&ndash;3 sentences&gt;</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-6">
+            <section class="slide" id="slide-7">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 4</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 4</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Review the PRD</h2>
                     <p>Once the PRD is generated, ask Claude to check it for gaps or concerns:</p>
 <pre><code>Do you have any concerns or gaps in the PRD
@@ -348,9 +481,12 @@ based on the Layer 8 Ecosystem?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-7">
+            <section class="slide" id="slide-8">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 4</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 4</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Check for Reuse First</h2>
                     <p>If gaps are identified, ask Claude whether existing projects already solve part of the problem:</p>
 <pre><code>Do any of the projects in the ../ directory
@@ -359,9 +495,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-8">
+            <section class="slide" id="slide-9">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 5</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 5</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Execute the PRD</h2>
                     <p>Once the PRD is validated and approved:</p>
 <pre><code>PRD approved. Please implement it.</code></pre>
@@ -369,9 +508,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-9">
+            <section class="slide" id="slide-10">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 6</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 6</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Run the System Locally</h2>
                     <p>After the build is complete, start the generated system on your own machine:</p>
 <pre><code>cd go
@@ -380,9 +522,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-10">
+            <section class="slide" id="slide-11">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 7</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 7</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Prepare for Deployment</h2>
                     <p>Before creating deployment images, obtain the secure base images (security + PostgreSQL). For testing with unsecure images, replace all:</p>
                     <ul>
@@ -393,9 +538,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-11">
+            <section class="slide" id="slide-12">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 7</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 7</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Build the Images</h2>
                     <p>Once the base images are ready, build the full set of Docker images:</p>
 <pre><code>go/build-all-images.sh</code></pre>
@@ -403,9 +551,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-12">
+            <section class="slide" id="slide-13">
                 <div class="slide-card">
-                    <span class="step-kicker">Step 7</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 7</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Deploy to Kubernetes</h2>
                     <p>After the images are built, deploy the system to your Kubernetes cluster:</p>
 <pre><code>cd k8s
@@ -414,9 +565,12 @@ address these concerns?</code></pre>
                 </div>
             </section>
 
-            <section class="slide" id="slide-13">
+            <section class="slide" id="slide-14">
                 <div class="slide-card">
-                    <span class="step-kicker">Complete</span>
+                    <div class="slide-meta">
+                        <span class="step-kicker">Complete</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
                     <h2>Enterprise-Ready From the Start</h2>
                     <div class="closing-copy">
                         <p>The outcome is not a prototype.</p>
@@ -428,10 +582,22 @@ address these concerns?</code></pre>
         </main>
     </div>
 
-    <a href="#top" class="mobile-jump" aria-label="Back to top">&#8593;</a>
+    <div class="deck-controls" aria-label="Slide navigation">
+        <button type="button" class="deck-arrow prev" id="prev-slide" aria-label="Previous slide">&#8249;</button>
+        <button type="button" class="deck-arrow next" id="next-slide" aria-label="Next slide">&#8250;</button>
+    </div>
 
     <script>
         (function () {
+            const slides = Array.from(document.querySelectorAll('.slide'));
+            const deck = document.getElementById('deck');
+            const prevButton = document.getElementById('prev-slide');
+            const nextButton = document.getElementById('next-slide');
+            const progressFill = document.getElementById('deck-progress-fill');
+            const progressCopy = document.getElementById('deck-progress-copy');
+            let currentSlide = 0;
+            let touchStartX = null;
+
             document.querySelectorAll('pre').forEach((block) => {
                 const button = document.createElement('button');
                 button.type = 'button';
@@ -457,6 +623,92 @@ address these concerns?</code></pre>
 
                 block.appendChild(button);
             });
+
+            function slideIndexFromHash() {
+                const slideId = window.location.hash.replace('#', '');
+
+                if (!slideId) {
+                    return 0;
+                }
+
+                const index = slides.findIndex((slide) => slide.id === slideId);
+                return index === -1 ? 0 : index;
+            }
+
+            function renderSlide(index, updateHash) {
+                currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+
+                slides.forEach((slide, slideIndex) => {
+                    slide.classList.toggle('active', slideIndex === currentSlide);
+                });
+
+                prevButton.disabled = currentSlide === 0;
+                nextButton.disabled = currentSlide === slides.length - 1;
+                progressFill.style.width = (((currentSlide + 1) / slides.length) * 100) + '%';
+                progressCopy.textContent = 'Slide ' + (currentSlide + 1) + ' of ' + slides.length;
+
+                if (updateHash) {
+                    history.replaceState(null, '', '#' + slides[currentSlide].id);
+                }
+
+                window.scrollTo({ top: 0, behavior: 'auto' });
+            }
+
+            prevButton.addEventListener('click', function () {
+                renderSlide(currentSlide - 1, true);
+            });
+
+            nextButton.addEventListener('click', function () {
+                renderSlide(currentSlide + 1, true);
+            });
+
+            document.querySelectorAll('[data-action="next"]').forEach((button) => {
+                button.addEventListener('click', function () {
+                    renderSlide(currentSlide + 1, true);
+                });
+            });
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'ArrowRight' || event.key === 'PageDown') {
+                    renderSlide(currentSlide + 1, true);
+                }
+
+                if (event.key === 'ArrowLeft' || event.key === 'PageUp') {
+                    renderSlide(currentSlide - 1, true);
+                }
+            });
+
+            deck.addEventListener('touchstart', function (event) {
+                if (event.touches.length === 1) {
+                    touchStartX = event.touches[0].clientX;
+                }
+            }, { passive: true });
+
+            deck.addEventListener('touchend', function (event) {
+                if (touchStartX === null || event.changedTouches.length !== 1) {
+                    touchStartX = null;
+                    return;
+                }
+
+                const deltaX = event.changedTouches[0].clientX - touchStartX;
+                touchStartX = null;
+
+                if (Math.abs(deltaX) < 50) {
+                    return;
+                }
+
+                if (deltaX < 0) {
+                    renderSlide(currentSlide + 1, true);
+                } else {
+                    renderSlide(currentSlide - 1, true);
+                }
+            }, { passive: true });
+
+            window.addEventListener('hashchange', function () {
+                renderSlide(slideIndexFromHash(), false);
+            });
+
+            renderSlide(slideIndexFromHash(), true);
         }());
     </script>
 </body>
