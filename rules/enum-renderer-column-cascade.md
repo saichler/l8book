@@ -4,6 +4,47 @@ All three rules below cause the same silent cascading failure: a TypeError durin
 
 ---
 
+## Rule 0: Enum Factory API — Only Use Existing Methods
+
+`Layer8EnumFactory` has exactly three methods. Never call a method that doesn't exist (e.g., `createStatus`, `createEnum`). A non-existent method call throws a TypeError that prevents the entire IIFE from completing, leaving `Module.enums` unassigned.
+
+### Available Methods on Layer8EnumFactory
+
+| Method | Input | Returns | Usage |
+|--------|-------|---------|-------|
+| `create(definitions)` | `[['Label', 'valueKey', 'cssClass'], ...]` | `{ enum, values, classes }` | Enums with status classes |
+| `simple(labels)` | `['Unspecified', 'TypeA', 'TypeB']` | `{ enum }` | Plain enums without classes |
+| `withValues(definitions)` | `[['Label', 'valueKey'], ...]` | `{ enum, values }` | Enums with custom value keys |
+
+### Correct Patterns
+```javascript
+// Status enum with classes — use create()
+var STATUS = factory.create([
+    ['Unspecified', null, ''],
+    ['Active', 'active', 'layer8d-status-active'],
+    ['Inactive', 'inactive', 'layer8d-status-inactive']
+]);
+// Export: MODULE.enums.STATUS = STATUS.enum; MODULE.enums.STATUS_CLASSES = STATUS.classes;
+
+// Plain enum — use simple()
+var TYPE = factory.simple(['Unspecified', 'TypeA', 'TypeB']);
+// Export: MODULE.enums.TYPE = TYPE.enum;
+```
+
+### Wrong Patterns
+```javascript
+// WRONG — createStatus does not exist
+factory.createStatus(['Unspecified', 'Active'], { 1: 'success' })
+
+// WRONG — createEnum does not exist
+factory.createEnum(['Unspecified', 'TypeA'])
+```
+
+### Historical Context
+This bug occurred in `l8security-enums.js` where `factory.createStatus()` was used instead of `factory.create()`. The TypeError silently killed the IIFE, leaving `L8Security.enums.ACCOUNT_STATUS` unassigned, which then cascaded to broken columns and forms.
+
+---
+
 ## Rule 1: Renderer API — Use renderEnum, Not createEnumRenderer
 
 `createEnumRenderer` does NOT exist in `Layer8DRenderers`. Never use it.
@@ -138,6 +179,10 @@ All three rules produce the same catastrophic result:
 
 ## Verification
 ```bash
+# Check all enum factory method calls are valid (create, simple, withValues only)
+grep -rn 'factory\.\w\+(' --include="*-enums.js" | grep -v 'factory\.create\b\|factory\.simple\b\|factory\.withValues\b'
+# Any matches are bugs — only create, simple, withValues exist on Layer8EnumFactory
+
 # Check all factory method calls exist
 grep -oP 'col\.(\w+)\(' *-columns.js | sort -u
 grep -oP '^\s+(\w+):\s*function' layer8-column-factory.js | sort -u
