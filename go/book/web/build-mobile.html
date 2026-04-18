@@ -376,7 +376,7 @@
         <div class="deck-progress-bar" aria-hidden="true">
             <div class="deck-progress-fill" id="deck-progress-fill"></div>
         </div>
-        <div class="deck-progress-copy" id="deck-progress-copy">Slide 1 of 14</div>
+        <div class="deck-progress-copy" id="deck-progress-copy">Slide 1 of 15</div>
 
         <main class="deck" id="deck">
             <section class="slide active hero" id="slide-1">
@@ -467,6 +467,19 @@ for &lt;your idea in 2&ndash;3 sentences&gt;</code></pre>
                 </div>
             </section>
 
+            <section class="slide" id="slide-7a">
+                <div class="slide-card">
+                    <div class="slide-meta">
+                        <span class="step-kicker">Step 4</span>
+                        <span class="slide-hint">Swipe or use arrows</span>
+                    </div>
+                    <h2>Review the PRD</h2>
+                    <p>Validate the PRD comply with the rules:</p>
+<pre><code>Does the PRD comply with the global rules?</code></pre>
+                    <p>This helps you to align the plan and avoid Hallucinations</p>
+                </div>
+            </section>
+
             <section class="slide" id="slide-7">
                 <div class="slide-card">
                     <div class="slide-meta">
@@ -474,9 +487,8 @@ for &lt;your idea in 2&ndash;3 sentences&gt;</code></pre>
                         <span class="slide-hint">Swipe or use arrows</span>
                     </div>
                     <h2>Review the PRD</h2>
-                    <p>Once the PRD is generated, ask Claude to check it for gaps or concerns:</p>
-<pre><code>Do you have any concerns or gaps in the PRD
-based on the Layer 8 Ecosystem?</code></pre>
+                    <p>Ask Claude to surface gaps and concerns:</p>
+<pre><code>Identify any gaps or concerns in the PRD.</code></pre>
                     <p>This helps you improve the plan before any implementation begins.</p>
                 </div>
             </section>
@@ -489,8 +501,7 @@ based on the Layer 8 Ecosystem?</code></pre>
                     </div>
                     <h2>Check for Reuse First</h2>
                     <p>If gaps are identified, ask Claude whether existing projects already solve part of the problem:</p>
-<pre><code>Do any of the projects in the ../ directory
-address these concerns?</code></pre>
+<pre><code>Check whether any projects in ../ address these concerns.</code></pre>
                     <blockquote>This enforces <strong>reuse before creation</strong> &mdash; a core Layer 8 principle.</blockquote>
                 </div>
             </section>
