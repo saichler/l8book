@@ -9,15 +9,27 @@
 <link rel="stylesheet" href="../l8ui/m/css/layer8m-forms.css">
 <link rel="stylesheet" href="../l8ui/m/css/layer8m-datepicker.css">
 <link rel="stylesheet" href="../l8ui/m/css/layer8m-reference-picker.css">
+<link rel="stylesheet" href="../l8ui/m/css/layer8m-portal-switcher.css">
 <link rel="stylesheet" href="../l8ui/m/css/layer8m-nav-cards.css">
+<link rel="stylesheet" href="../l8ui/m/css/layer8m-notification.css">
+<link rel="stylesheet" href="../l8ui/m/css/layer8m-widget.css">
+<link rel="stylesheet" href="../l8ui/m/css/layer8m-theme-switcher.css">
 
 <!-- JS: Layer8 Mobile Core -->
 <script src="../l8ui/m/js/layer8m-config.js"></script>
+<!-- JS: Portal switcher (loads after config; init handled by layer8m-portal.js) -->
+<script src="../l8ui/m/js/layer8m-portal-switcher.js"></script>
 <!-- JS: Project-specific config registration (optional) -->
 <script src="js/mobile-config-hcm.js"></script>
 <!-- JS: Layer8 Mobile Auth & Utils -->
 <script src="../l8ui/m/js/layer8m-auth.js"></script>
 <script src="../l8ui/m/js/layer8m-utils.js"></script>
+
+<!-- JS: Notification (load before forms/utils consumers) -->
+<script src="../l8ui/m/js/layer8m-notification.js"></script>
+
+<!-- JS: Input Formatter (load before forms) -->
+<script src="../l8ui/m/js/layer8m-input-formatter.js"></script>
 
 <!-- JS: Shared Desktop Utilities (needed for currency cache, renderers) -->
 <script src="../l8ui/shared/layer8d-config.js"></script>
@@ -97,6 +109,10 @@
 <script src="../l8ui/m/js/layer8m-gantt.js"></script>
 <script src="../l8ui/m/js/layer8m-tree-grid.js"></script>
 <script src="../l8ui/m/js/layer8m-wizard.js"></script>
+
+<!-- JS: Mobile Widget & Theme Switcher -->
+<script src="../l8ui/m/js/layer8m-widget.js"></script>
+<script src="../l8ui/m/js/layer8m-theme-switcher.js"></script>
 
 <!-- JS: AI Agent (Mobile) -->
 <script src="../l8ui/l8agent/l8agent-enums.js"></script>

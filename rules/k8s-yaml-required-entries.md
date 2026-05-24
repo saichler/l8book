@@ -1,7 +1,7 @@
 # K8s YAML Required Entries (CRITICAL)
 
 ## Rule
-When creating Kubernetes YAML manifests for any new project, ALL of the following entries from the l8erp reference YAMLs MUST be included. Never omit structural entries that exist in the l8erp k8s YAMLs.
+When creating Kubernetes YAML manifests for any new project, ALL of the following entries MUST be included. These requirements apply to ALL four deployment mode YAMLs (`-local.yaml`, `-baremetal.yaml`, `-gke.yaml`, `-kind.yaml` — see `k8s-three-deployment-modes.md`). Never omit structural entries.
 
 ## Required Entries Checklist
 
@@ -54,20 +54,24 @@ volumes:
 - **Volume name `hdata`**: Convention consistency across all projects
 
 ## Verification
-After creating any k8s YAML:
+After creating any k8s YAML, verify ALL four deployment mode files:
 ```bash
-# Check namespace has labels
-grep -A2 "kind: Namespace" <file> | grep "labels:"
+# Check all four modes
+for f in k8s/<project>-local.yaml k8s/<project>-baremetal.yaml k8s/<project>-gke.yaml k8s/<project>-kind.yaml; do
+  echo "=== $f ==="
+  # Check namespace has labels
+  grep -A2 "kind: Namespace" "$f" | grep "labels:"
 
-# Check resource has labels
-grep -A4 "kind: StatefulSet\|kind: DaemonSet" <file> | grep "labels:"
+  # Check resource has labels
+  grep -A4 "kind: StatefulSet\|kind: DaemonSet\|kind: Deployment" "$f" | grep "labels:"
 
-# Check NODE_IP env is present
-grep "NODE_IP" <file>
+  # Check NODE_IP env is present
+  grep -c "NODE_IP" "$f"
 
-# Check volume name convention
-grep "name: hdata" <file>
+  # Check volume name convention
+  grep "name: hdata" "$f"
+done
 ```
 
 ## Reference
-The canonical k8s YAMLs are in `l8erp/k8s/`. Always diff new project YAMLs against these before finalizing.
+The canonical k8s YAMLs for l8pollaris-pattern projects are in `probler/k8s/` (four files: `-local`, `-baremetal`, `-gke`, `-kind`). For ERP-pattern projects, see `l8erp/k8s/`. Always diff new project YAMLs against the appropriate reference before finalizing.

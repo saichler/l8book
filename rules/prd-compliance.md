@@ -42,8 +42,10 @@ Every PRD MUST be reviewed against ALL rules at `../l8book/rules` before it is c
 
 #### Deployment
 - New deployable services include build.sh, Dockerfile, K8s YAML (deployment-artifacts)
+- All four K8s deployment modes are produced: local, baremetal, GKE, KIND (k8s-three-deployment-modes)
+- KIND cluster scripts (kind-start.sh, kind-stop.sh) are included
 - run-local.sh section is included (run-local-script)
-- K8s YAMLs include all required entries (k8s-yaml-required-entries)
+- K8s YAMLs include all required entries in all four modes (k8s-yaml-required-entries)
 
 #### Configuration
 - login.json adaptation is planned if copied from another project (login-json-adaptation)
