@@ -1,7 +1,10 @@
-# <div align="center"> Architecture Is the Alignment Mechanism
+# <div align="center">Architecture Is the Alignment Mechanism</div>
 
 Good architecture is not just a technical decision.
 It is an **incentive decision**.
+
+> **AI Benefit Preview**
+> This chapter shows why AI needs architecture as an alignment mechanism. When incentives, ownership, and system behavior are encoded structurally, AI can generate work that reinforces the architecture instead of optimizing for isolated snippets.
 
 Architecture determines what behavior is rewarded, what behavior is punished,
 and what behavior is impossible, long before any process, policy, or management
@@ -9,6 +12,9 @@ intervention exists.
 
 When architecture is implicit, incentives fragment.  
 When architecture is explicit, incentives align.
+
+With AI in the loop, this alignment must happen before generation begins.
+Otherwise the model optimizes for the nearest visible pattern, even when that pattern is an accident.
 
 ---
 ## Architecture Aligns Incentives
@@ -52,6 +58,7 @@ When intent is explicit and enforced by the platform:
 - Security is rewarded, because bypassing it is structurally impossible
 - Reuse is rewarded, because divergence has a visible cost
 - Saying “no” to unsafe changes is rewarded, because the system enforces it
+- AI is rewarded with clearer context, because the correct path is encoded in contracts and primitives
 
 Incentives stop relying on discipline.  
 They become properties of the system.
@@ -72,6 +79,7 @@ no matter what leadership intends.
 When architecture is explicit, the system itself rewards the right behavior.
 Engineers do not need to be heroic.
 Teams do not need to be disciplined.
+AI does not need to infer hidden intent from incomplete examples.
 Good outcomes emerge naturally because the system makes bad choices expensive
 and good choices easy.
 
@@ -99,6 +107,9 @@ implicit design.
 The next chapters introduce mechanisms that make alignment unavoidable:
 security, identity, trust, and execution semantics, not as features,
 but as incentive-shaping infrastructure.
+
+For AI, these mechanisms are not background details.
+They are the guardrails that convert generation into system construction.
 
 When incentives align with system goals, execution becomes boring.
 Boring becomes predictable.

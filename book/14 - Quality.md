@@ -1,4 +1,7 @@
-# <div align="center"> Quality
+# <div align="center">Quality</div>
+
+> **AI Benefit Preview**
+> This chapter explains why AI-assisted development depends on cheap, deterministic verification. Layer 8 makes quality structural so AI can iterate quickly, receive trustworthy feedback, and avoid producing changes that only work in a fragile environment.
 
 “It’s too hard to test.”  
 “Testing this will take at least two weeks.”  
@@ -17,7 +20,7 @@ Testing is often framed as a discipline problem, a tooling problem, or a time pr
 It is none of those.  
 Testing is a design problem.
 
-Quality is directly tied to work/life balance. The stronger the safety net, 
+Quality is directly tied to work-life balance. The stronger the safety net,
 the less fear there is in change. The less fear there is in change,
 the faster features ship and bugs get fixed, without regressions.
 
@@ -31,6 +34,12 @@ In Layer 8, quality is not enforced by process. It is enabled by architecture.
 
 This chapter is not about writing more tests. It is about designing systems that are easy to test, 
 easy to reason about, and hard to break.
+
+For AI-assisted development, this becomes non-negotiable.
+AI can generate changes quickly, but speed only matters when the system can validate those changes
+quickly and deterministically.
+Without fast feedback, AI turns uncertainty into review load.
+With fast feedback, AI becomes part of a tight design-build-verify loop.
 
 ---
 ## The 10-Minute Rule
@@ -58,6 +67,25 @@ The same rules apply:
 
 When testing is fast, experimentation becomes safe. When experimentation is safe, 
 quality stops being a tax and starts becoming a habit.
+
+### Why the 10-Minute Rule Matters for AI
+
+AI-assisted development depends on iteration.
+The model proposes a change, the system runs, tests verify the result, and the next change builds
+on that feedback.
+
+If adding or running a meaningful test is slow, AI loses its advantage.
+The bottleneck shifts from writing code to proving that the code is correct.
+
+The 10-Minute Rule keeps AI work grounded:
+
+- generated behavior must be testable immediately
+- architectural mistakes must surface while context is still fresh
+- reviewers should inspect intent and boundaries, not manually simulate the system
+- failures should produce concrete correction signals for the next AI iteration
+
+In this sense, testability is not downstream of AI productivity.
+It is a prerequisite for it.
 
 ---
 ## Determinism Is Not Optional
@@ -107,6 +135,11 @@ and indicates an architectural flaw rather than a testing flaw.
 Because Layer 8 is platform-agnostic,
 tests execute in a real local environment,
 not a simulation.
+
+This is what makes AI feedback trustworthy.
+The model is not validated against a mock of the architecture.
+It is validated against the same service contracts, virtual networking, security boundaries,
+serialization behavior, and concurrency rules used by the running system.
 
 ---
 ## What Layer 8 Provides as a Test Environment
@@ -180,6 +213,11 @@ Instead, real services are executed locally, under real contracts, inside a decl
 
 Cross-team dependencies stop being blockers. They become declared inputs.
 
+For AI, this removes a major source of uncertainty.
+The model does not need another team's environment, deployment schedule, or tribal knowledge
+to verify generated work.
+It needs the declared contract and a local runtime capable of enforcing it.
+
 ---
 ## Tests as Executable Architecture
 
@@ -206,6 +244,10 @@ When a test fails, it is not merely a bug in code. It is evidence that the archi
 is no longer behaving as designed.
 
 The fastest way to detect architectural drift is not a review or a meeting. It is a test run.
+
+This is also how AI is kept honest.
+Generated code can be plausible, idiomatic, and still architecturally wrong.
+Executable architecture gives the system a way to reject plausible wrong answers quickly.
 
 ---
 ## Closing the Test Fragility Failure Mode
@@ -262,3 +304,7 @@ can now be exercised locally.
 Concurrency limits, retry behavior, and SLA violations are triggered deliberately, 
 observed deterministically, and fixed before deployment.
 
+That changes the economics of AI-assisted delivery.
+AI can move quickly because the architecture can say no quickly.
+The faster the system rejects invalid work, the safer it becomes to generate, refine,
+and ship valid work.

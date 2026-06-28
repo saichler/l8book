@@ -1,5 +1,8 @@
 # <div align="center">Migration as an Architectural Property</div>
 
+> **AI Benefit Preview**
+> This chapter explains how explicit architecture lets AI help with migration without pretending every legacy system can be automatically converted. AI becomes useful when the target architecture is clear enough to project new services, contracts, and boundaries beside existing systems.
+
 This chapter does not describe a migration plan.
 
 It does not estimate effort, predict timelines, or assume anything about the system you are
@@ -12,6 +15,11 @@ When architecture is implicit, change compounds risk.
 When architecture is explicit, change becomes survivable.
 
 That is the only claim made here.
+
+For AI-assisted development, this distinction prevents a common mistake:
+treating migration as a prompt-driven rewrite.
+Layer 8 does not assume AI can safely convert an implicit legacy system into an explicit one
+without first discovering ownership, boundaries, contracts, and risk.
 
 ---
 
@@ -65,6 +73,12 @@ These properties cannot be cleanly migrated, because they were never cleanly def
 
 This is why migration so often becomes a rewrite — not by intent, but by necessity.
 
+AI does not change this by itself.
+It can read code quickly and propose transformations quickly,
+but if responsibility was never explicit, AI still has to infer it.
+Inference is not migration.
+It is a hypothesis that must be validated.
+
 ---
 
 ## Explicit Architecture Changes the Equation
@@ -81,6 +95,10 @@ Once these properties exist, **change no longer depends on rediscovering invaria
 
 This does not make change easy.
 It makes change *bounded*.
+
+This is where AI becomes useful.
+The target shape is explicit enough for AI to help project new models, services, APIs,
+tests, and adapters without pretending the old system was cleaner than it is.
 
 ---
 
@@ -106,6 +124,30 @@ A single service can declare:
 From that point on, behavior inside that boundary is no longer negotiated.
 
 Everything outside may remain unchanged.
+
+### AI-Assisted Projection
+
+In practice, AI should be used to project explicit architecture beside existing systems, not to
+blindly rewrite them.
+
+Useful AI-assisted migration tasks include:
+
+- identifying candidate Prime Objects from existing models
+- drafting service boundaries for review
+- generating adapters around a legacy integration point
+- writing tests that capture current behavior before replacement
+- creating a new Layer 8 service beside an existing service
+- comparing generated contracts against observed legacy behavior
+
+Risky tasks include:
+
+- automatic wholesale rewrites
+- inferred ownership changes without review
+- generated database migrations without explicit intent
+- replacing security behavior inferred from scattered annotations
+- collapsing multiple legacy responsibilities into one new service without validation
+
+AI helps most when the migration unit is small and the target contract is explicit.
 
 ---
 
@@ -154,6 +196,11 @@ but because **explicit systems outcompete implicit ones**.
 
 This is gravity, not mandate.
 
+AI strengthens this gravity when it is pointed at explicit targets.
+New Layer 8 services become easier to generate, easier to test, and easier to evolve than
+continuing to extend implicit legacy paths.
+Over time, the cheaper path becomes the cleaner path.
+
 ---
 
 ## What This Chapter Does Not Promise
@@ -166,6 +213,7 @@ This chapter does not claim:
 - guaranteed deletion of code
 - fewer failure modes
 - or universal applicability
+- automatic AI-driven conversion
 
 Those claims require knowledge of the starting system.
 Layer 8 deliberately avoids making them.
@@ -220,3 +268,6 @@ Layer 8 does not require faith in outcomes.
 It requires commitment to intent.
 
 The rest follows — quietly, unevenly, and without ceremony.
+
+AI can accelerate that consequence.
+It cannot replace the architectural decision that makes the consequence safe.

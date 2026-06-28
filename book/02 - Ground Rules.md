@@ -1,7 +1,10 @@
-# <div align="center"> Ground Rules
+# <div align="center">Ground Rules</div>
 
 These rules are not best practices or guidelines.  
 They are constraints learned the hard way and enforced to prevent entire classes of failure.
+
+> **AI Benefit Preview**
+> This chapter defines the constraints that keep AI from turning speed into architectural drift. The rules tell AI what must remain invariant: intent before implementation, interfaces before instances, topology hidden from consumers, and simplicity enforced as a design property.
 
 ---
 
@@ -31,8 +34,13 @@ Debt becomes structural failure.
 
 Layer 8 treats these rules as constraints because constraints are what keep systems simple over time.
 
+For AI-assisted development, these rules are even more important.
+AI can generate a large amount of valid-looking code before anyone notices that a boundary,
+ownership model, or service contract was wrong.
+The rules narrow the solution space so generated work has a structure to obey.
+
 ---
-## Rule #1 - The Smart People / AI Can Do It
+## Rule #1 - Design for Available Intelligence
 
 What feels far-fetched to one engineer is often trivial to another, or to an AI.
 
@@ -40,6 +48,7 @@ When designing, “Is this possible?” is not a valid question.
 Design must be driven by intent, not by the current limits of knowledge, tools, or experience.
 
 Assume intelligence exists. Design accordingly.
+The architecture should express what must be true, not what today's implementation happens to make easy.
 
 ### Failure prevented  
 Prevents design from being constrained by current knowledge, causing intent to leak into implementation and permanently cap system evolution.
@@ -56,10 +65,10 @@ It is the deliberate act of extracting abstractions and building agnostic archit
 
 The simpler the design, the easier it is to understand.  
 The easier it is to understand, the easier it is to maintain.  
-The easier it is to maintain, the easier it is to change, or replace, the implementation.
+The easier it is to maintain, the easier it is to change, generate, or replace the implementation.
 
 Complexity locks systems in place and taxes both budgets and humans.  
-Simplicity keeps systems agile, affordable, and humane.
+Simplicity keeps systems agile, affordable, humane, and usable by AI.
 
 Layer 8 treats simplicity as a non-negotiable constraint:  
 if a design cannot be oversimplified, it is not yet understood.

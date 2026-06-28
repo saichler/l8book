@@ -1,6 +1,9 @@
-# <div align="center"> Service as a Contract, Enforced by Concurrency
+# <div align="center">Service as a Contract, Enforced by Concurrency</div>
 
 > The phrase "As a Service" is widely used and rarely understood.
+
+> **AI Benefit Preview**
+> This chapter gives AI the most important Layer 8 primitive: a service is a contract with declared ownership, lifecycle, SLA, and concurrency behavior. With those boundaries explicit, AI can generate service code without inventing where correctness lives.
 
 For most software engineers and architects, serviceability is not a first-class design 
 concern. It is not taught as part of computer science curricula, nor is it emphasized 
@@ -40,6 +43,13 @@ It is a core architectural contract.
 
 Layer 8 treats SLA as a first-class concept,
 enforced by the platform and used to drive radical simplicity in system design.
+
+For AI-assisted development, the SLA becomes the instruction boundary.
+AI should not infer whether a service is stateful, how many replicas it needs,
+where leadership lives, or which consistency model applies.
+Those decisions are declared.
+The platform enforces them.
+Generated code stays inside the contract.
 
 ---
 ## What is a Service?
@@ -153,6 +163,22 @@ processes and present itself as a single logical service.
 
 These properties emerge naturally from the service definition
 and will be explored further in the rest of this chapter.
+
+### Why Prime Objects Help AI
+
+AI needs a reliable way to decide where behavior belongs.
+Without an explicit ownership rule, generated code tends to place behavior wherever the current
+file, route, or example makes it convenient.
+
+Prime Objects give AI a structural answer:
+
+- lifecycle ownership defines the service boundary
+- identity defines the Service Item
+- the SLA defines concurrency and availability behavior
+- REST-style actions define the interaction vocabulary
+
+This reduces architectural guessing.
+AI can generate around declared service ownership instead of inventing a new boundary for each feature.
 
 ---
 ## Concurrency and Transactions
@@ -275,6 +301,10 @@ The service expresses intent. Layer 8 applies the contract.
 
 **Concurrency is served, not invented.**
 
+For AI, this is a hard boundary:
+generated service code should not implement its own concurrency model.
+It should declare the required behavior and rely on Layer 8 to enforce it.
+
 ### What Application Code No Longer Implements
 
 Because service behavior in Layer 8 is declared through the SLA and enforced by the platform,
@@ -297,6 +327,11 @@ Application code is limited to expressing domain behavior against a single logic
 Operational correctness is guaranteed by the platform, not reimplemented by each service.
 As a result, service implementations remain small, deterministic, and independent of 
 deployment topology.
+
+The same reduction applies to AI output.
+The model generates less operational code, and reviewers have fewer failure paths to inspect.
+When concurrency is a service, generated code can be judged against domain intent rather than
+against a hand-built distributed systems implementation.
 
 ---
 ## Base Service
@@ -366,6 +401,21 @@ The Base Service embodies the core philosophy of Layer 8:
 - declare intent,
 - enforce guarantees,
 - and eliminate accidental complexity.
+
+### AI Generates Declarations, Not Repeated Services
+
+The Base Service changes what AI is asked to produce.
+Instead of generating a new service implementation from scratch, AI can produce:
+
+- the Prime Object model
+- the service identity
+- the SLA declaration
+- the domain behavior that is truly specific
+- tests that verify the declared behavior
+
+Everything else is reused.
+This is the practical mechanism behind expedited delivery:
+the generated surface is small because the architecture already owns the repeated service mechanics.
 
 ---
 ## Service Manager

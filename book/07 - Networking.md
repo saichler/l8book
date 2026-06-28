@@ -1,4 +1,7 @@
-# <div align="center"> Networking
+# <div align="center">Networking</div>
+
+> **AI Benefit Preview**
+> This chapter explains how Layer 8 removes topology, routing, discovery, and transport details from the code AI generates. AI can express communication intent while the platform owns delivery, security, locality, and availability.
 
 ## Identify the Missing Infrastructure
 
@@ -73,6 +76,12 @@ Layer 7 provides syntax. It does not provide intent.
 
 It defines how messages are formatted, but not why communication should occur, under what authority,
 or what happens when assumptions fail.
+
+AI makes this gap more expensive.
+If communication intent is not explicit, AI must infer topology, retries, discovery,
+authorization, locality, and failure behavior from whichever examples are nearby.
+That encourages generated code to hard-code endpoints, duplicate retry logic,
+and treat transport decisions as architecture.
 
 This gap forces modern systems to compensate by embedding architecture into:
 
@@ -211,6 +220,23 @@ Layer 8 removes entire classes of failure by ensuring that discovery, routing, a
 They are no longer separate systems that must agree.
 They are a **single architectural authority.**
 
+### AI Uses Intent, Not Topology
+
+This is the networking rule Layer 8 gives to AI:
+
+**Generated code should express who it needs to communicate with and why, not where that thing runs.**
+
+That means AI does not generate:
+- hard-coded IP addresses or ports
+- environment-specific endpoint tables
+- service-discovery clients
+- retry and failover loops tied to topology
+- security checks that duplicate routing policy
+
+Those concerns belong to the Secure Virtual Network Overlay.
+AI works at the service and intent level.
+The platform resolves discovery, authorization, delivery, and locality.
+
 ### Concrete Anti-Pattern Replaced: Service Mesh Sprawl
 
 A common response to the limitations of OSI Layer 7 in distributed systems is the **service mesh**.
@@ -301,7 +327,7 @@ The vNIC abstracts modern software communication behind a single, consistent int
 Applications do not deal with IPs, ports, protocols, or topology.
 They simply communicate.
 
-While Layer 8 provides its own vNIC implementation, reinforced with AI, it fully embraces Rule #1:
+While Layer 8 provides its own vNIC implementation, it fully embraces Rule #1:
 **someone else can do it better.**
 
 For that reason, the vNIC is fully interfaced and agnostic.
@@ -310,6 +336,10 @@ without changing the system design.
 
 This is the shift:
 communication is no longer reinvented. It is plugged in.
+
+For AI, the vNIC is especially important because it removes a large class of generated glue code.
+The model does not need to produce networking scaffolding for every project.
+It can rely on one communication primitive and spend its effort on the system being built.
 
 ---
 ## But How Does It Work?

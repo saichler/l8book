@@ -1,4 +1,7 @@
-# <div align="center"> Web Server
+# <div align="center">Web Server</div>
+
+> **AI Benefit Preview**
+> This chapter shows how Layer 8 lets AI expose services through the web without hardcoding routes, duplicating security logic, or turning HTTP endpoints into architecture. The web server becomes a runtime surface for service contracts, not a place where AI invents application structure.
 
 There is no shortage of web servers in the industry. So why build another one?
 
@@ -28,6 +31,11 @@ This preserves coherence across the platform, keeps services decoupled from tran
 and ensures that security, identity, and authorization are enforced consistently—by design, 
 not by convention.
 
+For AI, this removes one of the most common sources of accidental architecture.
+AI should not turn HTTP routes into the source of truth.
+It should generate or modify service declarations, models, and Web API entries.
+The Web Server exposes those contracts.
+
 ---
 ## What the Web Server No Longer Owns
 
@@ -47,6 +55,21 @@ Specifically, the Web Server no longer owns:
 
 By removing these responsibilities, the Web Server is reduced to what it must be:  
 - **an execution surface for declared contracts.**
+
+### What AI No Longer Wires by Hand
+
+Because the Web Server is constrained, AI does not need to generate:
+
+- route registration tables
+- duplicated authorization checks per endpoint
+- manual service lookup code
+- endpoint-specific serialization branches
+- controller logic that owns business behavior
+- session state tied to web instances
+
+Those responsibilities either belong to the service SLA, the Security Provider,
+the serialization layer, or the service runtime.
+The web layer remains thin by construction.
 
 ---
 ## Statelessness and Scaling
@@ -83,6 +106,11 @@ Each Web API entry defines:
 - the response model
 
 An entry represents an externally visible contract, not an implementation detail.
+
+This gives AI a precise web-facing task.
+Instead of creating route code and hoping it matches the service, AI can declare the external
+input model, HTTP method, and response model in the SLA.
+The runtime handles discovery and exposure.
 
 ---
 ## UI Concerns vs Service Guarantees
@@ -135,3 +163,8 @@ The service executes under its SLA-defined rules.
 Nothing in this flow is application-specific.
 
 **Execution follows contracts. Transport remains an implementation detail.**
+
+For AI-generated applications, this is the desired end state:
+web behavior is derived from architecture, not accumulated through controller code.
+The model can help produce Web API declarations and client-facing flows, while Layer 8 ensures
+that security, serialization, routing, and service execution remain coherent.

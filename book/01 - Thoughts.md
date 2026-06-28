@@ -1,8 +1,11 @@
-# <div align="center"> Thoughts
+# <div align="center">Thoughts</div>
 
 This chapter is not about technology. It is about a **mindset failure** that shaped
 modern software into something slow, expensive, and fragile; and how AI, 
 when layered on top of that failure, ***amplifies it rather than fixes it.***
+
+> **AI Benefit Preview**
+> This chapter explains why AI needs explicit architecture before it can safely accelerate delivery. Layer 8 gives AI a serviceability model it can follow, reducing hallucinated structure, duplicated glue code, and locally correct but systemically invalid output.
 
 ---
 ## What if developing software did not have to be slow, expensive, and fragile?
@@ -69,6 +72,7 @@ The promise is ambitious:
 - ~90% less development and maintenance effort
 - Stronger security, scalability, and concurrency
 - Higher quality and performance over time
+- AI-assisted delivery measured in hours or days instead of months
 
 All pursued through **radical simplicity**, platform-agnostic design, and zero vendor lock-in.
 
@@ -128,6 +132,11 @@ It belongs to the system that allowed implicit design in the first place.
 
 AI is not reckless.  
 It is obedient.
+
+That obedience is exactly why architecture matters.
+If the system teaches AI through scattered examples, AI will reproduce scattered design.
+If the system teaches AI through explicit contracts, reusable components, and enforced boundaries,
+AI becomes a delivery multiplier instead of a complexity multiplier.
 
 ---
 
@@ -234,6 +243,10 @@ It means:
 
 When serviceability is explicit, AI becomes safe to use.  
 When serviceability is implicit, AI becomes dangerous.
+
+For Layer 8, this is the central design requirement:
+AI should spend its effort assembling capability from explicit architectural primitives,
+not rediscovering architecture through generated code.
 
 ---
 ## Radical Simplicity as the AI Safety Mechanism

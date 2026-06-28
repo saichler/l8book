@@ -1,4 +1,7 @@
-# <div align="center"> Practice: Making Architecture Explicit
+# <div align="center">Practice: Making Architecture Explicit</div>
+
+> **AI Benefit Preview**
+> This chapter turns the book's argument into a concrete AI workflow. By identifying Prime Objects, activating SLAs, and generating bindings from explicit definitions, AI works from declared architecture instead of reverse-engineering intent from implementation.
 
 At this point, you have a set of Protocol Buffer messages and have already identified the 
 **Prime Objects** in your model.
@@ -20,7 +23,7 @@ message Employee {
 }
 
 message AddressList {
-  repeated Employee list = 1;
+  repeated Addr list = 1;
   l8api.L8MetaData metadata = 2;
 }
 
@@ -36,9 +39,31 @@ At this stage, the important observation is not the syntax of the messages, but 
 **explicit identification of Prime Objects**. Prime Objects define lifecycle ownership, 
 concurrency boundaries, and service responsibility in Layer 8.
 
+This is the point where AI-assisted development becomes architecture-assisted development.
+The model is no longer asked to infer service boundaries from filenames, routes, or examples.
+It is given explicit Prime Objects and can generate around declared ownership.
+
 > **Note**
 > Layer 8 includes a script that simplifies the generation of Protocol Buffer bindings for AI-assisted workflows.
 > This script will be covered in the next chapter.
+
+---
+## The AI Workflow Boundary
+
+Before writing code, the workflow must establish four things:
+
+- the Prime Objects
+- the Service Items and primary keys
+- the SLA for each service
+- the Web API surface exposed by each service
+
+These are architectural decisions.
+AI can help draft them, challenge them, and generate boilerplate around them,
+but they must be reviewed as architecture, not as implementation detail.
+
+Once these declarations are clear, implementation becomes far smaller.
+AI is no longer building a distributed system from scratch.
+It is filling in a declared Layer 8 structure.
 
 ---
 ## Defining and Activating an SLA
@@ -115,6 +140,16 @@ What matters here is not the API mechanics, but the **architectural declaration*
 At this point, the system no longer relies on implicit conventions.
 The architecture is declared, enforced, and observable.
 
+For AI, this activation method is more important than the code volume suggests.
+It tells the model where correctness lives:
+
+- identity is declared through primary keys
+- concurrency is declared through the SLA
+- web exposure is declared through the Web API entries
+- lifecycle is activated through the vNIC and Service Manager
+
+That means future generated work can extend behavior without rediscovering those rules.
+
 ---
 ## Creating the Resources
 
@@ -125,6 +160,10 @@ and observability are built.
 In most projects, resource creation is centralized in a single static or bootstrap
 method, similar to the example below. This method is typically invoked once during
 process initialization.
+
+Centralization is important for AI.
+If every generated service initializes resources differently, the ecosystem fragments.
+Layer 8 keeps the bootstrap path boring and repeatable so AI can reuse it safely.
 
 ```go
 // CreateResources initializes and wires all core ecosystem services
@@ -173,11 +212,15 @@ func CreateResources(alias string) ifs.IResources {
 ---
 ## Containing Process
 
-A **containing process** is responsible for instantiating a virtual network interface (vNic)
+A **containing process** is responsible for instantiating a virtual network interface (vNIC)
 and activating services within that runtime context.
 
 From the application’s perspective, this process follows a small and deterministic sequence:
 initialize resources, establish networking, activate services, and wait.
+
+This deterministic sequence is the shape AI should preserve.
+Generated programs should not invent startup choreography, hidden ordering dependencies,
+or environment-specific boot logic.
 
 ```go
 func main() {
@@ -190,13 +233,13 @@ func main() {
 	// falls back to container-level and then process-level networking.
 	ifs.SetNetworkMode(ifs.NETWORK_K8s)
 
-	// Instantiate the virtual network interface (vNic)
+	// Instantiate the virtual network interface (vNIC)
 	nic := vnic.NewVirtualNetworkInterface(res, nil)
 
-	// Start the vNic and its underlying networking stack
+	// Start the vNIC and its underlying networking stack
 	nic.Start()
 
-	// Block until the vNic is connected and ready
+	// Block until the vNIC is connected and ready
 	nic.WaitForConnection()
 
 	// Activate services within this network context
@@ -265,3 +308,27 @@ func startWebServer(nic ifs.IVNic, httpPort int, cert string) {
 ```
 
 >That’s it. If it feels simple, it’s because the complexity was moved where it belongs, **into the architecture.**
+
+---
+## What AI Should Produce
+
+At the end of this workflow, AI should be producing a narrow set of artifacts:
+
+- protobuf models with explicit Prime Objects
+- SLA activation code
+- Web API declarations
+- domain-specific validation or behavior
+- local deterministic tests
+- small integration glue that uses Layer 8 primitives
+
+AI should not be producing:
+
+- custom networking layers
+- custom security systems
+- custom serialization paths
+- service-specific concurrency logic
+- route-driven application architecture
+- persistence decisions embedded in domain models
+
+This is the practical meaning of making architecture explicit.
+The work AI produces is smaller because the ecosystem already owns the repeated mechanics.

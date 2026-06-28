@@ -1,4 +1,7 @@
-# <div align="center"> Failure Modes of Implicit Architecture
+# <div align="center">Failure Modes of Implicit Architecture</div>
+
+> **AI Benefit Preview**
+> This chapter names the architectural failures AI will otherwise amplify: accidental coupling, implicit ownership, concurrency leakage, fragile tests, and security by annotation. Layer 8 benefits AI by turning each of these from a hidden judgment call into an explicit structural rule.
 
 ## Upfront Map: Failure Modes Covered in This Chapter
 
@@ -52,6 +55,10 @@ There is a growing belief that artificial intelligence will resolve this accumul
 AI, however, is a force multiplier. When applied to architectures with implicit intent and
 undefined serviceability, it accelerates existing failure modes rather than eliminating them.
 
+For human teams, these failures create meetings, delays, and incidents.
+For AI, they create ambiguous prompts, unstable examples, and generated code that looks correct
+while encoding the wrong responsibility.
+
 Layer 8 exists to address this condition at its root.
 Its goal is not to detect or mitigate these failures procedurally,
 but to make them **architecturally impossible**.
@@ -89,6 +96,9 @@ Common indicators include:
 
 In a distributed system, every implicit assumption becomes a coordination burden. As scale increases,
 these burdens compound into structural failure modes rather than isolated defects.
+
+For AI, every implicit assumption becomes a guess.
+The fewer guesses required, the more useful AI becomes.
 
 ---
 ## Failure Mode 1: Accidental Coupling
@@ -191,6 +201,10 @@ The difference between these two approaches is not tooling or infrastructure.
 
 When internal components are not designed to service each other through explicit contracts,
 integration shifts to shared internals. Accidental coupling becomes the default, and complexity accumulates where it does not belong.
+
+AI will happily extend whichever integration surface is visible.
+If the visible surface is a shared database, AI will generate more shared-database coupling.
+If the visible surface is a service contract, AI will generate against the contract.
 
 ---
 ### Transition
@@ -298,6 +312,10 @@ Explicit ownership converts it into a technical guarantee.
 Without explicit ownership, distributed systems do not fail fast.
 They fail ambiguously.
 
+Ambiguity is especially expensive with AI.
+If ownership is not modeled, AI cannot know where a fix belongs, where state should live,
+or which service is authoritative.
+
 ---
 
 ### Transition
@@ -381,6 +399,10 @@ It is a property of execution.
 When concurrency leaks into application code, every developer becomes responsible for reasoning
 about distributed execution. This responsibility does not scale with team size, system size,
 or time.
+
+It also does not scale with AI.
+AI can generate retry loops, locks, queues, and idempotency checks, but without a structural owner
+those fragments become another layer of accidental behavior.
 
 ---
 ## Failure Mode 4: Test Fragility
@@ -466,6 +488,10 @@ When intent is implicit, verification becomes unreliable.
 
 Distributed systems without deterministic test boundaries eventually rely on production to validate correctness.
 
+AI-assisted development depends on fast feedback.
+If tests are slow, flaky, or environment-bound, AI cannot iterate safely because the system cannot
+tell the difference between a wrong change and an unstable test.
+
 ---
 ### Transition
 
@@ -536,6 +562,10 @@ When trust is explicit, correctness is enforced structurally.
 Distributed systems that rely on security by annotation inevitably accumulate invisible trust
 assumptions that cannot be reliably audited or reasoned about.
 
+AI should not be asked to infer trust from annotations scattered across handlers, middleware,
+and deployment configuration.
+Trust must be explicit enough that generated code cannot bypass it accidentally.
+
 ---
 ### Closing the Failure Chain
 
@@ -597,6 +627,10 @@ Instead, Layer 8 eliminates the possibility of these failure modes by design:
 - Concurrency is platformized instead of embedded in application code
 - Determinism is enforced as an architectural property
 - Security is treated as a first-class architectural authority
+
+These same constraints are what make Layer 8 useful to AI.
+They reduce the number of architectural decisions the model has to invent and increase the number
+of decisions it can reuse safely.
 
 Layer 8 does not optimize behavior.  
 It constrains architecture so that the correct behavior is the default.

@@ -1,4 +1,7 @@
-# <div align="center"> Security & AAA
+# <div align="center">Security & AAA</div>
+
+> **AI Benefit Preview**
+> This chapter shows how Layer 8 gives AI an explicit authority model instead of asking it to infer security from annotations, routes, or middleware. When identity, authorization, and trust are architectural services, AI-generated code can participate in security without owning or bypassing it.
 
 ## Reader Orientation
 
@@ -21,6 +24,18 @@ is something you participate in, enforced before your code runs, not after it fa
 If you are reading this chapter looking for best practices, checklists, or annotations to copy, 
 you will not find them here. This chapter explains why those approaches fail; 
 and why Layer 8 removes the need for them entirely.
+
+For AI-assisted development, this distinction is critical.
+AI should not be asked to decide where security belongs in every generated handler,
+service, route, or integration point.
+That produces security by memory, only faster.
+
+Layer 8 gives AI a simpler rule:
+
+**Generated code participates in security; it does not define security.**
+
+Identity, authorization, trust, key distribution, and audit behavior are owned by the platform.
+AI-generated application code operates inside those boundaries.
 
 ---
 ## Security by Annotation vs Security by Authority
@@ -65,6 +80,24 @@ security-by-annotation optimizes convenience;
 security-by-authority optimizes inevitability.
 
 **Layer 8 chooses inevitability.**
+
+### Why This Matters for AI
+
+AI is highly effective at extending visible patterns.
+If security is visible as scattered annotations, middleware hooks, and route-level checks,
+AI will extend that scattering.
+
+The result is not always obviously wrong.
+It may be worse: code that appears secure because it copied the shape of security,
+while missing the authority model that makes security enforceable.
+
+Layer 8 prevents this by moving security above generated application code.
+AI can generate service behavior, UI flows, and integrations without being responsible
+for reconstructing authentication, authorization, and audit logic each time.
+
+This reduces both risk and review burden.
+Reviewers inspect whether generated code uses the platform correctly,
+not whether it recreated security correctly.
 
 ---
 ## First Analogy: The Household

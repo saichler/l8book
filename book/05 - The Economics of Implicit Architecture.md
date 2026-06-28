@@ -1,10 +1,13 @@
-# <div align="center"> The Economics of Implicit Architecture
+# <div align="center">The Economics of Implicit Architecture</div>
 
 Most organizations believe they are paying for software development.
 
 They are not.
 
 They are paying for **implicit architecture**.
+
+> **AI Benefit Preview**
+> This chapter explains why AI does not automatically reduce software cost. If architecture remains implicit, AI lowers the cost of producing code while increasing the volume of coordination, review, rework, and risk. Layer 8 changes the economics by giving AI fewer decisions to guess and more explicit structure to reuse.
 
 Treating implementation mechanisms as architectural decisions is a category error.
 
@@ -29,6 +32,7 @@ We are told to accept a set of inevitable tradeoffs:
 - Move fast **or** maintain quality
 - Scale the organization **or** preserve work–life balance
 - Build powerful systems **or** keep them simple
+- Use AI aggressively **or** keep architecture coherent
 
 These tradeoffs are presented as laws of nature.
 
@@ -46,6 +50,9 @@ It compounds.**
 
 This is how organizations become slower every year
 without consciously choosing to slow down.
+
+AI can hide this slowdown temporarily by increasing output volume.
+But output is not progress when every generated change adds another coordination path.
 
 ---
 
@@ -121,6 +128,7 @@ It appears as:
 - senior engineers trapped in constant firefighting
 - burnout and attrition explained away as “market conditions”
 - organizations that move slower every year despite better tools
+- AI initiatives that produce demos quickly but stall before becoming durable systems
 
 Drag is not a failure event.  
 It is the steady erosion of organizational capacity.
@@ -254,16 +262,18 @@ Every change requires more people to stay safe.
 This is how architectural failure becomes economic drag.
 
 ---
-## Humans as a First-Class Architectural Resource
+## Attention as a First-Class Architectural Resource
 
 Modern software architecture routinely treats machines as finite
-and humans as infinite.
+and attention as infinite.
 
 CPU is monitored.
 Memory is bounded.
 Throughput is measured.
 
 Human attention is assumed.
+AI review attention is assumed.
+Architectural context is assumed.
 
 In practice, attention, context, and uninterrupted time are among the 
 scarcest resources in any organization.
@@ -271,6 +281,7 @@ scarcest resources in any organization.
 Every implicit dependency consumes attention.  
 Every coordination point destroys context.  
 Every fragile interaction increases interruption.
+Every AI-generated change that requires architectural interpretation consumes the same scarce resource.
 
 These costs do not appear in system metrics,
 but they dominate how work actually feels.
@@ -286,6 +297,9 @@ Architecture that ignores human limits
 eventually fails economically, because 
 **the most expensive resource in the system
 is the one it silently exhausts.**
+
+AI does not remove that limit.
+It increases the rate at which unclear architecture demands review, correction, and judgment.
 
 ---
 ## How Implicit Architecture Creates Cost

@@ -1,4 +1,7 @@
-# <div align="center"> Object Relation Mapping
+# <div align="center">Object Relation Mapping</div>
+
+> **AI Benefit Preview**
+> This chapter explains how Layer 8 prevents AI from embedding persistence decisions into domain models. By moving mapping, storage, and schema concerns behind explicit interfaces, AI can model business objects without leaking database mechanics into generated code.
 
 Persisting object models into relational databases has always been hard.
 Object Relational Mapping (ORM) was introduced as a solution.
@@ -27,6 +30,11 @@ Traditional ORMs tend to fail in predictable ways:
 
 Layer 8 eliminates these failure modes by removing implicit, instance-driven persistence
 and replacing it with introspection and explicit interfaces.
+
+AI-assisted development makes traditional ORM failure modes easier to reproduce at scale.
+Given examples of annotations, repositories, lazy-loaded objects, or database-specific queries,
+AI will generate more of them.
+The system may appear productive while quietly binding domain models to persistence mechanics.
 
 First, the persistence layer becomes tightly coupled to relational databases,
 often to a specific vendor or dialect.
@@ -59,6 +67,19 @@ By separating Service, Convert, and Persist, Layer 8 eliminates tight coupling,
 prevents schema leakage into the model, and allows each layer to evolve independently.
 
 Persistence becomes composable, replaceable, and intentional.
+
+### What AI Should Not Own
+
+Layer 8 draws a hard line around persistence:
+
+AI-generated domain code should not own tables, joins, sessions, lazy loading, database dialects,
+or repository lifecycles.
+
+AI may define the model and the service intent.
+The ORM layer derives the relational projection and delegates durable storage to plugins.
+
+This keeps AI focused on the business object instead of teaching it to embed storage decisions
+inside the model.
 
 ## Ownership Boundaries: Services vs Persistence
 
@@ -119,6 +140,10 @@ mapping rules, and database-specific assumptions.
 
 The model remains pure. The relational view is generated. 
 Persistence adapts to the model.
+
+For AI, this means a model change does not automatically become a persistence rewrite.
+The generated model remains the source of intent, and the persistence layer adapts through
+introspection and explicit plugin contracts.
 
 ---
 ## Service
@@ -185,7 +210,7 @@ Persisting relational data is intentionally straightforward.
 Relational data can be stored in:
 - relational database tables,
 - files,
-- NoSql, 
+- NoSQL,
 - or any other durable storage mechanism.
 
 Layer 8 avoids complex annotations and mapping rules. Instead, it relies on two universal columns 
@@ -275,6 +300,11 @@ The boundary is deliberate:
 - Plugins handle optimization.
 
 **Storage-specific intelligence remains isolated.**
+
+This is the correct place for AI assistance.
+AI can help implement or optimize a storage plugin, but that intelligence remains behind the
+Persist interface.
+It does not leak into services, models, APIs, or UI code.
 
 This keeps the ORM portable, while still allowing high-performance, 
 storage-aware implementations.
