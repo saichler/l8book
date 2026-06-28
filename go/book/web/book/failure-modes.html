@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Failure Modes of Implicit Architecture | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Failure Modes of Implicit Architecture | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Failure Modes of Implicit Architecture | Radical Simplicity for Humans</title>
+    <title>Failure Modes of Implicit Architecture | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Failure Modes of Implicit Architecture</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter names the architectural failures AI will otherwise amplify: accidental coupling, implicit ownership, concurrency leakage, fragile tests, and security by annotation. Layer 8 benefits AI by turning each of these from a hidden judgment call into an explicit structural rule.</p>
+                    </blockquote>
 
                     <h2>Upfront Map: Failure Modes Covered in This Chapter</h2>
 
@@ -105,6 +110,8 @@
 
                     <p>There is a growing belief that artificial intelligence will resolve this accumulated complexity. AI, however, is a force multiplier. When applied to architectures with implicit intent and undefined serviceability, it accelerates existing failure modes rather than eliminating them.</p>
 
+                    <p>For human teams, these failures create meetings, delays, and incidents. For AI, they create ambiguous prompts, unstable examples, and generated code that looks correct while encoding the wrong responsibility.</p>
+
                     <p>Layer 8 exists to address this condition at its root. Its goal is not to detect or mitigate these failures procedurally, but to make them <strong>architecturally impossible</strong>.</p>
 
                     <hr>
@@ -130,6 +137,8 @@
                     </ul>
 
                     <p>In a distributed system, every implicit assumption becomes a coordination burden. As scale increases, these burdens compound into structural failure modes rather than isolated defects.</p>
+
+                    <p>For AI, every implicit assumption becomes a guess. The fewer guesses required, the more useful AI becomes.</p>
 
                     <hr>
 
@@ -218,6 +227,8 @@
 
                     <p>When internal components are not designed to service each other through explicit contracts, integration shifts to shared internals. Accidental coupling becomes the default, and complexity accumulates where it does not belong.</p>
 
+                    <p>AI will happily extend whichever integration surface is visible. If the visible surface is a shared database, AI will generate more shared-database coupling. If the visible surface is a service contract, AI will generate against the contract.</p>
+
                     <h4>Transition</h4>
 
                     <p>Accidental coupling is the first and most visible failure mode of implicit design. Once services are coupled through shared internals, ownership can no longer be singular or enforceable. Responsibility fragments by necessity, not by choice. At that point, <strong>implicit ownership is no longer avoidable</strong>, it is structurally forced.</p>
@@ -300,6 +311,8 @@
 
                     <p>Without explicit ownership, distributed systems do not fail fast. They fail ambiguously.</p>
 
+                    <p>Ambiguity is especially expensive with AI. If ownership is not modeled, AI cannot know where a fix belongs, where state should live, or which service is authoritative.</p>
+
                     <h4>Transition</h4>
 
                     <p>Once ownership is implicit, there is no longer a single place where correctness under concurrency can live. With no authoritative owner, concurrency semantics must be reimplemented by every participant. From that moment on, <strong>concurrency leakage is inevitable</strong>, because there is nowhere else for it to go.</p>
@@ -366,6 +379,8 @@
                     <p>Concurrency is not a feature. It is a property of execution.</p>
 
                     <p>When concurrency leaks into application code, every developer becomes responsible for reasoning about distributed execution. This responsibility does not scale with team size, system size, or time.</p>
+
+                    <p>It also does not scale with AI. AI can generate retry loops, locks, queues, and idempotency checks, but without a structural owner those fragments become another layer of accidental behavior.</p>
 
                     <hr>
 
@@ -435,6 +450,8 @@
 
                     <p>Distributed systems without deterministic test boundaries eventually rely on production to validate correctness.</p>
 
+                    <p>AI-assisted development depends on fast feedback. If tests are slow, flaky, or environment-bound, AI cannot iterate safely because the system cannot tell the difference between a wrong change and an unstable test.</p>
+
                     <h4>Transition</h4>
 
                     <p>Once determinism is lost, the system no longer has a stable notion of correctness. In that environment, security cannot be enforced structurally and is reduced to configuration and convention. <strong>Security by annotation is not a choice at this stage; it is the only remaining option.</strong></p>
@@ -482,6 +499,8 @@
                     <p>When trust is implicit, correctness depends on discipline and configuration. When trust is explicit, correctness is enforced structurally.</p>
 
                     <p>Distributed systems that rely on security by annotation inevitably accumulate invisible trust assumptions that cannot be reliably audited or reasoned about.</p>
+
+                    <p>AI should not be asked to infer trust from annotations scattered across handlers, middleware, and deployment configuration. Trust must be explicit enough that generated code cannot bypass it accidentally.</p>
 
                     <h4>Closing the Failure Chain</h4>
 
@@ -534,6 +553,8 @@
                         <li>Determinism is enforced as an architectural property</li>
                         <li>Security is treated as a first-class architectural authority</li>
                     </ul>
+
+                    <p>These same constraints are what make Layer 8 useful to AI. They reduce the number of architectural decisions the model has to invent and increase the number of decisions it can reuse safely.</p>
 
                     <p>Layer 8 does not optimize behavior.<br>
                     It constrains architecture so that the correct behavior is the default.</p>

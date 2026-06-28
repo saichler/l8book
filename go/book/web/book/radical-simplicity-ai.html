@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Radical Simplicity for AI | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Radical Simplicity for AI | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Radical Simplicity for AI | Radical Simplicity for Humans</title>
+    <title>Radical Simplicity for AI | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html" class="active">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Radical Simplicity for AI</h1>
+
+                    <blockquote>
+                        <strong>AI Benefit Preview</strong><br>
+                        This chapter is the practical payoff: it describes how Layer 8 rules, APIs, UI components, and architectural constraints are packaged so AI can build enterprise-grade systems quickly without repeatedly relearning the ecosystem.
+                    </blockquote>
 
                     <p>We used AI extensively to harden both the architecture and the implementations of the Layer 8 ecosystem. In doing so, we discovered that <strong>AI effectiveness is not limited by intelligence, but by structure</strong>.</p>
 
@@ -76,23 +81,21 @@
 
                     <p><strong>Radical Simplicity for AI</strong> means delivering a working product in hours instead of months&mdash;without sacrificing architecture, correctness, or long-term maintainability.</p>
 
+                    <p>The previous chapters described the architectural ingredients. This chapter describes the operating model:</p>
+
+                    <ol>
+                        <li>Make intent explicit.</li>
+                        <li>Load the Layer 8 rules into the AI environment.</li>
+                        <li>Generate inside the ecosystem instead of around it.</li>
+                        <li>Verify locally against deterministic architecture.</li>
+                        <li>Deploy only after the system proves the contracts hold.</li>
+                    </ol>
+
                     <hr>
 
                     <h2>AI Guideline Rules</h2>
 
-                    <blockquote>
-                        <strong>Download the full rule sets</strong><br>
-                        The complete AI rule definitions used throughout this chapter are available here:
-                        <ul>
-                            <li><strong>Generic Software Development Rules</strong><br>
-                            https://example.com/generic-software-development-rules.md</li>
-                            <li><strong>Layer 8 Architecture and ERP Rules</strong><br>
-                            https://example.com/layer8-erp-rules.md</li>
-                        </ul>
-                        These rule sets are designed to be injected directly into AI workflows. Replace these links with their GitHub locations when publishing.
-                    </blockquote>
-
-                    <p>Before you start working with AI, you must give it <strong>explicit global guidelines for software development</strong>.</p>
+                    <p>Before you start working with AI, you must give it <strong>explicit global guidelines for software development</strong> and <strong>Layer 8-specific rules</strong>.</p>
 
                     <p>This was one of the more surprising discoveries in our work. Despite its apparent sophistication, AI does <strong>not</strong> reliably apply foundational software engineering discipline unless that discipline is stated explicitly.</p>
 
@@ -106,6 +109,16 @@
                     </ol>
 
                     <p>Together, these rules turn AI from a code generator into a <strong>constrained, architecture-aware participant</strong>.</p>
+
+                    <p>The Layer 8 setup script installs the available rule bundle by linking files from:</p>
+
+<pre><code>l8book/rules</code></pre>
+
+                    <p>into:</p>
+
+<pre><code>~/.claude/rules</code></pre>
+
+                    <p>The exact rule set will evolve with the ecosystem. That is intentional. Rules are not documentation frozen in time; they are executable architectural memory.</p>
 
                     <h3>Examples of Generic Software Development Rules</h3>
 
@@ -159,6 +172,41 @@
 
                     <hr>
 
+                    <h2>The Layer 8 AI Contract</h2>
+
+                    <p>When working with AI, Layer 8 draws a clear contract.</p>
+
+                    <p>AI may help produce:</p>
+
+                    <ul>
+                        <li>product requirements</li>
+                        <li>protobuf models</li>
+                        <li>Prime Object definitions</li>
+                        <li>SLA activation code</li>
+                        <li>Web API declarations</li>
+                        <li>domain behavior</li>
+                        <li>UI flows built on Layer 8 components</li>
+                        <li>tests and verification scripts</li>
+                    </ul>
+
+                    <p>AI should not own:</p>
+
+                    <ul>
+                        <li>security architecture</li>
+                        <li>networking topology</li>
+                        <li>serialization mechanics</li>
+                        <li>concurrency control</li>
+                        <li>persistence coupling</li>
+                        <li>service discovery</li>
+                        <li>route-driven system structure</li>
+                    </ul>
+
+                    <p>Those responsibilities are already owned by the ecosystem.</p>
+
+                    <p>This is the core productivity gain. AI does less because Layer 8 already does more.</p>
+
+                    <hr>
+
                     <h1>Building Your First AI System</h1>
 
                     <p>Developing your own AI-driven system with the <strong>Layer 8 Ecosystem</strong> is intentionally simple. This guide walks you through creating your first project from scratch using Layer 8 patterns and AI-assisted development.</p>
@@ -198,6 +246,7 @@
                         <li>Install all required dependencies</li>
                         <li>Clone the Layer 8 ecosystem projects</li>
                         <li>Apply the Layer 8 architectural rules</li>
+                        <li>Link the local rule bundle into the AI assistant environment</li>
                     </ul>
 
                     <p>At completion, your workspace will be initialized at:</p>
@@ -206,9 +255,9 @@
 
                     <hr>
 
-                    <h2>Running Claude Code</h2>
+                    <h2>Running an AI Assistant</h2>
 
-                    <p>Start Claude:</p>
+                    <p>The setup flow below uses Claude Code as the concrete example. Start the assistant from the initialized project directory:</p>
 
 <pre><code>claude</code></pre>
 
@@ -220,7 +269,9 @@
 
                     <p>Layer 8 starts with intent, not code.</p>
 
-                    <p>In Claude, define your product:</p>
+                    <p>The PRD is where architectural ambiguity should be exposed. Do not rush past it. If the PRD cannot identify Prime Objects, service boundaries, user flows, and missing reuse opportunities, implementation will simply encode uncertainty.</p>
+
+                    <p>In the assistant, define your product:</p>
 
 <pre><code>Create a PRD using the Layer 8 Ecosystem Architecture for &lt;your idea in 2&ndash;3 sentences&gt;</code></pre>
 
@@ -234,6 +285,16 @@
 
                     <p>This step ensures reuse before creation&mdash;a core Layer 8 principle.</p>
 
+                    <p>Before approving the PRD, verify that it answers:</p>
+
+                    <ul>
+                        <li>What are the Prime Objects?</li>
+                        <li>Which services own lifecycle and correctness?</li>
+                        <li>Which capabilities already exist in sibling Layer 8 projects?</li>
+                        <li>Which APIs are internal service contracts and which are Web APIs?</li>
+                        <li>What must be tested locally before deployment?</li>
+                    </ul>
+
                     <hr>
 
                     <h2>Executing the PRD</h2>
@@ -242,7 +303,9 @@
 
 <pre><code>PRD approved. Please implement it.</code></pre>
 
-                    <p>Claude will generate a full, production-grade distributed system aligned with Layer 8 constraints.</p>
+                    <p>The assistant will generate a full, production-grade distributed system aligned with Layer 8 constraints.</p>
+
+                    <p>This instruction is intentionally short because the rules and architecture carry the detail. The AI should not be repeatedly taught how Layer 8 works in every prompt. It should read the rules, inspect the ecosystem, reuse existing components, and implement inside the declared architecture.</p>
 
                     <hr>
 
@@ -254,6 +317,19 @@
 ./run-local.sh</code></pre>
 
                     <p>This launches the full distributed system locally using the deterministic Layer 8 environment.</p>
+
+                    <p>Local execution is not optional. It is the verification step that turns generated code into a credible system.</p>
+
+                    <p>Before considering the work complete, validate:</p>
+
+                    <ul>
+                        <li>services activate through declared SLAs</li>
+                        <li>Web APIs are discovered from declarations</li>
+                        <li>security and AAA are active</li>
+                        <li>queries use L8Query correctly</li>
+                        <li>desktop and mobile UI behavior is consistent when UI is generated</li>
+                        <li>tests exercise the meaningful service behavior</li>
+                    </ul>
 
                     <hr>
 
@@ -284,6 +360,27 @@
 
                     <hr>
 
+                    <h2>What Success Looks Like</h2>
+
+                    <p>A successful Layer 8 AI workflow does not produce a large pile of custom code. It produces a small amount of project-specific intent connected to a large amount of reusable architecture.</p>
+
+                    <p>The signs are concrete:</p>
+
+                    <ul>
+                        <li>models describe the domain without persistence annotations</li>
+                        <li>services are activated through SLAs</li>
+                        <li>APIs use Elements and L8Query instead of custom dialects</li>
+                        <li>web exposure is declared, not hand-wired</li>
+                        <li>tests run locally without external team coordination</li>
+                        <li>generated code follows existing Layer 8 components instead of cloning them</li>
+                    </ul>
+
+                    <p>If the implementation is full of custom networking, custom security, custom serialization, custom repositories, and route-specific business logic, the workflow has failed.</p>
+
+                    <p>That may still be AI-generated software. It is not Radical Simplicity for AI.</p>
+
+                    <hr>
+
                     <h2>Closing Note</h2>
 
                     <p>This is not a development setup. This is a system production pipeline.</p>
@@ -292,7 +389,7 @@
 
                     <nav class="chapter-nav">
                         <a href="practice.html" class="prev">Practice</a>
-                        <span class="placeholder next">Next Chapter</span>
+                        <a href="migration.html" class="next">Migration</a>
                     </nav>
                 </article>
             </div>

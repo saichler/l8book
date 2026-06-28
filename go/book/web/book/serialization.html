@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Serialization | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Serialization | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Serialization | Radical Simplicity for Humans</title>
+    <title>Serialization | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Serialization</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter shows how Layer 8 keeps AI from duplicating serialization logic across services. By centralizing model-to-bytes and bytes-to-model behavior, AI can work with service intent and model structure instead of hand-writing fragile conversion paths.</p>
+                    </blockquote>
 
                     <h2>The Act of Serialization</h2>
 
@@ -78,6 +83,8 @@
                     </ul>
 
                     <p>As a result, application logic, transport concerns, and model evolution become tightly coupled.</p>
+
+                    <p>AI tends to make this coupling worse when serialization remains application-owned. It can generate converters quickly, but each converter becomes another place where model meaning, wire format, error handling, and version behavior can drift.</p>
 
                     <hr>
 
@@ -121,6 +128,22 @@
 
                     <p>This separation allows symmetry to be enforced centrally and consistently, rather than being hand-maintained in every service.</p>
 
+                    <h3>What AI No Longer Generates</h3>
+
+                    <p>When Layer 8 owns serialization, AI does not need to generate:</p>
+
+                    <ul>
+                        <li>model-specific encoders and decoders</li>
+                        <li>duplicated JSON or protobuf conversion functions</li>
+                        <li>version-translation glue between services</li>
+                        <li>defensive payload reconstruction logic</li>
+                        <li>transport-specific serialization branches</li>
+                    </ul>
+
+                    <p>AI can work with model instances and service Elements. Layer 8 owns the transformation boundary.</p>
+
+                    <p>This is a major reduction in generated code volume, but more importantly, it removes a common source of subtle inconsistency.</p>
+
                     <h3>Responsibility Boundary Diagram</h3>
 
                     <figure class="diagram">
@@ -153,6 +176,8 @@
                     <p>Deserialization produces a model instance or a model-agnostic representation that can be routed, inspected, stored, forwarded, or later bound to domain logic.</p>
 
                     <p>Understanding the model is optional and occurs only when the application needs to apply business behavior.</p>
+
+                    <p>This matters directly to AI-assisted systems. Generated components can inspect, route, store, forward, and expose data without needing a custom compile-time type dependency for every model they encounter. AI can assemble systems from generic Layer 8 capabilities instead of creating a new serialization path for every integration.</p>
 
                     <p>The mechanics that make this possible, including model-agnostic representations, runtime type resolution, and delta calculation, are explored in depth in the <strong>Model-Agnostic Runtime: Data Without Schemas</strong> chapter.</p>
 

@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Service as a Contract, Enforced by Concurrency | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Service as a Contract, Enforced by Concurrency | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Service as a Contract, Enforced by Concurrency | Radical Simplicity for Humans</title>
+    <title>Service as a Contract, Enforced by Concurrency | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -66,6 +66,11 @@
 
                     <blockquote>
                         <p>The phrase "As a Service" is widely used and rarely understood.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter gives AI the most important Layer 8 primitive: a service is a contract with declared ownership, lifecycle, SLA, and concurrency behavior. With those boundaries explicit, AI can generate service code without inventing where correctness lives.</p>
                     </blockquote>
 
                     <p>For most software engineers and architects, serviceability is not a first-class design concern. It is not taught as part of computer science curricula, nor is it emphasized during professional growth.</p>
@@ -93,6 +98,8 @@
                     <p>An SLA is not documentation. It is not an operational afterthought. It is a core architectural contract.</p>
 
                     <p>Layer 8 treats SLA as a first-class concept, enforced by the platform and used to drive radical simplicity in system design.</p>
+
+                    <p>For AI-assisted development, the SLA becomes the instruction boundary. AI should not infer whether a service is stateful, how many replicas it needs, where leadership lives, or which consistency model applies. Those decisions are declared. The platform enforces them. Generated code stays inside the contract.</p>
 
                     <hr>
 
@@ -189,6 +196,21 @@ message Address {
                     <p>without introducing service-specific logic, while allowing a single service to span multiple processes and present itself as a single logical service.</p>
 
                     <p>These properties emerge naturally from the service definition and will be explored further in the rest of this chapter.</p>
+
+                    <h3>Why Prime Objects Help AI</h3>
+
+                    <p>AI needs a reliable way to decide where behavior belongs. Without an explicit ownership rule, generated code tends to place behavior wherever the current file, route, or example makes it convenient.</p>
+
+                    <p>Prime Objects give AI a structural answer:</p>
+
+                    <ul>
+                        <li>lifecycle ownership defines the service boundary</li>
+                        <li>identity defines the Service Item</li>
+                        <li>the SLA defines concurrency and availability behavior</li>
+                        <li>REST-style actions define the interaction vocabulary</li>
+                    </ul>
+
+                    <p>This reduces architectural guessing. AI can generate around declared service ownership instead of inventing a new boundary for each feature.</p>
 
                     <hr>
 
@@ -376,6 +398,8 @@ message Address {
 
                     <p><strong>Concurrency is served, not invented.</strong></p>
 
+                    <p>For AI, this is a hard boundary: generated service code should not implement its own concurrency model. It should declare the required behavior and rely on Layer 8 to enforce it.</p>
+
                     <h3>What Application Code No Longer Implements</h3>
 
                     <p>Because service behavior in Layer 8 is declared through the SLA and enforced by the platform, application code is no longer responsible for implementing core operational concerns.</p>
@@ -397,6 +421,8 @@ message Address {
                     <p>Application code is limited to expressing domain behavior against a single logical service abstraction.</p>
 
                     <p>Operational correctness is guaranteed by the platform, not reimplemented by each service. As a result, service implementations remain small, deterministic, and independent of deployment topology.</p>
+
+                    <p>The same reduction applies to AI output. The model generates less operational code, and reviewers have fewer failure paths to inspect. When concurrency is a service, generated code can be judged against domain intent rather than against a hand-built distributed systems implementation.</p>
 
                     <hr>
 
@@ -471,6 +497,20 @@ message Address {
                         <li>enforce guarantees,</li>
                         <li>and eliminate accidental complexity.</li>
                     </ul>
+
+                    <h3>AI Generates Declarations, Not Repeated Services</h3>
+
+                    <p>The Base Service changes what AI is asked to produce. Instead of generating a new service implementation from scratch, AI can produce:</p>
+
+                    <ul>
+                        <li>the Prime Object model</li>
+                        <li>the service identity</li>
+                        <li>the SLA declaration</li>
+                        <li>the domain behavior that is truly specific</li>
+                        <li>tests that verify the declared behavior</li>
+                    </ul>
+
+                    <p>Everything else is reused. This is the practical mechanism behind expedited delivery: the generated surface is small because the architecture already owns the repeated service mechanics.</p>
 
                     <hr>
 

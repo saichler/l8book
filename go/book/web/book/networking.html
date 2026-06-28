@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Networking | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Networking | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Networking | Radical Simplicity for Humans</title>
+    <title>Networking | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Networking</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter explains how Layer 8 removes topology, routing, discovery, and transport details from the code AI generates. AI can express communication intent while the platform owns delivery, security, locality, and availability.</p>
+                    </blockquote>
 
                     <h2>Identify the Missing Infrastructure</h2>
 
@@ -130,6 +135,8 @@
                     <p>Layer 7 provides syntax. It does not provide intent.</p>
 
                     <p>It defines how messages are formatted, but not why communication should occur, under what authority, or what happens when assumptions fail.</p>
+
+                    <p>AI makes this gap more expensive. If communication intent is not explicit, AI must infer topology, retries, discovery, authorization, locality, and failure behavior from whichever examples are nearby. That encourages generated code to hard-code endpoints, duplicate retry logic, and treat transport decisions as architecture.</p>
 
                     <p>This gap forces modern systems to compensate by embedding architecture into:</p>
 
@@ -266,6 +273,24 @@
 
                     <p>They are no longer separate systems that must agree. They are a <strong>single architectural authority.</strong></p>
 
+                    <h3>AI Uses Intent, Not Topology</h3>
+
+                    <p>This is the networking rule Layer 8 gives to AI:</p>
+
+                    <p><strong>Generated code should express who it needs to communicate with and why, not where that thing runs.</strong></p>
+
+                    <p>That means AI does not generate:</p>
+
+                    <ul>
+                        <li>hard-coded IP addresses or ports</li>
+                        <li>environment-specific endpoint tables</li>
+                        <li>service-discovery clients</li>
+                        <li>retry and failover loops tied to topology</li>
+                        <li>security checks that duplicate routing policy</li>
+                    </ul>
+
+                    <p>Those concerns belong to the Secure Virtual Network Overlay. AI works at the service and intent level. The platform resolves discovery, authorization, delivery, and locality.</p>
+
                     <h3>Concrete Anti-Pattern Replaced: Service Mesh Sprawl</h3>
 
                     <p>A common response to the limitations of OSI Layer 7 in distributed systems is the <strong>service mesh</strong>.</p>
@@ -352,11 +377,13 @@
 
                     <p>The vNIC abstracts modern software communication behind a single, consistent interface. Applications do not deal with IPs, ports, protocols, or topology. They simply communicate.</p>
 
-                    <p>While Layer 8 provides its own vNIC implementation, reinforced with AI, it fully embraces Rule #1: <strong>someone else can do it better.</strong></p>
+                    <p>While Layer 8 provides its own vNIC implementation, it fully embraces Rule #1: <strong>someone else can do it better.</strong></p>
 
                     <p>For that reason, the vNIC is fully interfaced and agnostic. Anyone can implement it differently, improve it, or replace it entirely; without changing the system design.</p>
 
                     <p>This is the shift: communication is no longer reinvented. It is plugged in.</p>
+
+                    <p>For AI, the vNIC is especially important because it removes a large class of generated glue code. The model does not need to produce networking scaffolding for every project. It can rely on one communication primitive and spend its effort on the system being built.</p>
 
                     <hr>
 

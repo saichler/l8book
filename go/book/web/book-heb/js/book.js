@@ -1,5 +1,5 @@
 /**
- * Radical Simplicity for Humans - Book Website JavaScript
+ * Radical Simplicity for AI - Book Website JavaScript
  * Minimal interactivity for a professional reading experience
  */
 

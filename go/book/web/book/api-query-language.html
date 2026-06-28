@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="API &amp; Query Language | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="API &amp; Query Language | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>API &amp; Query Language | Radical Simplicity for Humans</title>
+    <title>API &amp; Query Language | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -67,6 +67,11 @@
                     <blockquote>
                         <p>An API is a language.<br>
                         Protocols are merely the alphabet.</p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter shows how Layer 8 gives AI a consistent API language instead of many service-specific dialects. When query and command semantics are uniform, AI can generate integrations, UI flows, and service calls against one mental model.</p>
                     </blockquote>
 
                     <p>Because APIs <strong><em>are languages</em></strong>, inconsistency is not cosmetic; it directly increases cognitive load, fragmentation, and long-term system complexity.</p>
@@ -90,6 +95,8 @@
                     <p>Layer 8 takes a different approach.</p>
 
                     <p>Instead of standardizing how services speak, it standardizes what can be expressed.</p>
+
+                    <p>For AI, this is the difference between learning one language and learning every service's dialect. When API semantics are uniform, generated code can call services, build UI flows, compose queries, and interpret responses without rediscovering a new contract each time.</p>
 
                     <p>This chapter describes <strong>service-to-service</strong> APIs within the Layer 8 platform; how these APIs are exposed over a web interface is covered separately in the <strong>Web Server chapter</strong>.</p>
 
@@ -128,6 +135,23 @@
                     <p>The response is always IElements, with metadata describing the scope of the result (for example, which page was returned and how many elements exist in total).</p>
 
                     <p>The capability lives in the model and query language, not in new service-specific APIs.</p>
+
+                    <h3>Why This Matters for AI-Generated Integrations</h3>
+
+                    <p>In conventional systems, AI often has to generate integration code by reading service-specific endpoint names, payload shapes, pagination conventions, error formats, and filtering rules. Every service becomes a small language.</p>
+
+                    <p>Layer 8 collapses that variation. AI uses the same request shape, Element envelope, action vocabulary, and query language across services.</p>
+
+                    <p>This makes generated integrations smaller and more predictable:</p>
+
+                    <ul>
+                        <li>fewer custom client methods</li>
+                        <li>fewer service-specific adapters</li>
+                        <li>fewer one-off pagination handlers</li>
+                        <li>fewer accidental semantic differences between APIs</li>
+                    </ul>
+
+                    <p>The API becomes something AI can reuse, not something it must infer.</p>
 
                     <hr>
 
@@ -266,6 +290,8 @@ message Addr {
                     <p>The model defines what can be queried.<br>
                     The query language expresses intent.<br>
                     The platform executes it.</p>
+
+                    <p>For AI, this creates a stable target. When the model changes, AI can update model intent and query expressions without generating a new endpoint family or translating between unrelated service dialects.</p>
 
                     <p>Note: How Layer 8 exposes APIs through a web interface is covered in the <strong>Web Server chapter.</strong></p>
 

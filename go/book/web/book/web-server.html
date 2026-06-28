@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Web Server | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Web Server | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Web Server | Radical Simplicity for Humans</title>
+    <title>Web Server | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Web Server</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter shows how Layer 8 lets AI expose services through the web without hardcoding routes, duplicating security logic, or turning HTTP endpoints into architecture. The web server becomes a runtime surface for service contracts, not a place where AI invents application structure.</p>
+                    </blockquote>
 
                     <p>There is no shortage of web servers in the industry. So why build another one?</p>
 
@@ -83,6 +88,8 @@
                     <p>The web server becomes an execution surface for service contracts, not a place where application logic is embedded.</p>
 
                     <p>This preserves coherence across the platform, keeps services decoupled from transport mechanics, and ensures that security, identity, and authorization are enforced consistently&mdash;by design, not by convention.</p>
+
+                    <p>For AI, this removes one of the most common sources of accidental architecture. AI should not turn HTTP routes into the source of truth. It should generate or modify service declarations, models, and Web API entries. The Web Server exposes those contracts.</p>
 
                     <hr>
 
@@ -106,6 +113,21 @@
 
                     <p>By removing these responsibilities, the Web Server is reduced to what it must be:<br>
                     <strong>an execution surface for declared contracts.</strong></p>
+
+                    <h3>What AI No Longer Wires by Hand</h3>
+
+                    <p>Because the Web Server is constrained, AI does not need to generate:</p>
+
+                    <ul>
+                        <li>route registration tables</li>
+                        <li>duplicated authorization checks per endpoint</li>
+                        <li>manual service lookup code</li>
+                        <li>endpoint-specific serialization branches</li>
+                        <li>controller logic that owns business behavior</li>
+                        <li>session state tied to web instances</li>
+                    </ul>
+
+                    <p>Those responsibilities either belong to the service SLA, the Security Provider, the serialization layer, or the service runtime. The web layer remains thin by construction.</p>
 
                     <hr>
 
@@ -142,6 +164,8 @@
                     </ul>
 
                     <p>An entry represents an externally visible contract, not an implementation detail.</p>
+
+                    <p>This gives AI a precise web-facing task. Instead of creating route code and hoping it matches the service, AI can declare the external input model, HTTP method, and response model in the SLA. The runtime handles discovery and exposure.</p>
 
                     <hr>
 
@@ -199,6 +223,8 @@
                     <p>Nothing in this flow is application-specific.</p>
 
                     <p><strong>Execution follows contracts. Transport remains an implementation detail.</strong></p>
+
+                    <p>For AI-generated applications, this is the desired end state: web behavior is derived from architecture, not accumulated through controller code. The model can help produce Web API declarations and client-facing flows, while Layer 8 ensures that security, serialization, routing, and service execution remain coherent.</p>
 
                     <nav class="chapter-nav">
                         <a href="object-relation-mapping.html" class="prev">Object Relation Mapping</a>

@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Introduction - Why This Book Exists | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Introduction - Why This Book Exists | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Introduction | Radical Simplicity for Humans</title>
+    <title>Introduction | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -66,7 +66,12 @@
                     <h1>Why This Book Exists</h1>
 
                     <blockquote>
-                        <p><strong>When architecture is implicit, organizations spend human effort compensating for structural absence; and no amount of talent can outrun that cost.</strong></p>
+                        <p><strong>When architecture is implicit, AI does not remove complexity. It accelerates it.</strong></p>
+                    </blockquote>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter defines the central promise of the book: Layer 8 makes architecture explicit enough for AI to build useful systems quickly without guessing at ownership, security, concurrency, or runtime behavior.</p>
                     </blockquote>
 
                     <p>Most companies do not fail because their engineers are incapable. They fail because their systems demand heroics.</p>
@@ -76,6 +81,14 @@
                     <p>When architecture is wrong, effort does not compound. It leaks.</p>
 
                     <p>Organizations compensate by adding people, process, and pressure. Velocity slows. Quality drops. Burnout rises. Everyone feels it, but few can name the cause.</p>
+
+                    <p>AI changes the speed of this failure. It can produce code, screens, services, and integrations faster than any team could by hand. But if the architecture is implicit, AI has to infer what the system means from scattered code, conventions, comments, and incomplete examples.</p>
+
+                    <p>That is not acceleration. It is ambiguity at machine speed.</p>
+
+                    <p>This book argues for a different path:</p>
+
+                    <p><strong>Radical Simplicity for AI</strong> means designing systems so clearly, explicitly, and structurally that AI can build inside the architecture instead of inventing around it.</p>
 
                     <hr>
 
@@ -188,6 +201,25 @@
 
                     <hr>
 
+                    <h3>AI Fails Differently</h3>
+
+                    <p>AI does not burn out, sit in meetings, or wait for approvals. Its failure mode is different.</p>
+
+                    <p>When architecture is implicit, AI:</p>
+                    <ul>
+                        <li>fills gaps with plausible assumptions</li>
+                        <li>duplicates patterns that should have been centralized</li>
+                        <li>generates local fixes that violate global intent</li>
+                        <li>treats accidental conventions as architectural truth</li>
+                        <li>scales inconsistency faster than people can review it</li>
+                    </ul>
+
+                    <p>The output may compile. The demo may work. The system may still be wrong.</p>
+
+                    <p>AI does not fail because it lacks effort. It fails because the architecture did not give it enough structure.</p>
+
+                    <hr>
+
                     <h2>The False Tradeoff</h2>
 
                     <p>We are told there is an inevitable tradeoff:</p>
@@ -226,14 +258,16 @@
                         <li>company goals</li>
                         <li>system behavior</li>
                         <li>human effort</li>
+                        <li>AI-generated work</li>
                     </ul>
 
-                    <p>Good architecture makes the right thing the easy thing. Bad architecture forces people to compensate.</p>
+                    <p>Good architecture makes the right thing the easy thing. Bad architecture forces people and AI to compensate.</p>
 
                     <p>When architecture is aligned:</p>
                     <ul>
                         <li>companies scale without chaos</li>
                         <li>engineers ship without burnout</li>
+                        <li>AI generates inside known boundaries</li>
                         <li>quality emerges without policing</li>
                     </ul>
 
@@ -253,7 +287,7 @@
                         <li>encodes guarantees structurally</li>
                         <li>centralizes complexity instead of distributing it</li>
                         <li>removes entire classes of failure rather than detecting them later</li>
-                        <li>assumes humans are fallible and time is finite</li>
+                        <li>assumes humans are fallible, AI is literal, and time is finite</li>
                     </ul>
 
                     <p><strong>This is not minimalism. It is constraint.</strong></p>
@@ -292,6 +326,10 @@
                     <p>Layer 8 <strong>is a working architectural model</strong> built to test a hypothesis:</p>
 
                     <p>If architecture is designed correctly, company success and work&ndash;life balance stop being in conflict.</p>
+
+                    <p>For the AI era, the hypothesis becomes sharper:</p>
+
+                    <p>If architecture is explicit enough, AI can produce systems in dramatically less time without converting speed into hidden risk.</p>
 
                     <p>Layer 8 is not a framework, a platform, or a product. It is a set of architectural constraints that force alignment.</p>
 
@@ -340,7 +378,7 @@
 
                     <h3>If You Are a Technical Leader or Executive</h3>
 
-                    <p>Your primary risk is not implementation failure. It is <strong>misdiagnosing where cost, delay, and burnout originate</strong>.</p>
+                    <p>Your primary risk is not implementation failure. It is <strong>misdiagnosing where cost, delay, burnout, and AI waste originate</strong>.</p>
 
                     <p>Recommended path:</p>
 
@@ -350,7 +388,7 @@
                         <li><strong>Failure Modes of Implicit Architecture</strong><br>
                         Names the structural causes behind recurring incidents, rewrites, and coordination drag.</li>
                         <li><strong>The Economics of Implicit Architecture</strong><br>
-                        Explains why these failures compound over time and why they cannot be "optimized away."</li>
+                        Explains why these failures compound over time and why they cannot be "optimized away" by tools or AI.</li>
                         <li><strong>Architecture Is the Alignment Mechanism</strong><br>
                         Shows how architecture encodes incentives long before process or culture can correct them.</li>
                         <li><strong>Migration</strong><br>
@@ -363,7 +401,7 @@
 
                     <h3>If You Are an Architect</h3>
 
-                    <p>Your primary risk is <strong>treating architecture as guidance instead of constraint</strong>.</p>
+                    <p>Your primary risk is <strong>treating architecture as guidance instead of constraint</strong>, especially when AI can produce implementations faster than teams can inspect them.</p>
 
                     <p>Recommended path:</p>
 
@@ -384,7 +422,7 @@
 
                     <h3>If You Are a Senior Engineer or Staff Engineer</h3>
 
-                    <p>Your primary risk is <strong>being asked to compensate for architectural absence with effort</strong>.</p>
+                    <p>Your primary risk is <strong>being asked to compensate for architectural absence with effort</strong>, and then being asked to review AI output that repeats the same absence faster.</p>
 
                     <p>Recommended path:</p>
 
@@ -402,6 +440,27 @@
                     </ol>
 
                     <p>This book is not telling you to work harder or smarter. It is explaining why you should not have to.</p>
+
+                    <hr>
+
+                    <h3>If You Are Using AI to Build Software</h3>
+
+                    <p>Your primary risk is <strong>confusing output speed with system progress</strong>.</p>
+
+                    <p>Recommended path:</p>
+
+                    <ol>
+                        <li><strong>Thoughts</strong><br>
+                        Establishes why AI amplifies architecture instead of replacing it.</li>
+                        <li><strong>Ground Rules</strong><br>
+                        Defines the constraints AI must work inside.</li>
+                        <li><strong>Service as a Contract, Enforced by Concurrency</strong><br>
+                        Shows how Layer 8 gives AI a clear unit of ownership and behavior.</li>
+                        <li><strong>API &amp; Query Language</strong><br>
+                        Shows how AI can generate against stable contracts instead of inventing integration logic.</li>
+                        <li><strong>Radical Simplicity for AI</strong><br>
+                        Describes the concrete workflow for building with AI inside the Layer 8 ecosystem.</li>
+                    </ol>
 
                     <hr>
 
@@ -459,6 +518,7 @@
                     <p>This book is for:</p>
                     <ul>
                         <li>engineers tired of rewriting the same systems</li>
+                        <li>AI-assisted builders who need architecture the model can follow</li>
                         <li>architects frustrated by fragile complexity</li>
                         <li>leaders who sense something is wrong but lack language for it</li>
                     </ul>

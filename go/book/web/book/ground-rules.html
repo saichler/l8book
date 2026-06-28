@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Ground Rules - Architectural Constraints | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Ground Rules - Architectural Constraints | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Ground Rules | Radical Simplicity for Humans</title>
+    <title>Ground Rules | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -66,6 +66,11 @@
 
                     <p>These rules are not best practices or guidelines.<br>
                     They are constraints learned the hard way and enforced to prevent entire classes of failure.</p>
+
+                    <blockquote>
+                    <p><strong>AI Benefit Preview</strong><br>
+                    This chapter defines the constraints that keep AI from turning speed into architectural drift. The rules tell AI what must remain invariant: intent before implementation, interfaces before instances, topology hidden from consumers, and simplicity enforced as a design property.</p>
+                    </blockquote>
 
                     <hr>
 
@@ -91,16 +96,19 @@
 
                     <p>Layer 8 treats these rules as constraints because constraints are what keep systems simple over time.</p>
 
+                    <p>For AI-assisted development, these rules are even more important. AI can generate a large amount of valid-looking code before anyone notices that a boundary, ownership model, or service contract was wrong. The rules narrow the solution space so generated work has a structure to obey.</p>
+
                     <hr>
 
-                    <h2>Rule #1 - The Smart People / AI Can Do It</h2>
+                    <h2>Rule #1 - Design for Available Intelligence</h2>
 
                     <p>What feels far-fetched to one engineer is often trivial to another, or to an AI.</p>
 
                     <p>When designing, "Is this possible?" is not a valid question.<br>
                     Design must be driven by intent, not by the current limits of knowledge, tools, or experience.</p>
 
-                    <p>Assume intelligence exists. Design accordingly.</p>
+                    <p>Assume intelligence exists. Design accordingly.<br>
+                    The architecture should express what must be true, not what today's implementation happens to make easy.</p>
 
                     <h3>Failure prevented</h3>
                     <p>Prevents design from being constrained by current knowledge, causing intent to leak into implementation and permanently cap system evolution.</p>
@@ -120,10 +128,10 @@
 
                     <p>The simpler the design, the easier it is to understand.<br>
                     The easier it is to understand, the easier it is to maintain.<br>
-                    The easier it is to maintain, the easier it is to change, or replace, the implementation.</p>
+                    The easier it is to maintain, the easier it is to change, generate, or replace the implementation.</p>
 
                     <p>Complexity locks systems in place and taxes both budgets and humans.<br>
-                    Simplicity keeps systems agile, affordable, and humane.</p>
+                    Simplicity keeps systems agile, affordable, humane, and usable by AI.</p>
 
                     <p>Layer 8 treats simplicity as a non-negotiable constraint:<br>
                     if a design cannot be oversimplified, it is not yet understood.</p>

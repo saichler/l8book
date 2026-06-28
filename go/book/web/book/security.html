@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Security &amp; AAA | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Security &amp; AAA | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Security &amp; AAA | Radical Simplicity for Humans</title>
+    <title>Security &amp; AAA | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Security &amp; AAA</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter shows how Layer 8 gives AI an explicit authority model instead of asking it to infer security from annotations, routes, or middleware. When identity, authorization, and trust are architectural services, AI-generated code can participate in security without owning or bypassing it.</p>
+                    </blockquote>
 
                     <h2>Reader Orientation</h2>
 
@@ -75,6 +80,14 @@
                     <p><strong>Engineers</strong> should read this chapter to recalibrate where security belongs. Security is not something you add, annotate, or remember. In Layer 8, security is something you participate in, enforced before your code runs, not after it fails.</p>
 
                     <p>If you are reading this chapter looking for best practices, checklists, or annotations to copy, you will not find them here. This chapter explains why those approaches fail; and why Layer 8 removes the need for them entirely.</p>
+
+                    <p>For AI-assisted development, this distinction is critical. AI should not be asked to decide where security belongs in every generated handler, service, route, or integration point. That produces security by memory, only faster.</p>
+
+                    <p>Layer 8 gives AI a simpler rule:</p>
+
+                    <p><strong>Generated code participates in security; it does not define security.</strong></p>
+
+                    <p>Identity, authorization, trust, key distribution, and audit behavior are owned by the platform. AI-generated application code operates inside those boundaries.</p>
 
                     <hr>
 
@@ -115,6 +128,16 @@
                     <p>This distinction matters: security-by-annotation optimizes convenience; security-by-authority optimizes inevitability.</p>
 
                     <p><strong>Layer 8 chooses inevitability.</strong></p>
+
+                    <h3>Why This Matters for AI</h3>
+
+                    <p>AI is highly effective at extending visible patterns. If security is visible as scattered annotations, middleware hooks, and route-level checks, AI will extend that scattering.</p>
+
+                    <p>The result is not always obviously wrong. It may be worse: code that appears secure because it copied the shape of security, while missing the authority model that makes security enforceable.</p>
+
+                    <p>Layer 8 prevents this by moving security above generated application code. AI can generate service behavior, UI flows, and integrations without being responsible for reconstructing authentication, authorization, and audit logic each time.</p>
+
+                    <p>This reduces both risk and review burden. Reviewers inspect whether generated code uses the platform correctly, not whether it recreated security correctly.</p>
 
                     <hr>
 

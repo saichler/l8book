@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Quality | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Quality | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Quality | Radical Simplicity for Humans</title>
+    <title>Quality | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html" class="active">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,9 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Quality</h1>
+
+                    <blockquote><strong>AI Benefit Preview</strong><br>
+                    This chapter explains why AI-assisted development depends on cheap, deterministic verification. Layer 8 makes quality structural so AI can iterate quickly, receive trustworthy feedback, and avoid producing changes that only work in a fragile environment.</blockquote>
 
                     <p>&ldquo;It&rsquo;s too hard to test.&rdquo;<br>
                     &ldquo;Testing this will take at least two weeks.&rdquo;<br>
@@ -81,7 +84,7 @@
                     <p>It is none of those.<br>
                     Testing is a design problem.</p>
 
-                    <p>Quality is directly tied to work/life balance. The stronger the safety net, the less fear there is in change. The less fear there is in change, the faster features ship and bugs get fixed, without regressions.</p>
+                    <p>Quality is directly tied to work-life balance. The stronger the safety net, the less fear there is in change. The less fear there is in change, the faster features ship and bugs get fixed, without regressions.</p>
 
                     <p>Everyone agrees with this in theory. Managers repeat it. Their managers repeat it again. And yet the same excuses persist.</p>
 
@@ -90,6 +93,8 @@
                     <p>In Layer 8, quality is not enforced by process. It is enabled by architecture.</p>
 
                     <p>This chapter is not about writing more tests. It is about designing systems that are easy to test, easy to reason about, and hard to break.</p>
+
+                    <p>For AI-assisted development, this becomes non-negotiable. AI can generate changes quickly, but speed only matters when the system can validate those changes quickly and deterministically. Without fast feedback, AI turns uncertainty into review load. With fast feedback, AI becomes part of a tight design-build-verify loop.</p>
 
                     <hr>
 
@@ -119,6 +124,23 @@
                     </ul>
 
                     <p>When testing is fast, experimentation becomes safe. When experimentation is safe, quality stops being a tax and starts becoming a habit.</p>
+
+                    <h3>Why the 10-Minute Rule Matters for AI</h3>
+
+                    <p>AI-assisted development depends on iteration. The model proposes a change, the system runs, tests verify the result, and the next change builds on that feedback.</p>
+
+                    <p>If adding or running a meaningful test is slow, AI loses its advantage. The bottleneck shifts from writing code to proving that the code is correct.</p>
+
+                    <p>The 10-Minute Rule keeps AI work grounded:</p>
+
+                    <ul>
+                        <li>generated behavior must be testable immediately</li>
+                        <li>architectural mistakes must surface while context is still fresh</li>
+                        <li>reviewers should inspect intent and boundaries, not manually simulate the system</li>
+                        <li>failures should produce concrete correction signals for the next AI iteration</li>
+                    </ul>
+
+                    <p>In this sense, testability is not downstream of AI productivity. It is a prerequisite for it.</p>
 
                     <hr>
 
@@ -162,6 +184,8 @@
                     <p>Any test whose outcome varies without an input change is non-deterministic by definition and indicates an architectural flaw rather than a testing flaw.</p>
 
                     <p>Because Layer 8 is platform-agnostic, tests execute in a real local environment, not a simulation.</p>
+
+                    <p>This is what makes AI feedback trustworthy. The model is not validated against a mock of the architecture. It is validated against the same service contracts, virtual networking, security boundaries, serialization behavior, and concurrency rules used by the running system.</p>
 
                     <hr>
 
@@ -228,6 +252,8 @@
 
                     <p>Cross-team dependencies stop being blockers. They become declared inputs.</p>
 
+                    <p>For AI, this removes a major source of uncertainty. The model does not need another team&rsquo;s environment, deployment schedule, or tribal knowledge to verify generated work. It needs the declared contract and a local runtime capable of enforcing it.</p>
+
                     <hr>
 
                     <h2>Tests as Executable Architecture</h2>
@@ -253,6 +279,8 @@
                     <p>When a test fails, it is not merely a bug in code. It is evidence that the architecture is no longer behaving as designed.</p>
 
                     <p>The fastest way to detect architectural drift is not a review or a meeting. It is a test run.</p>
+
+                    <p>This is also how AI is kept honest. Generated code can be plausible, idiomatic, and still architecturally wrong. Executable architecture gives the system a way to reject plausible wrong answers quickly.</p>
 
                     <hr>
 
@@ -306,6 +334,8 @@
                     <p>A class of failures that previously required a staging cluster or production traffic can now be exercised locally.</p>
 
                     <p>Concurrency limits, retry behavior, and SLA violations are triggered deliberately, observed deterministically, and fixed before deployment.</p>
+
+                    <p>That changes the economics of AI-assisted delivery. AI can move quickly because the architecture can say no quickly. The faster the system rejects invalid work, the safer it becomes to generate, refine, and ship valid work.</p>
 
                     <nav class="chapter-nav">
                         <a href="web-server.html" class="prev">Web Server</a>

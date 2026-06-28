@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Model-Agnostic Runtime: Data Without Schemas | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Model-Agnostic Runtime: Data Without Schemas | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Model-Agnostic Runtime: Data Without Schemas | Radical Simplicity for Humans</title>
+    <title>Model-Agnostic Runtime: Data Without Schemas | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Model-Agnostic Runtime: Data Without Schemas</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter explains how Layer 8 gives AI a reusable runtime for model traversal, change tracking, comparison, cloning, and update application. AI no longer needs to regenerate subtle model-specific mechanics every time a new service or object appears.</p>
+                    </blockquote>
 
                     <p>This chapter is not about removing schemas. It is about removing duplicated logic.</p>
 
@@ -97,6 +102,10 @@
 
                     <p>Schemas are not removed. They are no longer reimplemented everywhere.</p>
 
+                    <p>For AI, this is one of the strongest accelerators in the Layer 8 ecosystem. Most generated business systems repeat the same low-value mechanics: walk the object graph, compare two versions, clone safely, apply a partial update, map fields into storage, and reconstruct state later.</p>
+
+                    <p>Layer 8 removes that work from the prompt. AI defines or modifies the model and service intent. The runtime supplies the mechanics.</p>
+
                     <hr>
 
                     <h2>Centralized Authority, Preserved Correctness</h2>
@@ -128,6 +137,23 @@
                     <p>No schema is required at compile time. No shared model definitions are enforced between components.</p>
 
                     <p>The result is a model-agnostic runtime: a universal data engine that can reason about model state without coupling applications to structure-specific logic.</p>
+
+                    <h3>Why This Changes AI Development</h3>
+
+                    <p>Without a model-agnostic runtime, AI must repeatedly generate code that is both tedious and risky:</p>
+
+                    <ul>
+                        <li>field walkers</li>
+                        <li>patch appliers</li>
+                        <li>deep-copy functions</li>
+                        <li>equality checks</li>
+                        <li>cache update logic</li>
+                        <li>persistence mapping helpers</li>
+                    </ul>
+
+                    <p>This code is easy to produce and hard to trust. Small mistakes often appear only under nested data, concurrent updates, or model evolution.</p>
+
+                    <p>Layer 8 makes these mechanics reusable infrastructure. AI-generated work becomes smaller because generated services can assume the runtime already knows how to inspect, compare, update, and move model state safely.</p>
 
                     <p>This approach challenges assumptions deeply ingrained in traditional software design. Once understood, it removes entire classes of complexity from distributed systems.</p>
 
@@ -188,6 +214,8 @@ NewValue: 55</code></pre>
                     <p>The receiving side resolves the PropertyId and applies the update safely using the same blueprint.</p>
 
                     <p>This is the core pattern repeated throughout Layer 8: introspect once, reason generically, and move only the minimal truth required.</p>
+
+                    <p>For AI, this pattern is the difference between generating one architecture-aware model and generating hundreds of model-specific helper functions.</p>
 
                     <h3>Failure Modes Eliminated</h3>
 

@@ -7,9 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#fdfbf7">
-    <meta name="description" content="Object Relation Mapping | Radical Simplicity for Humans by Sharon Aicler">
+    <meta name="description" content="Object Relation Mapping | Radical Simplicity for AI by Sharon Aicler">
     <meta name="author" content="Sharon Aicler">
-    <title>Object Relation Mapping | Radical Simplicity for Humans</title>
+    <title>Object Relation Mapping | Radical Simplicity for AI</title>
     <link rel="stylesheet" href="css/book.css">
 </head>
 <body>
@@ -23,7 +23,7 @@
     <div class="site-container">
         <nav class="sidebar" role="navigation" aria-label="Table of Contents">
             <header class="site-header">
-                <h1 class="book-title">Radical Simplicity<br>for Humans</h1>
+                <h1 class="book-title">Radical Simplicity<br>for AI</h1>
                 <p class="book-subtitle">Layer 8</p>
                 <div class="author-info">
                     <p>Sharon Aicler</p>
@@ -55,7 +55,7 @@
                 <li><a href="quality.html">Quality</a></li>
                 <li><a href="practice.html">Practice</a></li>
                 <li><a href="radical-simplicity-ai.html">Radical Simplicity for AI</a></li>
-                <li><span class="coming-soon">Migration</span></li>
+                <li><a href="migration.html">Migration</a></li>
             </ul>
         </nav>
 
@@ -63,6 +63,11 @@
             <div class="content-wrapper">
                 <article>
                     <h1>Object Relation Mapping</h1>
+
+                    <blockquote>
+                        <p><strong>AI Benefit Preview</strong><br>
+                        This chapter explains how Layer 8 prevents AI from embedding persistence decisions into domain models. By moving mapping, storage, and schema concerns behind explicit interfaces, AI can model business objects without leaking database mechanics into generated code.</p>
+                    </blockquote>
 
                     <p>Persisting object models into relational databases has always been hard. Object Relational Mapping (ORM) was introduced as a solution.</p>
 
@@ -91,6 +96,8 @@
 
                     <p>Layer 8 eliminates these failure modes by removing implicit, instance-driven persistence and replacing it with introspection and explicit interfaces.</p>
 
+                    <p>AI-assisted development makes traditional ORM failure modes easier to reproduce at scale. Given examples of annotations, repositories, lazy-loaded objects, or database-specific queries, AI will generate more of them. The system may appear productive while quietly binding domain models to persistence mechanics.</p>
+
                     <p>First, the persistence layer becomes tightly coupled to relational databases, often to a specific vendor or dialect.</p>
 
                     <p>Second, the complexity does not disappear. It moves.</p>
@@ -115,6 +122,16 @@
                     <p>By separating Service, Convert, and Persist, Layer 8 eliminates tight coupling, prevents schema leakage into the model, and allows each layer to evolve independently.</p>
 
                     <p>Persistence becomes composable, replaceable, and intentional.</p>
+
+                    <h3>What AI Should Not Own</h3>
+
+                    <p>Layer 8 draws a hard line around persistence:</p>
+
+                    <p>AI-generated domain code should not own tables, joins, sessions, lazy loading, database dialects, or repository lifecycles.</p>
+
+                    <p>AI may define the model and the service intent. The ORM layer derives the relational projection and delegates durable storage to plugins.</p>
+
+                    <p>This keeps AI focused on the business object instead of teaching it to embed storage decisions inside the model.</p>
 
                     <h2>Ownership Boundaries: Services vs Persistence</h2>
 
@@ -181,6 +198,8 @@
                     <p>By treating relational data as a projection of the model, Layer 8 avoids schema annotations, mapping rules, and database-specific assumptions.</p>
 
                     <p>The model remains pure. The relational view is generated. Persistence adapts to the model.</p>
+
+                    <p>For AI, this means a model change does not automatically become a persistence rewrite. The generated model remains the source of intent, and the persistence layer adapts through introspection and explicit plugin contracts.</p>
 
                     <hr>
 
@@ -256,7 +275,7 @@
                     <ul>
                         <li>relational database tables,</li>
                         <li>files,</li>
-                        <li>NoSql,</li>
+                        <li>NoSQL,</li>
                         <li>or any other durable storage mechanism.</li>
                     </ul>
 
@@ -360,6 +379,8 @@
                     </ul>
 
                     <p><strong>Storage-specific intelligence remains isolated.</strong></p>
+
+                    <p>This is the correct place for AI assistance. AI can help implement or optimize a storage plugin, but that intelligence remains behind the Persist interface. It does not leak into services, models, APIs, or UI code.</p>
 
                     <p>This keeps the ORM portable, while still allowing high-performance, storage-aware implementations.</p>
 
