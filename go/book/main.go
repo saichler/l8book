@@ -16,6 +16,7 @@
 package main
 
 import (
+	"encoding/base64"
 	"github.com/saichler/l8bus/go/overlay/vnet"
 	"github.com/saichler/l8reflect/go/reflect/introspecting"
 	"github.com/saichler/l8services/go/services/manager"
@@ -43,19 +44,31 @@ func main() {
 }
 
 func startWebServer(port int, cert string) {
+
+	nic1 := createVnic(43434)
+
+	domain, private, _ := nic1.Resources().Certificate()
+	if domain == "" || private == "" {
+		d, p, _ := sec.CreateCertBundle()
+		domainBytes, _ := base64.StdEncoding.DecodeString(d)
+		privateBytes, _ := base64.StdEncoding.DecodeString(p)
+		domain = string(domainBytes)
+		private = string(privateBytes)
+	}
+
 	serverConfig := &server.RestServerConfig{
 		Host:           ipsegment.MachineIP,
-		Port:           port,
+		Port:           int(nic1.Resources().SysConfig().WebConfig.WebPort),
 		Authentication: true,
-		CertName:       cert,
-		Prefix:         "/book/",
+		CertDomain:     domain,
+		CertPrivate:    private,
+		Prefix:         nic1.Resources().WebPrefix(),
 	}
+
 	svr, err := server.NewRestServer(serverConfig)
 	if err != nil {
 		panic(err)
 	}
-
-	nic1 := createVnic(43434)
 
 	hs, ok := nic1.Resources().Services().ServiceHandler(health.ServiceName, 0)
 	if ok {
