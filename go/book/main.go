@@ -18,6 +18,7 @@ package main
 import (
 	"encoding/base64"
 	"github.com/saichler/l8bus/go/overlay/vnet"
+	"github.com/saichler/l8common/go/common"
 	"github.com/saichler/l8reflect/go/reflect/introspecting"
 	"github.com/saichler/l8services/go/services/manager"
 	"github.com/saichler/l8types/go/sec"
@@ -87,7 +88,7 @@ func startWebServer(port int, cert string) {
 }
 
 func createVnic(vnet uint32) ifs.IVNic {
-	resources := CreateResources("web-" + strconv.Itoa(int(vnet)))
+	resources := common.CreateResources("web-"+strconv.Itoa(int(vnet)), false)
 	resources.SysConfig().VnetPort = vnet
 
 	nic := vnic.NewVirtualNetworkInterface(resources, nil)
@@ -96,33 +97,4 @@ func createVnic(vnet uint32) ifs.IVNic {
 	nic.WaitForConnection()
 
 	return nic
-}
-
-func CreateResources(alias string) ifs.IResources {
-	//logger.SetLogToFile(alias)
-	log := logger.NewLoggerImpl(&logger.FmtLogMethod{})
-	log.SetLogLevel(ifs.Info_Level)
-	res := resources.NewResources(log)
-
-	res.Set(registry.NewRegistry())
-
-	sec, err := sec.LoadSecurityProvider(res)
-	if err != nil {
-		time.Sleep(time.Second * 10)
-		panic(err.Error())
-	}
-	res.Set(sec)
-
-	conf := &l8sysconfig.L8SysConfig{MaxDataSize: resources.DEFAULT_MAX_DATA_SIZE,
-		RxQueueSize:              resources.DEFAULT_QUEUE_SIZE,
-		TxQueueSize:              resources.DEFAULT_QUEUE_SIZE,
-		LocalAlias:               alias,
-		VnetPort:                 uint32(43434),
-		KeepAliveIntervalSeconds: 30}
-	res.Set(conf)
-
-	res.Set(introspecting.NewIntrospect(res.Registry()))
-	res.Set(manager.NewServices(res))
-
-	return res
 }
