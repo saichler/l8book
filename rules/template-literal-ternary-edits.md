@@ -50,12 +50,8 @@ After ANY edit that adds ternary expressions or conditional wrappers inside temp
 4. Verify every ternary `? \`` has a corresponding `` \` : ...}`
 
 ## Error Symptoms
-- Clicking a button/row does nothing (the handler function is undefined because the file failed to load)
-- "X is not a function" in console (if the caller has error handling)
+- Handler function undefined or "X is not a function" in console (the file failed to load)
 - No visible error at all (the most common case — the file silently fails to parse)
-- User reports "I don't see any change" after edits (the edited file isn't loading)
 
 ## When This Applies
-- Adding null guards around optional HTML sections in template literals
-- Wrapping table/div sections in `${array.length > 0 ? \`...\` : ''}` conditionals
-- Any edit that introduces new `${}` nesting inside an existing template literal
+Any edit that introduces new `${}` ternary nesting inside an existing template literal.

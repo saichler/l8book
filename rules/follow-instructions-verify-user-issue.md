@@ -9,12 +9,8 @@ When the user reports a specific bug with a specific location (e.g., "HCM portal
 
 Do NOT:
 - Assume you know the cause without verifying
-- Fix a general/related problem and claim the user's specific issue is resolved
+- Fix a different problem than the one described and claim done
 - Report work as "done" without confirming the user's specific symptom is addressed
-- Create plans that address a different problem than what the user described
-
-## Why This Is Critical
-This rule exists because of a specific failure: the user reported "Organization field shows raw ID in inline form but name in popup." Instead of tracing that specific rendering path, a general `formatFieldDisplayValue` refactor was implemented that had nothing to do with reference field ID resolution. The work was reported as complete even though the user's actual issue was untouched.
 
 ## Verification Before Claiming Done
 After implementing any fix for a user-reported bug:

@@ -19,10 +19,6 @@ Each item must be accounted for in the target platform — either implemented, o
 #### Example: The Inventory Type Filter Gap
 ```
 Desktop targets.js feature inventory:
-  ✓ Target table with pagination
-  ✓ Add/Edit/Delete target CRUD
-  ✓ Target detail popup
-  ✓ Nested host/protocol editing
   ✗ Inventory type filter dropdown (initInventoryTypeFilter, baseWhereClause)  ← MISSED
   ✗ Toggle target state button (toggleTargetState)  ← MISSED
 ```
@@ -76,14 +72,6 @@ Mobile (WRONG): Table → onRowClick(item) → IGNORE item → L8Query server ca
                  ↑ unnecessary server call that desktop never makes, with broken syntax
 ```
 
-### Anti-Pattern 2: Dropped parameters in intermediate layers
-```
-Config:  idField='targetId' → getItemId=(item)=>item.targetId  ✓
-Factory: receives getItemId in options → DOES NOT pass to constructor  ✗
-Table:   no getItemId → falls back to item.id → '' for all items  ✗
-Result:  every card has data-id="", every click returns first item
-```
-
 ## Rendering Lifecycle: Hidden Containers and Deferred Initialization
 
 When the source platform renders components inside **tabbed interfaces, collapsible panels, or other initially-hidden containers**, you MUST trace **when** each component initializes relative to its container's visibility — not just what data it uses.
@@ -123,12 +111,6 @@ Any component that reads container dimensions during initialization:
 - **Drag-and-drop layouts** — position calculation needs visible bounds
 - **Virtual scrollers** — row count depends on container height
 
-### Checklist Addition
-When porting a tabbed interface, add to the feature inventory (Step 0):
-- For each tab: what components does it contain?
-- For each component: does it require visible container dimensions?
-- If yes: how does the source platform defer its initialization?
-
 ## Never Bypass Existing Abstractions
 
 When fixing a bug or adding a feature to converted code, **extend the existing wrapper/helper** — do NOT replace it with a direct call to the underlying API. A working abstraction may handle edge cases, guards, or state management that are not visible in its source code.
@@ -156,43 +138,20 @@ D.showTabbedPopup(device.name, tabs, onShowCallback, onTabChangeCallback);
 ```
 
 ### Why This Causes Regressions
-1. The wrapper may apply guards, defaults, or transformations you didn't notice
-2. The wrapper's call site has been tested in production — the direct call has not
-3. Other code may depend on the wrapper's side effects (e.g., setting state, dispatching events)
-4. The wrapper is the contract; the underlying API is an implementation detail that may change
+1. Other code may depend on the wrapper's side effects (e.g., setting state, dispatching events)
+2. The wrapper is the contract; the underlying API is an implementation detail that may change
 
 ### When This Applies
 - Fixing bugs in code that already works through a helper/wrapper
 - Adding callbacks, options, or features to an existing flow
 - Any time you're tempted to replace `helper(args)` with `underlying.api(reconstructedArgs)`
 
-## Checklist Before Writing Conversion Code
-- [ ] I have created a feature inventory of every interactive element on the source platform's page
-- [ ] Every item in the inventory is marked as "implement" or "defer (reason)"
-- [ ] I have traced every data flow path in the source platform
-- [ ] I know whether each path uses local data or server queries
-- [ ] I have verified the target platform's framework provides equivalent data access
-- [ ] I am NOT introducing server calls that the source platform doesn't make
-- [ ] I am NOT adding UI features (edit buttons, shortcuts) that the source platform doesn't have
-- [ ] I have verified the target platform's auth/transport layer supports all HTTP methods used by the source
-
-## Checklist After Writing Conversion Code
-- [ ] I have traced the data through EVERY intermediate layer (factories, registries, adapters)
-- [ ] Every parameter needed by the consuming code is forwarded by all intermediate layers
-- [ ] Components in hidden containers (tabs, collapsed panels) defer initialization until visible
-- [ ] I did NOT bypass any existing wrapper/helper — I extended it instead
-- [ ] I have tested at least one complete interaction path end-to-end in the actual UI
-
 ## Common Traps
 | Trap | What Happens | Prevention |
 |------|-------------|------------|
-| Assuming detail needs server fetch | Broken L8Query, wrong/duplicate data | Check if table passes item to handler |
-| Dropped parameter in factory/adapter | Data exists at source, missing at consumer | Trace every intermediate layer |
 | Adding "convenience" features | Edit button in read-only view | Match source platform exactly, no additions |
 | Replicating untested patterns | Same bug in 6+ files | Test ONE file end-to-end before replicating |
 | Checking structure not behavior | "File exists and has functions" ≠ works | Trace click → handler → data → render |
-| Verifying only endpoints, not middle | A→D looks correct, but B drops data | Verify A→B→C→D, every link |
-| Skipping feature inventory | Table chrome (filters, dropdowns, toggles) not ported | Enumerate all elements in Step 0 before coding |
 | Assuming transport parity | `Auth.patch()` doesn't exist, silent TypeError on save | Verify target auth layer supports all HTTP methods used |
 | Rendering into hidden containers | Charts/canvas blank in inactive tabs (0x0 dimensions) | Trace source platform's deferred init pattern; render on tab activation, not on popup open |
 | Bypassing existing wrappers | Regression — wrapper handled guards/state you didn't replicate | Extend the wrapper to support new features; never replace with direct API call |
@@ -218,11 +177,6 @@ When building a field-by-field parity table, add a **Value Type** column:
 | 2 | Last Seen | device.lastSeen | item.lastSeen | YES | NO — desktop formats as date string, mobile is raw timestamp | Must format before detail code |
 | 3 | Name | device.name | item.name | YES | YES — both are raw strings from server | OK |
 ```
-
-### Parity Transform Checklist
-1. **Identify all transforms** on the source side (search for transform functions, renderers, formatters, enum maps)
-2. **For every transformed field**, verify the target side either applies the same transform OR the consuming code handles the raw type
-3. **Mark value type mismatches** as action items in the traceability matrix — they are bugs, not cosmetic differences
 
 ### Fields Most Likely to Have Transform Mismatches
 | Raw Server Type | Common Transform | Breaks When |

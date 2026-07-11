@@ -53,15 +53,11 @@ _defaultGetItemId(item) {
 ```
 
 ### Why Silent Fallbacks Are Dangerous
-1. **They mask configuration errors**: A missing `getItemId` passthrough in a factory becomes invisible — the table renders, cards appear, clicks "work" — but every click returns the first item
-2. **They make debugging exponentially harder**: The symptom ("same data every click") appears far from the cause (factory not forwarding a parameter). With a visible error, the cause is immediate
-3. **They compound**: One silent fallback (`''`) feeds into another function (`_findItemById('')`) which silently returns the first match, creating a chain of "working" code that produces wrong results
+They make debugging exponentially harder: the symptom ("same data every click") appears far from the cause (factory not forwarding a parameter). With a visible error, the cause is immediate.
 
 ### Where This Applies
-- ID resolution (`getItemId`, `_findItemById`, `getItemId` fallbacks)
-- Configuration lookups (reference configs, module configs, nav configs)
-- Data transforms (missing transform returning raw data without warning)
-- Endpoint resolution (returning empty string instead of erroring)
+- ID resolution and configuration lookups (`getItemId`, reference configs, module configs, nav configs)
+- Data transforms and endpoint resolution (returning raw data or empty string instead of erroring)
 - Any function that returns a default value when the real value should have been provided by configuration
 
 ### Where This Does NOT Apply

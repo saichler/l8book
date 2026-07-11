@@ -32,14 +32,7 @@ Layer8DModuleFactory.create({
 
 ```javascript
 // WRONG - sectionSelector uses section name instead of module name
-Layer8DModuleFactory.create({
-    namespace: 'Prj',
-    defaultModule: 'planning',
-    defaultService: 'projects',
-    sectionSelector: 'projects',      // <-- WRONG: 'projects' is the section, not the module
-    initializerName: 'initializePrj',
-    requiredNamespaces: [...]
-});
+sectionSelector: 'projects',      // Should be 'planning' (same as defaultModule)
 ```
 
 ## Verification
@@ -47,11 +40,3 @@ When creating a module init file, verify:
 1. `sectionSelector` === `defaultModule`
 2. The HTML has `<div class="hcm-module-content" data-module="${sectionSelector}">`
 
-## Examples from Existing Modules
-
-| Module | defaultModule | sectionSelector |
-|--------|---------------|-----------------|
-| CRM    | opportunities | opportunities   |
-| PRJ    | planning      | planning        |
-| HCM    | core-hr       | core-hr         |
-| FIN    | general-ledger| general-ledger  |

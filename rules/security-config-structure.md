@@ -142,10 +142,8 @@ Some entities are intentionally public (e.g., active listings in a marketplace).
 This denies access to OTHER users' draft listings while keeping active/fulfilled listings visible to all.
 
 ## What NOT to Do
-- Do NOT implement row-level filtering in ServiceCallbacks — use security config deny rules
 - Do NOT hardcode user ID checks in Before/After hooks
 - Do NOT create custom middleware for data scoping
-- Do NOT use `baseWhereClause` in the UI as a substitute for server-side scoping — UI filters are for convenience, not security
 
 ## Config File Location
 The security config JSON lives in the project's security plugin directory:
@@ -170,11 +168,7 @@ The canonical example is `l8secure/go/secure/plugin/phy/phy.json` (l8physio proj
 - Pre-defined users with role assignments
 
 ## PRD Requirement
-Every PRD that defines roles and access control MUST include a **Security Config Design** section showing:
-1. Role definitions with allow rules per entity type
-2. Deny rules with L8Query expressions for row-level scoping
-3. Field-level denials for sensitive data
-4. Which data is intentionally public vs. user-scoped
+Every PRD that defines roles and access control MUST include a **Security Config Design** section that explicitly identifies which data is intentionally public vs. user-scoped.
 
 ## Relationship to Other Rules
 - Extends `security-provider-interface.md`: this rule documents the config format that ISecurityProvider consumes

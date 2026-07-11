@@ -6,8 +6,6 @@ Only ONE process may activate the ORM service for a given Prime Object. That pro
 ## Why This Matters
 When two processes both activate the same ORM service (via `ActivateAllServices` or similar), each gets its own in-memory cache and its own direct connection to the database table. Writes from process A go to the DB and update A's cache, but process B's cache never hears about them. Once B's cache is populated from a partial DB read, it never falls back to the DB again — B's view of the data is permanently frozen. The database is consistent, but the caches diverge silently. No errors, no warnings, just stale data served to users.
 
-This is NOT a cache synchronization problem. Distributed cache sync (dcache, notifications) is a workaround for a design violation. The correct fix is to enforce single ownership.
-
 ## The Rule
 1. **One owner**: Each Prime Object's ORM service is activated in exactly one process (or one logical service group).
 2. **Remote access**: Any other process that needs that data calls the owning service via vnic/vnet RPC — POST, GET, PUT, DELETE over the service mesh.
@@ -47,4 +45,4 @@ If a process calls `ActivateAllServices`, it must only activate services that it
 - Any HA/replication deployment where multiple nodes handle the same service area
 
 ## Historical Context
-This bug was discovered in l8physio where `physio_demo` and `boostapp_demo` both activated the `PhyClient` ORM service. `boostapp_demo` wrote 25 clients directly to postgres via its local ORM handler. `physio_demo`'s cache loaded 14 rows on first access (mid-sync) and was permanently frozen at 14. Postgres had 25, UI showed 14. The root cause was not missing cache sync — it was that two processes were both acting as owners of the same table.
+Discovered in l8physio where two processes both activated PhyClient ORM. One cache froze on initial partial read. Root cause: dual ownership, not missing sync.

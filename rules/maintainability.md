@@ -1,21 +1,17 @@
 # Code Maintainability Standards
 
 ## File Size
-Files that are over 500 lines of code are not maintainable, please make sure to refactor them and break them into smaller files logically.
 
 ### File Size Check (CRITICAL)
 After ANY edit that adds more than 10 lines to a file, check the file's total line count.
 If the file is approaching 450 lines, proactively split it before continuing.
 If the file exceeds 500 lines, STOP and refactor immediately before proceeding.
 
-## No Duplicate Code
-Avoid duplicate code. Always check for existing utilities, functions, or components before writing new code. Consolidate duplicates into shared modules.
-
 ## Future-Proof Design
-The ERP system has more modules that are not implemented yet. When designing components, consider that future modules (Financial, SCM, Manufacturing, Sales, CRM, Projects, BI, Documents, E-Commerce, Compliance, System) will follow similar patterns. Design shared components to be reusable across all modules.
+When designing components, consider that all current and future modules will follow similar patterns. Design shared components to be reusable across all modules.
 
 ## Read Before Implementing
-When asked to implement something similar to an existing component, you MUST read ALL the code of the referenced component(s) first. Do not make any assumptions. Read every file, understand every pattern, and only then implement following the exact same patterns.
+When asked to implement something similar to an existing component, you MUST read ALL the code of the referenced component(s) first. Do not make any assumptions.
 - Use the Read tool to read the file completely. Show the key interfaces and props found. Then implement.
 
 ## Component Integration Analysis
@@ -23,7 +19,6 @@ When implementing support for a component, perform deep analysis first:
 - Understand all initialization arguments and configuration options
 - Understand how endpoints are constructed (if applicable)
 - Understand how L8Query is constructed for paging, filtering, and sorting (if supported)
-- Only proceed with implementation after full understanding is documented
 
 ## ServiceName
 ServiceName should not be larger than 10 characters.
@@ -59,7 +54,7 @@ Module-specific files should contain only data (configuration, definitions, mapp
 - An init file that calls a shared factory (~10 lines)
 
 ### Shared Components Before the Second Module
-The shared abstraction layer must be created as part of building the first module, or at latest refactored out before the second module ships. Never ship a second module by copying the first. If the first module embedded behavioral logic, the second module's implementation must include extracting that logic into shared components.
+The shared abstraction layer must be created as part of building the first module, or at latest refactored out before the second module ships. If the first module embedded behavioral logic, the second module's implementation must include extracting that logic into shared components.
 
 ### New Module Checklist
 Before creating a new module, verify it only needs configuration files:
@@ -82,4 +77,4 @@ When a newer module improves on a pattern from an older module, the improvement 
 If adding a new module requires more than 50 lines of structural/behavioral code (excluding domain-specific data like configs, enums, columns, forms), the shared abstraction layer needs improvement before proceeding.
 
 ### Document the Module Creation Recipe
-Maintain a "How to Add a New Module" guide that specifies exactly which files to create and which shared components to use. If the guide says "copy an existing module," the architecture has failed. The guide should say: create config, create data files, create init file with a factory call. No copying. No behavioral code. Configuration only.
+Maintain a "How to Add a New Module" guide that specifies exactly which files to create and which shared components to use. The guide should say: create config, create data files, create init file with a factory call. No copying. No behavioral code. Configuration only.

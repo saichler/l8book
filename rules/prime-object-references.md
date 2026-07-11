@@ -67,17 +67,7 @@ message SalesOrderLine {
 
 ### Existing correct example: HCM BenefitPlan
 
-```protobuf
-message BenefitPlan {
-    string plan_id = 1;
-    // ... plan fields ...
-    repeated CoverageOption coverage_options = 14;  // Embedded child (no service)
-    repeated PlanCost costs = 15;                    // Embedded child (no service)
-    EligibilityRules eligibility = 16;              // Embedded child (no service)
-}
-```
-
-`CoverageOption`, `PlanCost`, and `EligibilityRules` do NOT have service directories. They are managed entirely through the `BenefitPlan` service. This is the correct pattern.
+See BenefitPlan in `go/types/hcm/*.pb.go` — CoverageOption, PlanCost, and EligibilityRules are embedded children with no separate service.
 
 ---
 
@@ -125,14 +115,7 @@ A Prime Object gets ALL of the following:
 - **Mock data generator** with its own ID slice in `store.go`
 
 ### Child Type UI (inline within parent)
-A child type gets NONE of the above. Instead:
-- **No config entry** — not a standalone service
-- **No column definitions** — not shown in its own table
-- **No standalone form** — not independently created/edited
-- **No nav entry** — not navigable on its own
-- **No type registration** — not a registered Prime Object
-- **Inline table in parent form** — child rows displayed via `f.inlineTable()` within the parent's form definition
-- **Mock data inline** — generated as part of the parent's `repeated` field, not as a separate generator
+A child type gets NONE of the above — it appears only as an `f.inlineTable()` within its parent's form, and its mock data is generated inline as part of the parent's repeated field.
 
 ### Correct UI Pattern for Child Types
 
@@ -171,7 +154,7 @@ SalesOrderLine: f.form('Order Line', [
 ```
 
 ### Why This Matters
-When a child is wrongly given standalone UI, users see it as an independent navigable entity — they can create "orphan" lines without an order, browse lines across all orders (which is never useful), and the parent form shows no children. The correct UX is always: navigate to the parent, see its children inline, edit children within the parent context.
+Standalone UI for a child creates orphan records and hides the parent-child relationship from users.
 
 ---
 
@@ -199,5 +182,4 @@ grep -rn '\[\]\*\|^\s*\*' go/types/**/*.pb.go | grep 'protobuf:' | grep -v 'List
 
 ## Historical Context
 - **Rule 2** was discovered when `BenefitEnrollment.CoveredDependents []*Dependent` caused "Decorator Not Found in Dependent" errors.
-- **Rule 1** was established after an audit found ~134 child entities (order lines, BOM lines, invoice lines, case comments, fiscal periods, bins, etc.) incorrectly implemented as separate Prime Objects with their own services across 10 modules. These should have been embedded `repeated` fields in their parent types from the start.
-- **Rule 3** was added because those ~134 child entities each had a full standalone UI stack (config, columns, forms, nav entries) that should not have existed — children should only appear as inline tables within their parent's form.
+- **Rules 1 & 3** were established after an audit found ~134 child entities (order lines, BOM lines, invoice lines, case comments, fiscal periods, bins, etc.) incorrectly implemented as separate Prime Objects with their own services AND full standalone UI stacks (config, columns, forms, nav entries) across 10 modules. They should have been embedded `repeated` fields with inline table UI only.
