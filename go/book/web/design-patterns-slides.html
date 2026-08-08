@@ -1,0 +1,1710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layer 8 Ecosystem - Design Patterns</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --color-bg: #F9F9F7;
+  --color-bg-alt: #F0F0EE;
+  --color-text: #000000;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-accent: #0070F3;
+  --color-border: #E5E5E5;
+  --color-white: #FFFFFF;
+}
+
+body {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Top Navigation Bar */
+.nav-bar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 64px;
+  background: rgba(249, 249, 247, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  z-index: 100;
+}
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.nav-logo {
+  width: 36px; height: 36px;
+  background: var(--color-text);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  color: var(--color-white);
+  letter-spacing: -0.5px;
+}
+.nav-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.02em;
+}
+.nav-subtitle {
+  font-size: 11px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.nav-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nav-btn {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 8px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.nav-btn:hover { background: var(--color-bg-alt); border-color: var(--color-text); }
+.nav-btn:active { transform: scale(0.97); }
+.nav-btn:disabled { opacity: 0.25; cursor: default; }
+.nav-btn:disabled:hover { background: var(--color-white); border-color: var(--color-border); transform: none; }
+.nav-counter {
+  font-size: 13px;
+  color: var(--color-text-muted);
+  min-width: 60px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.nav-progress {
+  position: absolute;
+  bottom: 0; left: 0;
+  height: 2px;
+  background: var(--color-text);
+  transition: width 0.4s ease;
+}
+
+/* Slide Container */
+.slide-container {
+  position: fixed;
+  top: 64px; left: 0; right: 0; bottom: 0;
+  overflow: hidden;
+}
+.slide {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  padding: 40px 60px;
+  display: none;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+.slide::-webkit-scrollbar { width: 6px; }
+.slide::-webkit-scrollbar-track { background: transparent; }
+.slide::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+.slide.active { display: flex; flex-direction: column; }
+
+/* Title Slide */
+.title-slide {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: 24px;
+}
+.title-logo {
+  width: 80px; height: 80px;
+  background: var(--color-text);
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--color-white);
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+.title-main {
+  font-size: clamp(40px, 6vw, 60px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  color: var(--color-text);
+}
+.title-sub {
+  font-size: 20px;
+  color: var(--color-text-secondary);
+  max-width: 700px;
+  line-height: 1.7;
+}
+.title-sub code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.85em;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: var(--color-text);
+}
+.title-meta {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  margin-top: 16px;
+  letter-spacing: 0.02em;
+}
+
+/* Pattern Slide Layout */
+.pattern-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 28px;
+  flex-shrink: 0;
+}
+.pattern-number {
+  width: 44px; height: 44px;
+  min-width: 44px;
+  background: var(--color-text);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--color-white);
+}
+.pattern-title-group { flex: 1; }
+.pattern-title {
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--color-text);
+}
+.pattern-interface {
+  font-size: 14px;
+  color: var(--color-text-muted);
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  margin-top: 4px;
+  letter-spacing: 0.02em;
+}
+
+/* Content Sections */
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+}
+.content-grid.single { grid-template-columns: 1fr; }
+
+.section-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 20px 22px;
+  overflow: hidden;
+  transition: box-shadow 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.section-card:hover {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  transform: translateY(-2px);
+}
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.label-purpose { color: var(--color-accent); }
+.label-impact { color: #333333; }
+.label-ai { color: #555555; }
+.label-rules { color: #888888; }
+.label-example { color: var(--color-accent); }
+
+.section-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+.dot-purpose { background: var(--color-accent); }
+.dot-impact { background: #333333; }
+.dot-ai { background: #555555; }
+.dot-rules { background: #888888; }
+.dot-example { background: var(--color-accent); }
+
+.section-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+.section-text strong { color: var(--color-text); font-weight: 600; }
+.section-text code {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 0.85em;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  padding: 1px 6px;
+  border-radius: 4px;
+  color: var(--color-text);
+}
+
+ul.impact-list {
+  list-style: none;
+  padding: 0;
+}
+ul.impact-list li {
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  padding: 4px 0 4px 20px;
+  position: relative;
+}
+ul.impact-list li::before {
+  content: '';
+  position: absolute;
+  left: 2px; top: 12px;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--color-text);
+  opacity: 0.25;
+}
+ul.impact-list li strong { color: var(--color-text); font-weight: 600; }
+
+.rule-tag {
+  display: inline-block;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-secondary);
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  margin: 3px 4px 3px 0;
+  transition: all 0.15s;
+}
+.rule-tag:hover {
+  border-color: var(--color-text);
+  color: var(--color-text);
+}
+
+.code-block {
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 14px 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+  overflow-x: auto;
+  white-space: pre;
+}
+.code-block .kw { color: #333333; font-weight: 600; }
+.code-block .fn { color: var(--color-accent); }
+.code-block .str { color: #333333; }
+.code-block .cm { color: var(--color-text-muted); }
+.code-block .tp { color: #555555; }
+
+/* TOC Slide */
+.toc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+  align-content: start;
+}
+.toc-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+.toc-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--color-text);
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.toc-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+.toc-item:hover::before { transform: scaleX(1); }
+.toc-item:active { transform: translateY(-1px) scale(0.985); }
+.toc-num {
+  width: 28px; height: 28px;
+  min-width: 28px;
+  background: var(--color-text);
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--color-white);
+}
+.toc-label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text);
+  letter-spacing: -0.01em;
+}
+
+/* Summary Slide */
+.summary-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+  flex: 1;
+  align-content: start;
+}
+.summary-card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 28px 24px;
+  transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.summary-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+.summary-icon {
+  width: 48px; height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+.icon-config { background: rgba(0, 0, 0, 0.05); color: #333333; }
+.icon-one { background: rgba(0, 0, 0, 0.05); color: #333333; }
+.icon-boundary { background: rgba(0, 0, 0, 0.05); color: #333333; }
+.summary-card h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+  color: var(--color-text);
+}
+.summary-card p {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+}
+.summary-card p strong { color: var(--color-text); }
+.summary-footer {
+  margin-top: 28px;
+  padding: 28px;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.summary-footer p {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--color-text-secondary);
+}
+.summary-footer strong { color: var(--color-text); }
+
+.slide-heading {
+  font-size: clamp(24px, 3vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  flex-shrink: 0;
+  color: var(--color-text);
+}
+
+/* Architecture Slides */
+.arch-slide {
+  align-items: center;
+}
+.arch-subtitle {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  line-height: 1.7;
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 24px;
+  flex-shrink: 0;
+}
+.arch-svg-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  width: 100%;
+}
+.arch-svg-wrap svg {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Keyboard hint */
+.key-hint {
+  position: fixed;
+  bottom: 16px;
+  right: 24px;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  z-index: 101;
+}
+.key-hint kbd {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav class="nav-bar">
+  <div class="nav-brand">
+    <div class="nav-logo">L8</div>
+    <div>
+      <div class="nav-title">Layer 8 Ecosystem</div>
+      <div class="nav-subtitle">Design Patterns</div>
+    </div>
+  </div>
+  <div class="nav-controls">
+    <button class="nav-btn" id="btn-prev" onclick="prevSlide()">
+      <span>&#9664;</span> Prev
+    </button>
+    <span class="nav-counter" id="counter">1 / 26</span>
+    <button class="nav-btn" id="btn-next" onclick="nextSlide()">
+      Next <span>&#9654;</span>
+    </button>
+  </div>
+  <div class="nav-progress" id="progress"></div>
+</nav>
+
+<div class="slide-container">
+
+<!-- Slide 1: Title -->
+<div class="slide title-slide active" data-slide="1">
+  <div class="title-logo">L8</div>
+  <div class="title-main">Layer 8 Ecosystem<br>Design Patterns</div>
+  <div class="title-sub">The interface contracts in <code>l8types/go/ifs</code> that keep every component agnostic to every other component &mdash; encoding the economic optimization of building software.</div>
+  <div class="title-meta">&copy; 2025 Sharon Aicler &bull; Apache License 2.0</div>
+</div>
+
+<!-- Slide 2: Table of Contents -->
+<div class="slide" data-slide="2">
+  <div class="slide-heading">Design Patterns Overview</div>
+  <div class="toc-grid" id="toc-grid">
+    <div class="toc-item" onclick="goToSlide(6)"><div class="toc-num">1</div><div class="toc-label">Virtual Network Interface Card</div></div>
+    <div class="toc-item" onclick="goToSlide(7)"><div class="toc-num">2</div><div class="toc-label">Resource Container</div></div>
+    <div class="toc-item" onclick="goToSlide(8)"><div class="toc-num">3</div><div class="toc-label">Service Handler</div></div>
+    <div class="toc-item" onclick="goToSlide(9)"><div class="toc-num">4</div><div class="toc-label">Service Level Agreement</div></div>
+    <div class="toc-item" onclick="goToSlide(10)"><div class="toc-num">5</div><div class="toc-label">Service Lifecycle Callback</div></div>
+    <div class="toc-item" onclick="goToSlide(11)"><div class="toc-num">6</div><div class="toc-label">Service Registry</div></div>
+    <div class="toc-item" onclick="goToSlide(12)"><div class="toc-num">7</div><div class="toc-label">Security Provider</div></div>
+    <div class="toc-item" onclick="goToSlide(13)"><div class="toc-num">8</div><div class="toc-label">Type Registry</div></div>
+    <div class="toc-item" onclick="goToSlide(14)"><div class="toc-num">9</div><div class="toc-label">Type Introspection</div></div>
+    <div class="toc-item" onclick="goToSlide(15)"><div class="toc-num">10</div><div class="toc-label">Query Language</div></div>
+    <div class="toc-item" onclick="goToSlide(16)"><div class="toc-num">11</div><div class="toc-label">Data Elements</div></div>
+    <div class="toc-item" onclick="goToSlide(17)"><div class="toc-num">12</div><div class="toc-label">Web Service Bridge</div></div>
+    <div class="toc-item" onclick="goToSlide(18)"><div class="toc-num">13</div><div class="toc-label">Serialization</div></div>
+    <div class="toc-item" onclick="goToSlide(19)"><div class="toc-num">14</div><div class="toc-label">Distributed Cache</div></div>
+    <div class="toc-item" onclick="goToSlide(20)"><div class="toc-num">15</div><div class="toc-label">Event System</div></div>
+    <div class="toc-item" onclick="goToSlide(21)"><div class="toc-num">16</div><div class="toc-label">Persistent Storage</div></div>
+    <div class="toc-item" onclick="goToSlide(22)"><div class="toc-num">17</div><div class="toc-label">Structured Logging</div></div>
+    <div class="toc-item" onclick="goToSlide(23)"><div class="toc-num">18</div><div class="toc-label">Message Envelope</div></div>
+    <div class="toc-item" onclick="goToSlide(24)"><div class="toc-num">19</div><div class="toc-label">Transaction Management</div></div>
+    <div class="toc-item" onclick="goToSlide(25)"><div class="toc-num">20</div><div class="toc-label">Map-Reduce</div></div>
+  </div>
+</div>
+
+<!-- Slide 3: Architecture - Layered Stack -->
+<div class="slide arch-slide" data-slide="3">
+  <div class="slide-heading">Architecture: Layered Stack</div>
+  <div class="arch-subtitle">Patterns organized by dependency level. Each layer builds on the layers below it. Cross-cutting concerns span the full height.</div>
+  <div class="arch-svg-wrap">
+    <svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, sans-serif">
+      <!-- Cross-cutting sidebar -->
+      <rect x="760" y="20" width="180" height="480" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="850" y="46" text-anchor="middle" font-size="11" fill="#999" font-weight="600" letter-spacing="0.08em">CROSS-CUTTING</text>
+      <rect x="776" y="62" width="148" height="44" rx="6" fill="#fff" stroke="#E5E5E5"/>
+      <text x="850" y="89" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISecurityProvider</text>
+      <rect x="776" y="116" width="148" height="44" rx="6" fill="#fff" stroke="#E5E5E5"/>
+      <text x="850" y="143" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ILogger</text>
+      <rect x="776" y="170" width="148" height="44" rx="6" fill="#fff" stroke="#E5E5E5"/>
+      <text x="850" y="197" text-anchor="middle" font-size="12" fill="#333" font-weight="600">IEvents</text>
+      <rect x="776" y="224" width="148" height="44" rx="6" fill="#fff" stroke="#E5E5E5"/>
+      <text x="850" y="251" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISerializer</text>
+
+      <!-- Layer 7: External Interface -->
+      <rect x="20" y="20" width="720" height="60" rx="8" fill="#000" stroke="none"/>
+      <text x="30" y="38" font-size="10" fill="#999" font-weight="600" letter-spacing="0.08em">EXTERNAL INTERFACE</text>
+      <text x="360" y="58" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">IWebServer &bull; IWebService &bull; IWebProxy &bull; IPlugin</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,84 352,92 368,92" fill="#CCC"/>
+
+      <!-- Layer 6: Communication -->
+      <rect x="20" y="96" width="720" height="60" rx="8" fill="#333" stroke="none"/>
+      <text x="30" y="114" font-size="10" fill="#888" font-weight="600" letter-spacing="0.08em">COMMUNICATION</text>
+      <text x="360" y="134" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">IVNic &bull; Message &bull; ServiceAPI</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,160 352,168 368,168" fill="#CCC"/>
+
+      <!-- Layer 5: Service Layer -->
+      <rect x="20" y="172" width="720" height="60" rx="8" fill="#555" stroke="none"/>
+      <text x="30" y="190" font-size="10" fill="#aaa" font-weight="600" letter-spacing="0.08em">SERVICE LAYER</text>
+      <text x="360" y="210" text-anchor="middle" font-size="14" fill="#fff" font-weight="600">IServices &bull; IServiceHandler &bull; SLA &bull; IServiceCallback</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,236 352,244 368,244" fill="#CCC"/>
+
+      <!-- Layer 4: Data & Query -->
+      <rect x="20" y="248" width="720" height="60" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="30" y="266" font-size="10" fill="#999" font-weight="600" letter-spacing="0.08em">DATA &amp; QUERY</text>
+      <text x="360" y="286" text-anchor="middle" font-size="14" fill="#333" font-weight="600">IElements &bull; IQuery &bull; IDistributedCache &bull; IMapReduceService</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,312 352,320 368,320" fill="#CCC"/>
+
+      <!-- Layer 3: Transactions & Storage -->
+      <rect x="20" y="324" width="720" height="60" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="30" y="342" font-size="10" fill="#999" font-weight="600" letter-spacing="0.08em">PERSISTENCE</text>
+      <text x="360" y="362" text-anchor="middle" font-size="14" fill="#333" font-weight="600">IStorage &bull; ITransactionConfig &bull; IReplicationCache</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,388 352,396 368,396" fill="#CCC"/>
+
+      <!-- Layer 2: Type System -->
+      <rect x="20" y="400" width="720" height="60" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="30" y="418" font-size="10" fill="#999" font-weight="600" letter-spacing="0.08em">TYPE SYSTEM</text>
+      <text x="360" y="438" text-anchor="middle" font-size="14" fill="#333" font-weight="600">IRegistry &bull; IIntrospector &bull; IDecorators</text>
+
+      <!-- Arrow down -->
+      <polygon points="360,464 352,472 368,472" fill="#CCC"/>
+
+      <!-- Layer 1: Foundation -->
+      <rect x="20" y="476" width="720" height="44" rx="8" fill="#0070F3" stroke="none"/>
+      <text x="360" y="504" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">IResources</text>
+
+      <!-- Connecting line from IResources to cross-cutting -->
+      <line x1="740" y1="498" x2="776" y2="498" stroke="#0070F3" stroke-width="2" stroke-dasharray="4,3"/>
+      <line x1="776" y1="498" x2="776" y2="56" stroke="#0070F3" stroke-width="2" stroke-dasharray="4,3"/>
+    </svg>
+  </div>
+</div>
+
+<!-- Slide 4: Architecture - Hub and Spoke -->
+<div class="slide arch-slide" data-slide="4">
+  <div class="slide-heading">Architecture: Hub &amp; Spoke</div>
+  <div class="arch-subtitle">IResources is the central dependency injection container. Every pattern is accessible through a single entry point.</div>
+  <div class="arch-svg-wrap">
+    <svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, sans-serif">
+      <!-- Center hub -->
+      <circle cx="480" cy="260" r="56" fill="#0070F3" stroke="none"/>
+      <text x="480" y="256" text-anchor="middle" font-size="13" fill="#fff" font-weight="700">IResources</text>
+      <text x="480" y="272" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.7)" font-weight="500">Central Hub</text>
+
+      <!-- Spoke lines (drawn before nodes so nodes overlap) -->
+      <!-- Top row -->
+      <line x1="480" y1="204" x2="160" y2="60" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="204" x2="360" y2="50" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="204" x2="600" y2="50" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="204" x2="800" y2="60" stroke="#E5E5E5" stroke-width="1.5"/>
+      <!-- Middle-left -->
+      <line x1="424" y1="260" x2="80" y2="200" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="424" y1="260" x2="80" y2="320" stroke="#E5E5E5" stroke-width="1.5"/>
+      <!-- Middle-right -->
+      <line x1="536" y1="260" x2="880" y2="200" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="536" y1="260" x2="880" y2="320" stroke="#E5E5E5" stroke-width="1.5"/>
+      <!-- Bottom row -->
+      <line x1="480" y1="316" x2="160" y2="460" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="316" x2="360" y2="470" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="316" x2="600" y2="470" stroke="#E5E5E5" stroke-width="1.5"/>
+      <line x1="480" y1="316" x2="800" y2="460" stroke="#E5E5E5" stroke-width="1.5"/>
+
+      <!-- Communication cluster (top-left) -->
+      <rect x="72" y="36" width="176" height="48" rx="8" fill="#000" stroke="none"/>
+      <text x="160" y="56" text-anchor="middle" font-size="10" fill="#888" font-weight="600" letter-spacing="0.06em">COMMUNICATION</text>
+      <text x="160" y="72" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">IVNic &bull; Message</text>
+
+      <!-- Service cluster (top-center-left) -->
+      <rect x="260" y="26" width="200" height="48" rx="8" fill="#333" stroke="none"/>
+      <text x="360" y="46" text-anchor="middle" font-size="10" fill="#aaa" font-weight="600" letter-spacing="0.06em">SERVICES</text>
+      <text x="360" y="62" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">IServices &bull; IServiceHandler</text>
+
+      <!-- SLA cluster (top-center-right) -->
+      <rect x="500" y="26" width="200" height="48" rx="8" fill="#333" stroke="none"/>
+      <text x="600" y="46" text-anchor="middle" font-size="10" fill="#aaa" font-weight="600" letter-spacing="0.06em">CONFIGURATION</text>
+      <text x="600" y="62" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">SLA &bull; IServiceCallback</text>
+
+      <!-- Web cluster (top-right) -->
+      <rect x="710" y="36" width="180" height="48" rx="8" fill="#000" stroke="none"/>
+      <text x="800" y="56" text-anchor="middle" font-size="10" fill="#888" font-weight="600" letter-spacing="0.06em">WEB BRIDGE</text>
+      <text x="800" y="72" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">IWebServer &bull; IWebService</text>
+
+      <!-- Security (middle-left-top) -->
+      <rect x="16" y="178" width="128" height="44" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="80" y="205" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISecurityProvider</text>
+
+      <!-- Logger (middle-left-bottom) -->
+      <rect x="16" y="298" width="128" height="44" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="80" y="325" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ILogger</text>
+
+      <!-- Events (middle-right-top) -->
+      <rect x="816" y="178" width="128" height="44" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="880" y="205" text-anchor="middle" font-size="12" fill="#333" font-weight="600">IEvents</text>
+
+      <!-- Serializer (middle-right-bottom) -->
+      <rect x="816" y="298" width="128" height="44" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="880" y="325" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISerializer</text>
+
+      <!-- Type System cluster (bottom-left) -->
+      <rect x="62" y="436" width="196" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="160" y="454" text-anchor="middle" font-size="10" fill="#999" font-weight="600" letter-spacing="0.06em">TYPE SYSTEM</text>
+      <text x="160" y="472" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IRegistry &bull; IIntrospector</text>
+
+      <!-- Data cluster (bottom-center-left) -->
+      <rect x="268" y="446" width="184" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="360" y="464" text-anchor="middle" font-size="10" fill="#999" font-weight="600" letter-spacing="0.06em">DATA</text>
+      <text x="360" y="482" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IElements &bull; IQuery</text>
+
+      <!-- Cache cluster (bottom-center-right) -->
+      <rect x="508" y="446" width="184" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="600" y="464" text-anchor="middle" font-size="10" fill="#999" font-weight="600" letter-spacing="0.06em">CACHING</text>
+      <text x="600" y="482" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IDistributedCache</text>
+
+      <!-- Storage cluster (bottom-right) -->
+      <rect x="702" y="436" width="196" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="800" y="454" text-anchor="middle" font-size="10" fill="#999" font-weight="600" letter-spacing="0.06em">PERSISTENCE</text>
+      <text x="800" y="472" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IStorage &bull; ITransaction</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Slide 5: Architecture - Request Flow -->
+<div class="slide arch-slide" data-slide="5">
+  <div class="slide-heading">Architecture: Request Flow</div>
+  <div class="arch-subtitle">How a request flows through the ecosystem from HTTP to database and back. Cross-cutting concerns apply at every stage.</div>
+  <div class="arch-svg-wrap">
+    <svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" font-family="Inter, -apple-system, sans-serif">
+
+      <!-- Main pipeline background -->
+      <rect x="20" y="100" width="920" height="200" rx="12" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="480" y="128" text-anchor="middle" font-size="11" fill="#999" font-weight="600" letter-spacing="0.08em">REQUEST PIPELINE</text>
+
+      <!-- Step 1: HTTP -->
+      <rect x="40" y="148" width="100" height="64" rx="8" fill="#000" stroke="none"/>
+      <text x="90" y="175" text-anchor="middle" font-size="10" fill="#888" font-weight="600">HTTP</text>
+      <text x="90" y="195" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">IWebServer</text>
+      <!-- Arrow -->
+      <line x1="140" y1="180" x2="165" y2="180" stroke="#999" stroke-width="1.5"/>
+      <polygon points="165,175 175,180 165,185" fill="#999"/>
+
+      <!-- Step 2: Web Bridge -->
+      <rect x="178" y="148" width="108" height="64" rx="8" fill="#333" stroke="none"/>
+      <text x="232" y="175" text-anchor="middle" font-size="10" fill="#aaa" font-weight="600">BRIDGE</text>
+      <text x="232" y="195" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">IWebService</text>
+      <!-- Arrow -->
+      <line x1="286" y1="180" x2="311" y2="180" stroke="#999" stroke-width="1.5"/>
+      <polygon points="311,175 321,180 311,185" fill="#999"/>
+
+      <!-- Step 3: VNic -->
+      <rect x="324" y="148" width="90" height="64" rx="8" fill="#0070F3" stroke="none"/>
+      <text x="369" y="175" text-anchor="middle" font-size="10" fill="rgba(255,255,255,0.7)" font-weight="600">NETWORK</text>
+      <text x="369" y="195" text-anchor="middle" font-size="12" fill="#fff" font-weight="700">IVNic</text>
+      <!-- Arrow -->
+      <line x1="414" y1="180" x2="439" y2="180" stroke="#999" stroke-width="1.5"/>
+      <polygon points="439,175 449,180 439,185" fill="#999"/>
+
+      <!-- Step 4: Services -->
+      <rect x="452" y="148" width="96" height="64" rx="8" fill="#555" stroke="none"/>
+      <text x="500" y="175" text-anchor="middle" font-size="10" fill="#aaa" font-weight="600">DISPATCH</text>
+      <text x="500" y="195" text-anchor="middle" font-size="11" fill="#fff" font-weight="600">IServices</text>
+      <!-- Arrow -->
+      <line x1="548" y1="180" x2="573" y2="180" stroke="#999" stroke-width="1.5"/>
+      <polygon points="573,175 583,180 573,185" fill="#999"/>
+
+      <!-- Step 5: Handler -->
+      <rect x="586" y="148" width="118" height="64" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="645" y="170" text-anchor="middle" font-size="10" fill="#999" font-weight="600">HANDLER</text>
+      <text x="645" y="188" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IServiceHandler</text>
+      <text x="645" y="204" text-anchor="middle" font-size="10" fill="#999">+ IServiceCallback</text>
+      <!-- Arrow -->
+      <line x1="704" y1="180" x2="729" y2="180" stroke="#999" stroke-width="1.5"/>
+      <polygon points="729,175 739,180 729,185" fill="#999"/>
+
+      <!-- Step 6: Cache/Storage -->
+      <rect x="742" y="148" width="180" height="64" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="832" y="170" text-anchor="middle" font-size="10" fill="#999" font-weight="600">DATA</text>
+      <text x="832" y="188" text-anchor="middle" font-size="11" fill="#333" font-weight="600">IDistributedCache</text>
+      <text x="832" y="204" text-anchor="middle" font-size="10" fill="#999">&darr; IStorage</text>
+
+      <!-- SLA label below pipeline -->
+      <rect x="452" y="228" width="470" height="56" rx="8" fill="#fff" stroke="#E5E5E5"/>
+      <text x="687" y="250" text-anchor="middle" font-size="10" fill="#999" font-weight="600" letter-spacing="0.06em">CONFIGURED BY</text>
+      <text x="687" y="270" text-anchor="middle" font-size="13" fill="#333" font-weight="600">ServiceLevelAgreement &bull; ITransactionConfig &bull; IMapReduceService</text>
+
+      <!-- Cross-cutting concerns band (bottom) -->
+      <rect x="20" y="340" width="920" height="160" rx="12" fill="#fff" stroke="#E5E5E5"/>
+      <text x="480" y="368" text-anchor="middle" font-size="11" fill="#999" font-weight="600" letter-spacing="0.08em">CROSS-CUTTING CONCERNS &mdash; APPLIED AT EVERY STAGE</text>
+
+      <!-- Cross-cutting boxes -->
+      <rect x="40" y="386" width="168" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="124" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">SECURITY</text>
+      <text x="124" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISecurityProvider</text>
+
+      <rect x="224" y="386" width="130" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="289" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">TYPE SYSTEM</text>
+      <text x="289" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">IIntrospector</text>
+
+      <rect x="370" y="386" width="130" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="435" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">REGISTRY</text>
+      <text x="435" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">IRegistry</text>
+
+      <rect x="516" y="386" width="130" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="581" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">SERIALIZATION</text>
+      <text x="581" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ISerializer</text>
+
+      <rect x="662" y="386" width="130" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="727" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">LOGGING</text>
+      <text x="727" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">ILogger</text>
+
+      <rect x="808" y="386" width="114" height="48" rx="8" fill="#F0F0EE" stroke="#E5E5E5"/>
+      <text x="865" y="407" text-anchor="middle" font-size="10" fill="#999" font-weight="600">EVENTS</text>
+      <text x="865" y="424" text-anchor="middle" font-size="12" fill="#333" font-weight="600">IEvents</text>
+
+      <!-- Vertical dashed lines connecting pipeline to cross-cutting -->
+      <line x1="90" y1="212" x2="90" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="232" y1="212" x2="232" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="369" y1="212" x2="369" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="500" y1="212" x2="500" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="645" y1="212" x2="645" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+      <line x1="832" y1="212" x2="832" y2="340" stroke="#E5E5E5" stroke-width="1" stroke-dasharray="4,3"/>
+
+      <!-- IResources foundation bar -->
+      <rect x="20" y="456" width="920" height="44" rx="8" fill="#0070F3" stroke="none"/>
+      <text x="480" y="483" text-anchor="middle" font-size="14" fill="#fff" font-weight="700">IResources &mdash; Foundation: Provides Access to All Components</text>
+    </svg>
+  </div>
+</div>
+
+<!-- Slide 6: Pattern 1 - IVNic -->
+<div class="slide" data-slide="6">
+  <div class="pattern-header">
+    <div class="pattern-number">1</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Virtual Network Interface Card</div>
+      <div class="pattern-interface">IVNic &bull; VNic.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Abstracts <strong>all network communication</strong> behind a single interface. Whether a service runs in-process, on another node, in Docker, or in Kubernetes &mdash; the calling code uses the <strong>exact same API</strong>. Provides six messaging patterns: Unicast, Multicast, RoundRobin, Proximity, Leader, and Local.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Location transparency</strong> &mdash; moving a service between nodes requires zero code changes</li>
+        <li><strong>Multi-topology support</strong> &mdash; same binary runs in native, Docker, and K8s by changing one constant</li>
+        <li><strong>Built-in load distribution</strong> &mdash; RoundRobin and Proximity without external load balancers</li>
+        <li><strong>Leader election built-in</strong> &mdash; no external consensus systems (etcd, ZooKeeper)</li>
+        <li><strong>Simplified ServiceAPI</strong> &mdash; CRUD in single-line calls</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI generates correct inter-service communication on the <strong>first attempt</strong> because IVNic offers exactly one way to talk to a service. No ambiguity about transport, serialization, or routing. One pattern, everywhere.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">single-owner-database-table.md</span>
+        <span class="rule-tag">framework-interface-boundaries.md</span>
+        <span class="rule-tag">never-edit-vendor.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example (l8erp)</div>
+      <div class="code-block"><span class="cm">// Cross-service data access in a callback</span>
+ordersRaw, err := common.<span class="fn">GetEntities</span>(
+    <span class="str">"MfgProdOrd"</span>, <span class="tp">70</span>, &amp;mfg.MfgProductionOrder{...}, vnic)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 7: Pattern 2 - IResources -->
+<div class="slide" data-slide="7">
+  <div class="pattern-header">
+    <div class="pattern-number">2</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Resource Container</div>
+      <div class="pattern-interface">IResources &bull; Resources.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">The <strong>dependency injection container</strong> for the entire system. Instead of passing individual dependencies (logger, security, registry, introspector, services, events) through every function, a single <code>IResources</code> instance provides access to all of them.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Single point of configuration</strong> &mdash; all system resources configured once, accessed uniformly</li>
+        <li><strong>Zero dependency wiring</strong> &mdash; new services receive everything through one parameter</li>
+        <li><strong>Environment portability</strong> &mdash; same code works across environments</li>
+        <li><strong>Composition over inheritance</strong> &mdash; components access only what they need</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never figures out "how do I get the logger?" &mdash; the answer is always <code>resources.Logger()</code>. <strong>No bootstrapping code, no dependency graph to reason about.</strong> When AI generates a new service, it receives IResources and immediately has access to everything.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">security-provider-interface.md</span>
+        <span class="rule-tag">events-service-required.md</span>
+        <span class="rule-tag">vendor-third-party-code.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example (probler)</div>
+      <div class="code-block"><span class="kw">func</span> <span class="fn">CreateResources</span>(alias <span class="tp">string</span>) ifs.IResources {
+    log := logger.<span class="fn">NewLoggerImpl</span>(&amp;logger.FmtLogMethod{})
+    res := resources.<span class="fn">NewResources</span>(log)
+    sec, _ := sec.<span class="fn">LoadSecurityProvider</span>(res)
+    res.<span class="fn">Set</span>(sec)
+    <span class="kw">return</span> res
+}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 8: Pattern 3 - IServiceHandler -->
+<div class="slide" data-slide="8">
+  <div class="pattern-header">
+    <div class="pattern-number">3</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Service Handler</div>
+      <div class="pattern-interface">IServiceHandler &bull; Services.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Defines the <strong>universal contract</strong> for any service. Every service implements the same five CRUD methods (<strong>Post, Put, Patch, Delete, Get</strong>) plus lifecycle methods. The framework routes any message to any service without knowing what the service does.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Universal CRUD semantics</strong> &mdash; every entity managed through the same five operations</li>
+        <li><strong>Hot-pluggable services</strong> &mdash; activate/deactivate at runtime without restarts</li>
+        <li><strong>Framework-managed routing</strong> &mdash; dispatcher needs no service-specific logic</li>
+        <li><strong>Automatic web bridging</strong> &mdash; any service auto-exposed as REST endpoints</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">Creating a new service is <strong>pure template application</strong>. AI generates a <code>*Service.go</code> file with ServiceName, ServiceArea, Activate function, and lookup function &mdash; every time, the same structure. A complete, functional service in <strong>under 30 seconds</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">maintainability.md</span>
+        <span class="rule-tag">protobuf-model-names.md</span>
+        <span class="rule-tag">mock-endpoint-construction.md</span>
+        <span class="rule-tag">data-completeness-pipeline.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example (l8erp)</div>
+      <div class="code-block"><span class="kw">const</span> (
+    ServiceName = <span class="str">"MfgWorkOrd"</span>   <span class="cm">// Max 10 characters</span>
+    ServiceArea = <span class="kw">byte</span>(<span class="tp">70</span>)      <span class="cm">// Same for all MFG services</span>
+)
+<span class="kw">func</span> <span class="fn">Activate</span>(creds, dbname <span class="tp">string</span>, vnic ifs.IVNic) {
+    common.<span class="fn">ActivateService</span>(common.ServiceConfig{
+        ServiceName: ServiceName, ServiceArea: ServiceArea,
+        PrimaryKey: <span class="str">"WorkOrderId"</span>,
+    }, &amp;mfg.MfgWorkOrder{}, &amp;mfg.MfgWorkOrderList{}, ...)
+}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 9: Pattern 4 - SLA -->
+<div class="slide" data-slide="9">
+  <div class="pattern-header">
+    <div class="pattern-number">4</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Service Level Agreement</div>
+      <div class="pattern-interface">ServiceLevelAgreement &bull; ServiceLevelAgreement.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">The <strong>declarative configuration object</strong> for a service. All operational characteristics &mdash; storage, replication, transactions, web endpoints, keys, caching &mdash; are declared in a single SLA struct. The framework reads the declaration and <strong>configures everything automatically</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Declarative service definition</strong> &mdash; entire behavior declared in one place</li>
+        <li><strong>Separation of concerns</strong> &mdash; developer declares "what"; framework provides "how"</li>
+        <li><strong>Zero-code feature activation</strong> &mdash; <code>SetReplication(true)</code> enables replication</li>
+        <li><strong>Consistent metadata</strong> &mdash; aggregation functions declared once, computed automatically</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI generates service configurations by <strong>filling in a structured template</strong>. Every SLA field has a clear purpose and constrained valid values. AI never designs an activation sequence or writes cache initialization &mdash; it declares the SLA and calls <code>Activate</code>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">maintainability.md</span>
+        <span class="rule-tag">layer8d-table-pagination-metadata.md</span>
+        <span class="rule-tag">single-owner-database-table.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example (l8erp)</div>
+      <div class="code-block"><span class="cm">// 14+ module groups, 20 parallel workers</span>
+<span class="kw">func</span> <span class="fn">ActivateAllServices</span>(creds, dbname <span class="tp">string</span>, nic ifs.IVNic) {
+    <span class="kw">var</span> all []<span class="kw">func</span>()
+    all = <span class="fn">append</span>(all, <span class="fn">collectHCMActivations</span>(creds, dbname, nic)...)
+    all = <span class="fn">append</span>(all, <span class="fn">collectFinActivations</span>(creds, dbname, nic)...)
+    all = <span class="fn">append</span>(all, <span class="fn">collectMfgActivations</span>(creds, dbname, nic)...)
+    <span class="cm">// ... parallel activation with worker pool</span>
+}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 10: Pattern 5 - IServiceCallback -->
+<div class="slide" data-slide="10">
+  <div class="pattern-header">
+    <div class="pattern-number">5</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Service Lifecycle Callback</div>
+      <div class="pattern-interface">IServiceCallback &bull; ServiceLevelAgreement.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Provides <strong>Before and After hooks</strong> for every CRUD operation. Before hooks validate and can abort. After hooks perform side effects (cascade updates, roll-up calculations). Receives the entity, action type, and VNic &mdash; everything needed for business logic.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Business logic isolation</strong> &mdash; all rules in one file, separate from infrastructure</li>
+        <li><strong>Operation-aware hooks</strong> &mdash; Action parameter enables action-specific validation</li>
+        <li><strong>Abort capability</strong> &mdash; <code>false</code> from Before hook stops cleanly with error propagation</li>
+        <li><strong>Cascading operations</strong> &mdash; After hooks update related entities via VNic</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI generates callbacks using a <strong>fixed template</strong>: type assertion, validation calls via the <code>common.NewValidation</code> builder, primary key generation, and After hooks. AI can generate a complete callback from a <strong>protobuf struct definition alone</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">maintainability.md</span>
+        <span class="rule-tag">never-import-l8secure.md</span>
+        <span class="rule-tag">framework-interface-boundaries.md</span>
+        <span class="rule-tag">report-infra-bugs.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example (l8erp)</div>
+      <div class="code-block"><span class="kw">func</span> <span class="fn">newMfgWorkOrderServiceCallback</span>(vnic ifs.IVNic) ifs.IServiceCallback {
+    <span class="kw">return</span> common.<span class="fn">NewValidation</span>(&amp;mfg.MfgWorkOrder{}, vnic).
+        <span class="fn">StatusTransition</span>(<span class="fn">workOrderTransitions</span>()).
+        <span class="fn">After</span>(cascadeRollUpProductionOrderStatus).
+        <span class="fn">After</span>(rollUpCosts).
+        <span class="fn">Compute</span>(computeWorkOrderProgress).
+        <span class="fn">Require</span>(<span class="kw">func</span>(v <span class="tp">interface{}</span>) <span class="tp">string</span> {
+            <span class="kw">return</span> v.(*mfg.MfgWorkOrder).WorkOrderId
+        }, <span class="str">"WorkOrderId"</span>).<span class="fn">Build</span>()
+}</div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 11: Pattern 6 - IServices -->
+<div class="slide" data-slide="11">
+  <div class="pattern-header">
+    <div class="pattern-number">6</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Service Registry</div>
+      <div class="pattern-interface">IServices &bull; Services.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">The <strong>central registry</strong> managing service registration, activation, deactivation, and message routing. Knows which services are running, where they are hosted, who is the leader, and how to dispatch messages. The <strong>backbone of the service mesh</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Automatic service discovery</strong> &mdash; no config files, no DNS, no service mesh sidecars</li>
+        <li><strong>Leader election</strong> &mdash; distributed consensus as a framework feature</li>
+        <li><strong>Transparent routing</strong> &mdash; adding a service requires zero routing changes</li>
+        <li><strong>Parallel activation</strong> &mdash; l8erp activates 100+ services with 20 parallel workers</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes service discovery code. When AI generates a new service, it calls <code>Activate</code> and the service is discoverable. The <strong>entire service mesh topology is invisible</strong> to application code.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">single-owner-database-table.md</span>
+        <span class="rule-tag">events-service-required.md</span>
+        <span class="rule-tag">log-services-required.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 12: Pattern 7 - ISecurityProvider -->
+<div class="slide" data-slide="12">
+  <div class="pattern-header">
+    <div class="pattern-number">7</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Security Provider</div>
+      <div class="pattern-interface">ISecurityProvider &bull; Security.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Consolidates all <strong>Authentication, Authorization, and Accounting (AAA)</strong> behind a single interface. Handles login, TFA, connection validation, encryption/decryption, action authorization, and <strong>row-level data scoping</strong>. Loaded as a plugin for deployment flexibility.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Single security contract</strong> &mdash; all security concerns flow through one interface</li>
+        <li><strong>Plugin architecture</strong> &mdash; different security implementations without code changes</li>
+        <li><strong>Row-level scoping</strong> &mdash; <code>ScopeView</code> filters query results automatically per user</li>
+        <li><strong>Encrypted messaging</strong> &mdash; every message body encrypted by default</li>
+        <li><strong>Connection-level security</strong> &mdash; network ACL before any data exchange</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI <strong>never writes auth, authz, or encryption code</strong>. Security is automatically enforced by the framework. When AI generates a security config, it follows a <strong>declarative JSON format</strong> (roles, rules, deny expressions) requiring no programming.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">security-provider-interface.md</span>
+        <span class="rule-tag">security-config-structure.md</span>
+        <span class="rule-tag">security-provisioning-channels.md</span>
+        <span class="rule-tag">never-import-l8secure.md</span>
+        <span class="rule-tag">associate-ids-scope-view.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 13: Pattern 8 - IRegistry -->
+<div class="slide" data-slide="13">
+  <div class="pattern-header">
+    <div class="pattern-number">8</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Type Registry</div>
+      <div class="pattern-interface">IRegistry &bull; Registry.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Provides <strong>dynamic type registration and instantiation</strong>. Any protobuf type can be registered by name and new instances created at runtime without compile-time type knowledge. Foundation for generic serialization, deserialization, and message routing.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Dynamic type instantiation</strong> &mdash; <code>NewOf(instance)</code> creates typed objects from raw bytes</li>
+        <li><strong>Enum unification</strong> &mdash; central enum string-to-int mapping for query engine</li>
+        <li><strong>Type list discovery</strong> &mdash; UI introspection discovers models automatically</li>
+        <li><strong>Pluggable serialization</strong> &mdash; per-type custom serializers without framework changes</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI registers types with a <strong>one-line pattern</strong>: <code>common.RegisterType(resources, &amp;Type{}, &amp;TypeList{}, "PK")</code>. No switch statements for type dispatch, no factory patterns, no lookup tables. When AI generates a module, type registration is one call per entity.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">maintainability.md</span>
+        <span class="rule-tag">protobuf-model-names.md</span>
+        <span class="rule-tag">proto-list-convention.md</span>
+        <span class="rule-tag">protobuf-generation.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 14: Pattern 9 - IIntrospector -->
+<div class="slide" data-slide="14">
+  <div class="pattern-header">
+    <div class="pattern-number">9</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Type Introspection</div>
+      <div class="pattern-interface">IIntrospector, IDecorators &bull; Introspector.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Runtime type analysis that builds metadata trees for every registered type. <strong>IDecorators</strong> extend metadata with application semantics: primary keys, unique constraints, merge rules. Enables the framework to operate on entities <strong>generically</strong> &mdash; building queries, extracting keys, computing diffs.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Automatic key extraction</strong> &mdash; primary keys extracted without type knowledge</li>
+        <li><strong>Automatic table views</strong> &mdash; UI generates columns and forms from metadata</li>
+        <li><strong>Deep cloning</strong> &mdash; notification diffing without type-specific code</li>
+        <li><strong>Schema-driven behavior</strong> &mdash; adding a type with decorators gives full CRUD support</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI registers decorators with a <strong>single call</strong>: <code>AddPrimaryKeyDecorator(&amp;Type{}, "Field")</code>. The introspector handles key extraction, index building, and query optimization automatically. <strong>No custom metadata code ever needed.</strong></div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">introspector-nodes-params.md</span>
+        <span class="rule-tag">prime-object-references.md</span>
+        <span class="rule-tag">js-protobuf-field-names.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 15: Pattern 10 - IQuery -->
+<div class="slide" data-slide="15">
+  <div class="pattern-header">
+    <div class="pattern-number">10</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Query Language</div>
+      <div class="pattern-interface">IQuery, IExpression, ICondition, IComparator &bull; API.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">A structured query model with filtering, sorting, pagination, aggregation (COUNT, SUM, AVG, MIN, MAX), GROUP BY, and HAVING. Expressed as <strong>L8Query strings</strong> and used uniformly by the UI, API, ORM, and cache. <strong>One query language everywhere</strong> &mdash; no impedance mismatch.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>One query language everywhere</strong> &mdash; same syntax in JS, HTTP, ORM, and cache</li>
+        <li><strong>Automatic filtering</strong> &mdash; <code>Match(obj)</code> tests any object against criteria</li>
+        <li><strong>Built-in pagination</strong> &mdash; consistent across storage backends</li>
+        <li><strong>Map-reduce support</strong> &mdash; distributed queries natively</li>
+        <li><strong>Aggregate support</strong> &mdash; dashboard KPIs without custom code</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI constructs L8Query strings with a <strong>simple grammar</strong>: <code>select [cols] from [Type] where [cond] limit [n] page [p] sort-by [field]</code>. No query builder API, no ORM DSL &mdash; just a string. Same syntax for UI, tests, and mocks.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">l8query-rules.md</span>
+        <span class="rule-tag">protobuf-model-names.md</span>
+        <span class="rule-tag">setup-configuration.md</span>
+        <span class="rule-tag">layer8d-data-source.md</span>
+      </div>
+      <div class="section-label label-example" style="margin-top:16px"><span class="section-dot dot-example"></span> Example</div>
+      <div class="code-block"><span class="str">select * from Employee where lastName=Smith limit 10 page 0 sort-by lastName</span>
+<span class="str">select * from SalesTerritory where isActive=true limit 15 page 2 sort-by name descending</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 16: Pattern 11 - IElements -->
+<div class="slide" data-slide="16">
+  <div class="pattern-header">
+    <div class="pattern-number">11</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Data Elements</div>
+      <div class="pattern-interface">IElements &bull; API.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">The <strong>universal data container</strong>. Every service method accepts and returns IElements. Carries typed data objects, their keys, errors, query metadata, and serialization support. Eliminates the need for <strong>service-specific response types</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Uniform response type</strong> &mdash; router, cache, serializer, web bridge all use IElements</li>
+        <li><strong>Error propagation</strong> &mdash; errors are part of the container, not exceptions</li>
+        <li><strong>Notification support</strong> &mdash; same container carries CRUD results and real-time updates</li>
+        <li><strong>Metadata attachment</strong> &mdash; pagination metadata travels with the response</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes response types. Every service returns <code>IElements</code>, so AI uses one pattern everywhere: call method, check <code>Error()</code>, iterate <code>Elements()</code>. <strong>3 lines for every service interaction.</strong></div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">layer8d-table-pagination-metadata.md</span>
+        <span class="rule-tag">report-infra-bugs.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 17: Pattern 12 - IWebService -->
+<div class="slide" data-slide="17">
+  <div class="pattern-header">
+    <div class="pattern-number">12</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Web Service Bridge</div>
+      <div class="pattern-interface">IWebService, IWebServer, IWebProxy &bull; Web.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Bridges Layer 8 internal services to <strong>HTTP/REST</strong>. Maps HTTP methods to Layer 8 actions, handles protobuf-to-JSON conversion. Any service with a WebService configuration is <strong>automatically exposed as REST endpoints</strong> with zero HTTP handler code.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Zero HTTP code</strong> &mdash; no handlers, no request parsing, no response formatting</li>
+        <li><strong>Automatic endpoints</strong> &mdash; new service = new REST API, no HTTP work</li>
+        <li><strong>Plugin extensibility</strong> &mdash; custom web extensions without modifying core</li>
+        <li><strong>Single web server</strong> &mdash; all portals and services from one process</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes HTTP handlers or middleware. URL pattern is always <code>/{apiPrefix}/{serviceArea}/{ServiceName}</code>. AI constructs correct API calls without consulting documentation &mdash; the pattern is <strong>deterministic</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">portals-same-web-server.md</span>
+        <span class="rule-tag">setup-configuration.md</span>
+        <span class="rule-tag">index-html-redirect.md</span>
+        <span class="rule-tag">l8query-rules.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 18: Pattern 13 - ISerializer -->
+<div class="slide" data-slide="18">
+  <div class="pattern-header">
+    <div class="pattern-number">13</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Serialization</div>
+      <div class="pattern-interface">ISerializer &bull; Serializer.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Pluggable serialization supporting three modes: <strong>Binary</strong> (protobuf), <strong>JSON</strong>, and <strong>String</strong>. The framework selects the appropriate serializer based on context &mdash; binary for network, JSON for HTTP, string for logging. Service code <strong>never deals with serialization</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Format independence</strong> &mdash; services work with typed structs, never raw bytes</li>
+        <li><strong>Per-type optimization</strong> &mdash; custom serializers without pipeline changes</li>
+        <li><strong>Resource-aware</strong> &mdash; serializers access registry, security, introspector</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes serialization code. Types are protobuf messages with automatic binary and JSON support. New types get serialization <strong>for free</strong> &mdash; no marshaling, no field mapping, no format negotiation.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">protobuf-generation.md</span>
+        <span class="rule-tag">date-field-rendering-pipeline.md</span>
+        <span class="rule-tag">proto-list-convention.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 19: Pattern 14 - IDistributedCache -->
+<div class="slide" data-slide="19">
+  <div class="pattern-header">
+    <div class="pattern-number">14</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Distributed Cache</div>
+      <div class="pattern-interface">IDistributedCache, IServiceHandlerCache &bull; Services.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">In-memory cache with CRUD operations that <strong>automatically generate property change notifications</strong>. Every data change produces a notification set describing what changed (old/new values, which fields). Combined with IReplicationCache for multi-node data distribution.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Automatic change notifications</strong> &mdash; real-time UI updates with zero application code</li>
+        <li><strong>Query-capable cache</strong> &mdash; pagination and IQuery filtering in-memory</li>
+        <li><strong>Metadata aggregation</strong> &mdash; counts/totals computed incrementally</li>
+        <li><strong>Single-owner consistency</strong> &mdash; cache is authoritative, no invalidation needed</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes cache management code. The ORM provides caching and notifications through SLA configuration. AI generates UI code that subscribes to WebSocket notifications &mdash; <strong>no custom synchronization needed</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">single-owner-database-table.md</span>
+        <span class="rule-tag">layer8d-table-pagination-metadata.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 20: Pattern 15 - IEvents -->
+<div class="slide" data-slide="20">
+  <div class="pattern-header">
+    <div class="pattern-number">15</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Event System</div>
+      <div class="pattern-interface">IEvents &bull; Events.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Typed event posting API supporting <strong>17 event categories</strong>: Audit, System, Monitoring, Security, Integration, Network, Kubernetes, Performance, Syslog, Trap, Compute, Storage, Power, GPU, Topology, Automation, and generic. Events flow through the VNic to the events service.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Uniform observability</strong> &mdash; all events flow through one channel</li>
+        <li><strong>Typed categories</strong> &mdash; dedicated method per category ensures correct fields</li>
+        <li><strong>Integrated with IResources</strong> &mdash; available via <code>resources.Events()</code></li>
+        <li><strong>Decoupled producers/consumers</strong> &mdash; fire-and-forget posting</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI selects the appropriate typed method (e.g., <code>PostAuditEvent</code>, <code>PostSecurityEvent</code>) and populates the struct. The <strong>typed API prevents wrong field structures</strong> &mdash; the compiler catches mismatches.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div><span class="rule-tag">events-service-required.md</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 21: Pattern 16 - IStorage -->
+<div class="slide" data-slide="21">
+  <div class="pattern-header">
+    <div class="pattern-number">16</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Persistent Storage</div>
+      <div class="pattern-interface">IStorage &bull; Serializer.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Key-value storage interface for persistent backends. Provides <strong>Put, Get, Delete, and Collect</strong> (filter-based retrieval). The ORM uses IStorage to persist data &mdash; whether the backend is PostgreSQL, SQLite, or filesystem, the service code is <strong>identical</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Backend agnosticism</strong> &mdash; swap databases without changing service code</li>
+        <li><strong>Filter-based collection</strong> &mdash; server-side filtering without full data loads</li>
+        <li><strong>Cache coordination</strong> &mdash; <code>CacheEnabled()</code> optimizes query paths</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI never writes database queries. The ORM translates IQuery to SQL behind IStorage. AI declares storage needs through the SLA and <strong>never interacts with the database directly</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">never-touch-vendor-or-git.md</span>
+        <span class="rule-tag">vendor-third-party-code.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 22: Pattern 17 - ILogger -->
+<div class="slide" data-slide="22">
+  <div class="pattern-header">
+    <div class="pattern-number">17</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Structured Logging</div>
+      <div class="pattern-interface">ILogger &bull; Logger.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Five log levels (<strong>Trace, Debug, Info, Warning, Error</strong>) with a simple API. Accessible via <code>resources.Logger()</code> and used consistently throughout the system. Combined with l8logfusion for <strong>distributed log collection</strong> across all nodes.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Consistent log levels</strong> &mdash; uniform format system-wide</li>
+        <li><strong>Centralized control</strong> &mdash; <code>SetLogLevel</code> changes verbosity with no restarts</li>
+        <li><strong>Distributed collection</strong> &mdash; logs from all nodes aggregated in System UI</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI uses <code>resources.Logger().Info(...)</code> for all logging. No framework choice, no format decisions, no configuration. <strong>The pattern is always the same.</strong></div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div><span class="rule-tag">log-services-required.md</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 23: Pattern 18 - Message -->
+<div class="slide" data-slide="23">
+  <div class="pattern-header">
+    <div class="pattern-number">18</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Message Envelope</div>
+      <div class="pattern-interface">Message &bull; Message.go, MessageMarshal.go, MessageUnmarshal.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">The <strong>universal wire format</strong> for all network communication. Carries routing info (source, destination, service), delivery metadata (priority, multicast mode, action), authentication context (AAA ID), and optional transaction state. <strong>Body is always encrypted; header is plaintext for routing.</strong></div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Security by default</strong> &mdash; no unencrypted messaging path exists</li>
+        <li><strong>Priority-based QoS</strong> &mdash; eight priority levels (P1-P8)</li>
+        <li><strong>Transaction observability</strong> &mdash; full lifecycle timestamps in every message</li>
+        <li><strong>Efficient cloning</strong> &mdash; Clone, CloneReply, CloneFail for routing variants</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI <strong>never constructs Message objects</strong> directly &mdash; IVNic handles message creation internally. The Message struct is infrastructure that AI benefits from <strong>without needing to understand its internals</strong>. This is intentional design.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">framework-interface-boundaries.md</span>
+        <span class="rule-tag">never-edit-vendor.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 24: Pattern 19 - ITransactionConfig -->
+<div class="slide" data-slide="24">
+  <div class="pattern-header">
+    <div class="pattern-number">19</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Transaction Management</div>
+      <div class="pattern-interface">ITransactionConfig &bull; Services.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Declares whether a service participates in <strong>distributed transactions</strong>, how replication works, and how transaction keys are extracted. The framework uses this configuration to implement <strong>two-phase commit, replication, and lifecycle management</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>Declarative transactions</strong> &mdash; <code>SetTransactional(true)</code> enables 2PC automatically</li>
+        <li><strong>Configurable replication</strong> &mdash; <code>ReplicationCount()</code> declares replica count</li>
+        <li><strong>Voter participation</strong> &mdash; read-only replicas opt out of voting for performance</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI enables transactions by <strong>setting a single flag</strong> on the SLA. No transaction manager code, no lock management, no rollback handlers &mdash; the framework provides it all.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div>
+        <span class="rule-tag">single-owner-database-table.md</span>
+        <span class="rule-tag">framework-interface-boundaries.md</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 25: Pattern 20 - IMapReduceService -->
+<div class="slide" data-slide="25">
+  <div class="pattern-header">
+    <div class="pattern-number">20</div>
+    <div class="pattern-title-group">
+      <div class="pattern-title">Map-Reduce</div>
+      <div class="pattern-interface">IMapReduceService &bull; Services.go</div>
+    </div>
+  </div>
+  <div class="content-grid">
+    <div class="section-card">
+      <div class="section-label label-purpose"><span class="section-dot dot-purpose"></span> Purpose</div>
+      <div class="section-text">Defines how results from <strong>distributed queries</strong> are merged. When a query fans out to multiple service areas (e.g., inventory across warehouses), each area returns results, and the <code>Merge</code> function <strong>combines them into a single response</strong>.</div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-impact"><span class="section-dot dot-impact"></span> Positive Impact</div>
+      <ul class="impact-list">
+        <li><strong>No client-side merging</strong> &mdash; framework handles fan-out and merge transparently</li>
+        <li><strong>Custom merge logic</strong> &mdash; per-service semantics (sum, concat, dedup)</li>
+        <li><strong>Single query API</strong> &mdash; client sends one query, gets merged results</li>
+      </ul>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-ai"><span class="section-dot dot-ai"></span> AI Acceleration</div>
+      <div class="section-text">AI enables map-reduce by setting <code>mapreduce true</code> in L8Query strings. The framework handles distribution and merging. <strong>AI never writes fan-out, collection, or merge code.</strong></div>
+    </div>
+    <div class="section-card">
+      <div class="section-label label-rules"><span class="section-dot dot-rules"></span> Relevant Rules</div>
+      <div><span class="rule-tag">l8query-rules.md</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Slide 26: Summary -->
+<div class="slide" data-slide="26">
+  <div class="slide-heading">The Economic Optimization</div>
+  <div class="summary-columns">
+    <div class="summary-card">
+      <div class="summary-icon icon-config">&#9881;</div>
+      <h3>Configuration Over Implementation</h3>
+      <p>Services are <strong>declared</strong>, not implemented. The SLA declares what a service needs; the framework provides it. Callbacks declare validation rules; the framework enforces them. Security rules are declared in JSON; the framework applies them. The ratio of configuration to implementation approaches <strong>100:1</strong>.</p>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon icon-one">&#10003;</div>
+      <h3>One Way to Do Each Thing</h3>
+      <p>One way to communicate (<strong>IVNic</strong>), store data (<strong>IStorage</strong>), query (<strong>IQuery</strong>), secure (<strong>ISecurityProvider</strong>), log (<strong>ILogger</strong>), send events (<strong>IEvents</strong>). This eliminates the "which approach?" decision that consumes developer time and creates inconsistency.</p>
+    </div>
+    <div class="summary-card">
+      <div class="summary-icon icon-boundary">&#9632;</div>
+      <h3>Interface Boundaries as Firewalls</h3>
+      <p>Every interface in <code>ifs/</code> prevents coupling. A service cannot depend on another service's implementation &mdash; only on IVNic. The ORM cannot depend on a specific database &mdash; only on IStorage. Any component can be <strong>replaced, upgraded, or scaled</strong> without affecting others.</p>
+    </div>
+  </div>
+  <div class="summary-footer">
+    <p><strong>For AI, these three principles transform software development from creative problem-solving into deterministic template application.</strong><br>AI does not need to design &mdash; it applies patterns. AI does not need to decide &mdash; the framework decides.<br>AI does not need to debug integration issues &mdash; the interfaces prevent them.</p>
+  </div>
+</div>
+
+</div><!-- /slide-container -->
+
+<div class="key-hint">
+  <kbd>&#8592;</kbd> <kbd>&#8594;</kbd> to navigate
+</div>
+
+<script>
+(function() {
+  var current = 1;
+  var total = document.querySelectorAll('.slide').length;
+
+  function update() {
+    document.querySelectorAll('.slide').forEach(function(s) {
+      s.classList.remove('active');
+    });
+    var el = document.querySelector('[data-slide="' + current + '"]');
+    if (el) el.classList.add('active');
+
+    document.getElementById('counter').textContent = current + ' / ' + total;
+    document.getElementById('btn-prev').disabled = current <= 1;
+    document.getElementById('btn-next').disabled = current >= total;
+    document.getElementById('progress').style.width = ((current / total) * 100) + '%';
+  }
+
+  window.nextSlide = function() {
+    if (current < total) { current++; update(); }
+  };
+  window.prevSlide = function() {
+    if (current > 1) { current--; update(); }
+  };
+  window.goToSlide = function(n) {
+    if (n >= 1 && n <= total) { current = n; update(); }
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); nextSlide(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prevSlide(); }
+    if (e.key === 'Home') { e.preventDefault(); goToSlide(1); }
+    if (e.key === 'End') { e.preventDefault(); goToSlide(total); }
+  });
+
+  update();
+})();
+</script>
+
+</body>
+</html>
