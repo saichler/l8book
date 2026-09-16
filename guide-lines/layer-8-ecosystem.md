@@ -127,6 +127,28 @@ Real-time browser updates (live progress bars, auto-refreshing tables) run on on
 
 ---
 
+## Known Framework Gotchas
+
+Real bugs found and fixed in the shared framework during implementation work, plus non-obvious behavior worth knowing before you hit it yourself. Framework-level only — project-specific issues aren't listed here.
+
+**Go plugin ABI fragility (`l8secure`).** The security provider loads as a compiled `.so` via `plugin.Open()` — the host binary and the plugin must be built with the *exact* same Go toolchain version. An `apk upgrade` in a Dockerfile's final stage (Alpine package drift, e.g. `musl`) can break `dlopen`-based loading even with identical Go/dependency versions, producing `fatal error: runtime: no plugin module data`. Don't add package upgrades to the final stage of a Dockerfile that loads this plugin without verifying the ABI still matches.
+
+**L8QL pagination is 0-indexed, and aggregate counts are page-0-only.** `page 0` is the first page. `Cache.Fetch()`'s real `metadata.keyCount.counts` aggregate is only populated correctly when the query's `page` is `0` — `page 1+` silently falls back to `len(list)` (wrong for KPI/total-count UI). Always query `page 0` when you need the real count, not just the row data.
+
+**Theme switching doesn't survive full-page navigation.** `data-theme` lives on `<html>`, so navigating from one static HTML page to another (e.g. a login page to the app shell) starts fresh — every page must call `Layer8DThemeSwitcher.init()` itself, not just the first one.
+
+**`--layer8d-*` theme tokens: watch for aliases and contrast.** `layer8d-theme.css` maps several legacy short names (`--noc-cyan`, `--primary`, `--accent-color`, etc.) to the real `--layer8d-*` tokens — auditing a component for hardcoded colors by grepping only `var(--layer8d-primary` will miss real bugs reached through one of these aliases. Separately, never hardcode `color: white`/`#fff` on a `var(--layer8d-primary)` background — some themes use a light/near-white primary, which makes white text invisible; use `var(--layer8d-on-primary, white)` instead. And never define project CSS with the SAME generic names l8ui's theme aliases use (`--bg-primary`, `--text-primary`, `--shadow-sm`, etc.) if that stylesheet loads after l8ui's theme files — it silently shadows the real tokens with no error, breaking shared components' theme-responsiveness.
+
+**Chart/view switcher (`Layer8DViewFactory`/`Layer8ViewSwitcher`) now works — previously silently didn't.** `layer8d-module-config-factory.js`'s `service()` helper stores a service's alternate view types (e.g. `['chart']`) as `service.alternateViews`, but `layer8d-service-registry.js`'s `initializeServiceTable()` used to read `service.supportedViews` — a field nothing ever set — so the switcher silently never rendered for any project registering an alternate view this way. Fixed; if older example code references `supportedViews`, it predates the fix.
+
+**`Layer8ColumnFactory.col.link`'s `onClick` is dead code.** It renders a `data-action="click"` anchor, but no such handler exists in `layer8d-table-events.js`. Use `col.custom` with a real `<a href>` for a clickable column instead.
+
+**Reconstructing an `IQuery` from `.Text()` alone drops out-of-band fields.** `AaaId` (and potentially other struct fields) aren't part of the L8QL text itself — any code that re-parses a query from its text representation must re-stamp those fields afterward, or they silently vanish (this bit inter-process vnic transport in `l8srlz`'s `object.NewFromQuery`).
+
+**Cache/query keys must fold in `AaaId`, not just the query text.** Two callers issuing textually-identical L8QL queries under different identities can otherwise collide on one cache entry or subscription slot — `l8ql`'s `Query.Hash()` includes `AAAId()` in its hash for exactly this reason.
+
+---
+
 ## Canonical Implementation Projects
 
 These are complete implementation projects that serve as references for new projects.
