@@ -31,7 +31,7 @@
             --font-body: Georgia, "Times New Roman", serif;
             --font-heading: "Palatino Linotype", Palatino, "Book Antiqua", serif;
 
-            --content-max-width: 1380px;
+            --content-max-width: 760px;
             --font-size-base: 19px;
             --line-height: 1.9;
         }
@@ -53,15 +53,7 @@
         .page {
             max-width: var(--content-max-width);
             margin: 0 auto;
-            padding: 2rem 0;
-            display: grid;
-            grid-template-columns: minmax(0, 1fr) 264px;
-            gap: 2rem;
-            align-items: start;
-        }
-
-        .main-content {
-            min-width: 0;
+            padding: 4rem 2rem;
         }
 
         /* ---- Hero ---- */
@@ -70,38 +62,6 @@
             text-align: center;
             padding-bottom: 3rem;
             border-bottom: 2px solid var(--color-divider);
-        }
-
-        .hero-top {
-            display: block;
-        }
-
-        .hero-copy {
-            max-width: 960px;
-            margin: 0 auto;
-        }
-
-        .home-layout {
-            margin-top: 2.5rem;
-        }
-
-        .book-intro {
-            max-width: 960px;
-            text-align: left;
-        }
-
-        .book-intro h2 {
-            font-family: var(--font-heading);
-            font-size: 1.6rem;
-            font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--color-divider);
-        }
-
-        .book-intro p {
-            margin-bottom: 1.5rem;
         }
 
         .hero h1 {
@@ -124,12 +84,8 @@
         .hero .tagline {
             font-size: 1.1rem;
             color: var(--color-muted);
-            max-width: 960px;
+            max-width: 540px;
             margin: 0 auto 2rem;
-        }
-
-        .reading-actions {
-            margin-bottom: 2rem;
         }
 
         .read-btn {
@@ -151,47 +107,49 @@
 
         .presentation-banners {
             display: flex;
-            flex-direction: column;
-            gap: 0.35rem;
-            justify-content: flex-start;
-            margin: 0;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1.5rem auto 1rem;
+            max-width: 580px;
         }
 
         .presentation-banner {
             display: block;
-            border-radius: 4px;
-            padding: 0.45rem 0.6rem;
-            text-align: left;
+            flex: 1;
+            background: linear-gradient(180deg, #f8f5ef 0%, #f3efe7 100%);
+            border: 2px solid var(--color-accent);
+            border-radius: 6px;
+            padding: 0.5rem 1.8rem;
+            text-align: center;
             text-decoration: none;
-            transition: background-color 0.2s ease, color 0.2s ease;
+            transition: background-color 0.2s ease, border-color 0.2s ease;
         }
 
         .presentation-banner:hover {
-            background-color: rgba(139, 64, 73, 0.08);
+            background-color: var(--color-accent);
+            border-color: var(--color-accent);
         }
 
         .presentation-banner .banner-title {
             font-family: var(--font-heading);
-            font-size: 0.95rem;
+            font-size: 1.1rem;
             font-weight: 600;
             color: var(--color-accent);
-            margin-bottom: 0.1rem;
-            line-height: 1.35;
+            margin-bottom: 0.3rem;
         }
 
         .presentation-banner:hover .banner-title {
-            color: #73343c;
+            color: #fff;
         }
 
         .presentation-banner .banner-desc {
-            font-size: 0.78rem;
+            font-size: 0.9rem;
             color: var(--color-muted);
             margin-bottom: 0;
-            line-height: 1.35;
         }
 
         .presentation-banner:hover .banner-desc {
-            color: var(--color-muted);
+            color: rgba(255, 255, 255, 0.85);
         }
 
         .lang-links {
@@ -207,47 +165,6 @@
 
         .lang-links a:hover {
             text-decoration: underline;
-        }
-
-        .link-panel {
-            border-left: 1px solid var(--color-divider);
-            padding: 0.25rem 0 0.25rem 1rem;
-            font-size: 0.8em;
-            position: sticky;
-            top: 2rem;
-        }
-
-        .link-panel h2 {
-            font-family: var(--font-heading);
-            font-size: 0.65rem;
-            font-weight: 600;
-            color: var(--color-accent);
-            margin-bottom: 0.65rem;
-            padding-bottom: 0.35rem;
-            border-bottom: 1px solid var(--color-divider);
-        }
-
-        .link-group {
-            margin-top: 1rem;
-        }
-
-        .link-group:first-of-type {
-            margin-top: 0;
-        }
-
-        .link-group + .link-group {
-            padding-top: 1rem;
-            border-top: 1px solid var(--color-divider);
-        }
-
-        .link-group-label {
-            font-family: var(--font-heading);
-            font-size: 0.72rem;
-            font-weight: 600;
-            color: var(--color-muted);
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            margin-bottom: 0.45rem;
         }
 
         /* ---- Sections ---- */
@@ -391,7 +308,6 @@
 
             .page {
                 padding: 2.5rem 1.5rem;
-                grid-template-columns: 1fr;
             }
 
             .hero h1 {
@@ -400,19 +316,6 @@
 
             .hero .subtitle {
                 font-size: 1.2rem;
-            }
-
-            .home-layout {
-                margin-top: 2.5rem;
-            }
-
-            .link-panel {
-                position: static;
-            }
-
-            .hero-copy,
-            .book-intro {
-                max-width: none;
             }
 
             .highlights {
@@ -427,6 +330,10 @@
         }
 
         @media (max-width: 480px) {
+            .presentation-banners {
+                flex-direction: column;
+            }
+
             :root {
                 --font-size-base: 16px;
             }
@@ -468,53 +375,61 @@
 </head>
 <body>
     <div class="page">
-        <main class="main-content">
-            <header class="hero">
-                <div class="hero-top">
-                    <div class="hero-copy">
-                        <h1>Radical Simplicity for AI</h1>
-                        <p class="subtitle">Layer 8</p>
-                        <p class="tagline">A book about making architectural intent explicit and designing for AI, so systems scale without coordination overhead, heroics, or compounding complexity while lowering both software development cost and the cost of using AI effectively.</p>
-                        <div class="reading-actions">
-                            <a href="book/book.html" class="read-btn">Start Reading</a>
-                            <p class="lang-links">
-                                <a href="book/book.html">English</a> &middot; <a href="book-heb/book.html">&#1506;&#1489;&#1512;&#1497;&#1514;</a> &middot; <a href="book-rus/book.html">Русский</a>
-                            </p>
-                        </div>
-                    </div>
+        <header class="hero">
+            <h1>Radical Simplicity<br>for AI</h1>
+            <p class="subtitle">Layer 8</p>
+            <p class="tagline">A book about making architectural intent explicit, so systems scale without coordination overhead, heroics, or compounding complexity.</p>
+            <a href="build.html" class="read-btn" style="margin-bottom: 1.5rem; background-color: #1a4480;">Build Your First AI Driven Distributed System</a>
+            <div class="presentation-banners">
+                <a href="ec.html" class="presentation-banner">
+                    <div class="banner-title">Executive Presentation</div>
+                    <div class="banner-desc">Vision, economics, and proof</div>
+                </a>
+                <a href="vc.html" class="presentation-banner">
+                    <div class="banner-title">Investor Presentation</div>
+                    <div class="banner-desc">Opportunity, market, and returns</div>
+                </a>
+            </div>
+            <div class="presentation-banners">
+                <a href="book-exec/book.html" class="presentation-banner">
+                    <div class="banner-title">Executive Edition</div>
+                    <div class="banner-desc">The full book for non-technical readers</div>
+                </a>
+            </div>
+            <a href="book/book.html" class="read-btn">Start Reading</a>
+            <p class="lang-links">
+                <a href="book/book.html">English</a> &middot; <a href="book-heb/book.html">&#1506;&#1489;&#1512;&#1497;&#1514;</a> &middot; <a href="book-rus/book.html">Русский</a>
+            </p>
+        </header>
+
+        <section>
+            <h2>About the Book</h2>
+            <p>Most technology initiatives fail economically before they fail technically. Costs rise, delivery slows, and teams burn out, not because of talent or effort, but because architectural intent is left implicit.</p>
+            <p><strong>Radical Simplicity for AI</strong> examines why this happens and presents <em>Layer 8</em> as a structural response: an architectural model that encodes guarantees into the system itself, removing entire categories of failure by construction rather than by convention.</p>
+
+            <div class="highlights">
+                <div class="highlight-card">
+                    <h3>Architecture as Alignment</h3>
+                    <p>Good architecture is the primary alignment between company goals, system behavior, and human effort.</p>
                 </div>
-
-                <div class="home-layout">
-                    <div class="book-intro">
-                        <h2>About the Book</h2>
-                        <p>Most technology initiatives fail economically before they fail technically. Costs rise, delivery slows, and teams burn out, not because of talent or effort, but because architectural intent is left implicit.</p>
-                        <p><strong>Radical Simplicity for AI</strong> examines why this happens and presents <em>Layer 8</em> as a structural response: an architectural model that encodes guarantees into the system itself, removing entire categories of failure by construction rather than by convention.</p>
-
-                        <div class="highlights">
-                            <div class="highlight-card">
-                                <h3>Architecture as Alignment</h3>
-                                <p>Good architecture is the primary alignment between company goals, system behavior, and human effort.</p>
-                            </div>
-                            <div class="highlight-card">
-                                <h3>Failure by Design</h3>
-                                <p>When architecture is implicit, organizations spend human effort compensating for structural absence.</p>
-                            </div>
-                            <div class="highlight-card">
-                                <h3>Economics, Not Aesthetics</h3>
-                                <p>The focus is not optimization. It is removing costs that should not exist.</p>
-                            </div>
-                            <div class="highlight-card">
-                                <h3>Proof, Not Theory</h3>
-                                <p>Layer 8 is a working model, every claim in the book is testable and falsifiable.</p>
-                            </div>
-                        </div>
-
-                        <blockquote>
-                            <p><strong>Radical simplicity is architectural, not aesthetic.</strong> It reduces the things that can go wrong by construction, making intent explicit so the system enforces what convention cannot.</p>
-                        </blockquote>
-                    </div>
+                <div class="highlight-card">
+                    <h3>Failure by Design</h3>
+                    <p>When architecture is implicit, organizations spend human effort compensating for structural absence.</p>
                 </div>
-            </header>
+                <div class="highlight-card">
+                    <h3>Economics, Not Aesthetics</h3>
+                    <p>The focus is not optimization. It is removing costs that should not exist.</p>
+                </div>
+                <div class="highlight-card">
+                    <h3>Proof, Not Theory</h3>
+                    <p>Layer 8 is a working model, every claim in the book is testable and falsifiable.</p>
+                </div>
+            </div>
+
+            <blockquote>
+                <p><strong>Radical simplicity is architectural, not aesthetic.</strong> It reduces the things that can go wrong by construction, making intent explicit so the system enforces what convention cannot.</p>
+            </blockquote>
+        </section>
 
         <section>
             <h2>About the Author</h2>
@@ -533,53 +448,6 @@
                 <iframe src="https://github.com/sponsors/saichler/button" title="Sponsor saichler" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
             </div>
         </footer>
-        </main>
-
-        <aside class="link-panel" aria-label="Layer 8 links">
-            <div class="link-group">
-                <div class="link-group-label">Read</div>
-                <div class="presentation-banners">
-                    <a href="book-exec/book.html" class="presentation-banner">
-                        <div class="banner-title">Executive Edition</div>
-                        <div class="banner-desc">The full book for non-technical readers</div>
-                    </a>
-                </div>
-            </div>
-            <div class="link-group">
-                <div class="link-group-label">Presentations</div>
-                <div class="presentation-banners">
-                    <a href="ec.html" class="presentation-banner">
-                        <div class="banner-title">Executive Overview</div>
-                        <div class="banner-desc">Vision, economics, and proof</div>
-                    </a>
-                    <a href="design-patterns-slides.html" class="presentation-banner">
-                        <div class="banner-title">AI Design Patterns</div>
-                        <div class="banner-desc">AI-ready interface contracts</div>
-                    </a>
-                    <a href="vc.html" class="presentation-banner">
-                        <div class="banner-title">Investors Overview</div>
-                        <div class="banner-desc">Opportunity, market, and returns</div>
-                    </a>
-                </div>
-            </div>
-            <div class="link-group">
-                <div class="link-group-label">Start &amp; Demos</div>
-                <div class="presentation-banners">
-                    <a href="build.html" class="presentation-banner">
-                        <div class="banner-title">AI System Quickstart</div>
-                        <div class="banner-desc">Hands-on walkthrough</div>
-                    </a>
-                    <a href="https://www.probler.dev/" class="presentation-banner">
-                        <div class="banner-title">Probler</div>
-                        <div class="banner-desc">Live Layer 8 demo</div>
-                    </a>
-                    <a href="https://www.l8erp.one" class="presentation-banner">
-                        <div class="banner-title">ERP</div>
-                        <div class="banner-desc">Enterprise system demo</div>
-                    </a>
-                </div>
-            </div>
-        </aside>
     </div>
 </body>
 </html>
