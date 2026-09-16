@@ -115,6 +115,18 @@ Zero-dependency vanilla JavaScript/CSS library (no npm, no bundler). Loaded via 
 
 ---
 
+## Live Updates (WebSocket)
+
+Real-time browser updates (live progress bars, auto-refreshing tables) run on one generic mechanism spanning `l8utils`, `l8orm`/`l8services`, `l8web`, and `l8ui` — implementation projects write no per-model notification code themselves.
+
+**Server side.** `l8utils`'s `Cache.Post/Put/Patch/Delete` never send anything themselves — they build and return two notification objects: `n` (cross-node replication delta) and `cn` (the client-facing notification, carrying the full changed record and the set of `AaaId`s that should receive it). A client registers interest by issuing a query through `Cache.Fetch()` with L8QL's `register` keyword; the live query itself (not just its hash) is stored per-`AaaId`, so `cn` is only ever built for `AaaId`s whose registered query actually `Match()`es the changed record — never a blind broadcast. The caller holding the `vnic` (`BaseService`, `OrmService`/`OrmCache`, `DCache`) is what actually sends `cn`, via `vnic.Multicast("websock", 0, action, cn)`. `l8web`'s `WsNotifyService` is the `IServiceHandler` registered under that `"websock"`/area-0 name; it receives the multicast and hands it to `WebSocketManager`, which holds one live connection per authenticated `AaaId` (established at `GET /ws?token=<bearer>`) and pushes `{action, modelType, primaryKey, record}` as JSON to exactly the target connections.
+
+**Client side.** `l8ui/shared/layer8d-websocket.js`'s `Layer8DWebSocket.init()` opens that `/ws` connection once (auto-reconnect with backoff) and dispatches incoming messages by `modelType` (the protobuf type name, not the `ServiceName`) to `subscribe(modelType, callback)` listeners. Two ready-made consumers exist: `Layer8DTable`'s `realtime` option (patches/adds/removes list rows in place) and `layer8d-progress-bar.js`'s `Layer8DProgressBar.attach(container, {modelType, primaryKey, fetchCurrent, getProgress})` (single-record live progress — one initial fetch both registers server-side and renders the starting state, then updates straight from the pushed `record`, no re-fetch per tick). Any new live-updating component follows the same shape: query with `register`, subscribe by `modelType`, filter by `primaryKey` client-side.
+
+**Known limitations** (by design, not yet fixed): only one active registered subscription per `AaaId` per `Cache` instance — two concurrently open registered queries of the same model type under one session overwrite each other; no disconnect-triggered unregister, so a stale registration relies on TTL eviction rather than proactive cleanup on socket close. Full design: `l8utils/plans/generic-websocket-change-notifications.md`. Real end-to-end consumer example (a live scan-progress bar): `l8secure-scan/plans/scanjob-live-progress.md`.
+
+---
+
 ## Canonical Implementation Projects
 
 These are complete implementation projects that serve as references for new projects.
