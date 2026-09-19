@@ -347,12 +347,7 @@ grep -rn 'factory\.\w\+(' --include="*-enums.js" | grep -v 'factory\.create\b\|f
 
 Every project must include `l8events`. Required infrastructure.
 
-**Backend main.go:**
-```go
-import evtservices "github.com/saichler/l8events/go/services"
-// after ActivateAllServices:
-evtservices.ActivateEvents(dbcred, dbname, nic)
-```
+**Backend:** the `Events` service (ServiceArea 76) is activated by `l8common` -- projects must NOT call `evtservices.ActivateEvents` themselves (a second activation diverges caches -- see SingleOwnerDatabaseTable). Post events via `vnic.Resources().Events().PostXxxEvent(...)`.
 
 **UI main.go:**
 ```go
@@ -361,9 +356,41 @@ l8c.RegisterType(resources, &l8events.EventRecord{}, &l8events.EventRecordList{}
 ```
 
 ```bash
-grep -n "ActivateEvents" go/<project>/main/*.go
+grep -rn "ActivateEvents" go/<project> --include=*.go | grep -v vendor/   # should be empty
 grep -n "EventRecord" go/<project>/ui/*.go
-ls go/vendor/github.com/saichler/l8events/
+```
+
+## NotifyServiceRequired
+
+Every project must include `l8notify`. Required infrastructure, same as `l8events`. It is a system service, not a library to copy logic from -- all email/webhook/Slack notifications go through `Resources().Notify()`; never hand-roll SMTP/HTTP senders or a project-local delivery-log table.
+
+Services (ServiceArea 78): `Notify` (`NotifyRecord`, PK `NotifyId` -- immutable log; POST dispatches then persists, PUT rejected) and `IntegCfg` (`IntegrationConfig`, PK `IntegrationId` -- editable CRUD). L8Query `from` uses the type name (`NotifyRecord`), not the ServiceName.
+
+**Backend:** both services are activated by `l8common` -- projects must NOT call `notifyservices.ActivateNotify`/`ActivateIntegrationConfig` themselves (see SingleOwnerDatabaseTable).
+
+**UI main.go:**
+```go
+import "github.com/saichler/l8types/go/types/l8notify"
+l8c.RegisterType(resources, &l8notify.NotifyRecord{}, &l8notify.NotifyRecordList{}, "NotifyId")
+l8c.RegisterType(resources, &l8notify.IntegrationConfig{}, &l8notify.IntegrationConfigList{}, "IntegrationId")
+```
+
+**Sending (from any service):** synchronous, returns `*DeliveryResult`.
+```go
+result := vnic.Resources().Notify().Send(l8notify.NotifyChannel_NOTIFY_CHANNEL_EMAIL,
+    "user@example.com", "Subject", "Body", nil)
+```
+
+**Secrets:** `IntegrationConfig` holds non-secret routing data only (entered via admin UI). Secrets go in the project's security config JSON `credentials` map, keyed by `IntegrationConfig.credential_key` (`zside` = username/secret, `yside` = password).
+
+**UI:** components ship in `l8ui/notify/` (`l8notify-enums.js` first, then `l8notify-integration-mgmt.js`, `l8notify-delivery-log.js`, `l8notify-target-editor.js`, plus `l8notify-notification.css`). Data-only -- wire `getColumns()`/`getFormDefinition()` into `Layer8DTable`/`Layer8DForms` against `/<prefix>/78/IntegCfg` and `/<prefix>/78/Notify`.
+
+Direct use of `l8notify/go/channel|template|throttle|escalation` is allowed only for bespoke policy flows that own their own persistence; prefer `Notify().Send` so deliveries appear in the shared log.
+
+```bash
+grep -rn "ActivateNotify\|ActivateIntegrationConfig" go/<project> --include=*.go | grep -v vendor/   # should be empty
+grep -n "NotifyRecord\|IntegrationConfig" go/<project>/ui/*.go
+grep -rn "net/smtp\|hooks.slack.com" go/<project> --include=*.go | grep -v vendor/   # should be empty
 ```
 
 ## FileUploadPattern
@@ -719,9 +746,9 @@ All projects are siblings under the same parent. `../projectname` resolves from 
 | `l8opensim` | API simulation |
 | `l8agent` | AI agent |
 | `l8logfusion` | Distributed log collection |
-| `l8events` | Event processing |
-| `l8alarms` | Alarm lifecycle |
-| `l8notify` | Notification handling |
+| `l8events` | Event recording service (`Events`, area 76) -- required |
+| `l8alarms` | Alarm lifecycle + RCA (area 10); consumes l8events, sends via l8notify |
+| `l8notify` | Notification delivery service (`Notify`/`IntegCfg`, area 78) -- required |
 | `l8physio` | Physiotherapy project |
 | `l8myfamily` | Android app |
 
