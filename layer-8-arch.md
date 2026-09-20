@@ -35,10 +35,10 @@ Service lifecycle management, leader election, replication, distributed caching 
 Database CRUD as a distributed service. Auto-creates/migrates PostgreSQL tables from protobuf introspection. Query caching (30s TTL), optional in-memory write-through cache, time-series database support. Generates SQL from L8Query AST. Bidirectional object-to-relational conversion.
 
 ### l8web — HTTP/WebSocket Bridge
-HTTPS server with TLS and bearer token auth that routes REST requests to VNic with leader/local/proximity routing. WebSocket manager for authenticated connections with notification push. REST client with GZIP and auto-retry. GraphQL client. SNI-based TLS reverse proxy. Webhook handling with VCS signature verification. Built-in endpoints: `/auth`, `/registry`, `/permissions`, `/captcha`, `/register`, `/tfa*`, `/ws`.
+HTTPS server with TLS and bearer token auth that routes REST requests to VNic with leader/local/proximity routing. WebSocket manager for authenticated connections with notification push. REST client with GZIP and auto-retry. GraphQL client. SNI-based TLS reverse proxy. Webhook handling with VCS signature verification. Built-in endpoints: `/auth`, `/registry`, `/permissions`, `/captcha`, `/register`, `/forgotPassword`, `/resetPassword`, `/tfa*`, `/ws`.
 
 ### l8secure — Security & AAA
-Full `ISecurityProvider` implementation: authentication (password hashing, TFA/TOTP+QR, JWT), authorization (deny-before-allow role-based with pre-computed O(1) permission index), row-level data scoping via L8Query deny rules with `${userId}` and `${associateIds}` placeholders, field-level blanking, AES encryption, CAPTCHA, password policy enforcement, user registration. Activates CRUD services for users, roles, tokens, credentials, and portals (service area 73). Security configs are per-project JSON files compiled into Go plugins.
+Full `ISecurityProvider` implementation: authentication (password hashing, TFA/TOTP+QR, JWT), authorization (deny-before-allow role-based with pre-computed O(1) permission index), row-level data scoping via L8Query deny rules with `${userId}` and `${associateIds}` placeholders, field-level blanking, AES encryption, CAPTCHA, password policy enforcement, user registration, self-service password recovery (captcha-gated request emails a one-time link whose token is stored hashed with an expiry — 30 minutes by default, `L8PasswordResetPolicy` also carries the per-account cooldown and hourly cap; completing a reset revokes the user's existing tokens, and the mail goes out through `Resources().Notify().Send`). Activates CRUD services for users, roles, tokens, credentials, and portals (service area 73). Security configs are per-project JSON files compiled into Go plugins.
 
 ### l8common — Top-Level Convenience Layer
 One-call service activation (`ActivateService`) wiring ORM, web, replication, and transactions. Activates the required system services (l8events `Events`, l8notify `Notify`/`IntegCfg`) on behalf of every project via `system.Activate(creds, dbname, vnic)` (package `l8common/go/system`, separate from `common` to avoid an import cycle) — projects never call it or the underlying `Activate*` functions themselves. CRUD helpers (`GetEntity`, `PostEntity`, `PutEntity`, `EntityExists`). Validation framework with static validators (`ValidateRequired`, `ValidateEnum`, `ValidateMoney`) and a fluent builder. `NewServiceCallback` factory. Status transition machine. Money arithmetic. Infrastructure bootstrapping (`CreateResources`, `CreateVnic`, `CreateWebServer`, `OpenDBConnection`, `WaitForSignal`). Type registration. User provisioning helpers. Mock data upload client.
@@ -107,7 +107,7 @@ Zero-dependency vanilla JavaScript/CSS library (no npm, no bundler). Loaded via 
 
 **Mobile (`m/`):** Full mobile equivalents — card-based navigation, mobile forms/table/popup/confirm/datepicker/reference picker, mobile view factory with chart/kanban/calendar/timeline/gantt/tree/wizard.
 
-**Auth Pages:** Login (with TFA support), registration (with CAPTCHA).
+**Auth Pages:** Login (with TFA support), registration (with CAPTCHA), forgot-password and reset-password (sharing `Layer8DCaptchaWidget` with the registration page).
 
 **AI Chat:** Desktop and mobile chat interface for l8agent.
 
@@ -146,6 +146,8 @@ Real bugs found and fixed in the shared framework during implementation work, pl
 **Reconstructing an `IQuery` from `.Text()` alone drops out-of-band fields.** `AaaId` (and potentially other struct fields) aren't part of the L8QL text itself — any code that re-parses a query from its text representation must re-stamp those fields afterward, or they silently vanish (this bit inter-process vnic transport in `l8srlz`'s `object.NewFromQuery`).
 
 **Cache/query keys must fold in `AaaId`, not just the query text.** Two callers issuing textually-identical L8QL queries under different identities can otherwise collide on one cache entry or subscription slot — `l8ql`'s `Query.Hash()` includes `AAAId()` in its hash for exactly this reason.
+
+**`NotifyRecord` keeps the message body verbatim.** `Resources().Notify().Send(...)` persists the whole message in the immutable delivery log, and there is no redaction or "don't persist the body" option — so anything emailed through it, including one-time links and their tokens, is readable by whoever can GET `NotifyRecord` (service area 78). Keep that read access admin-only, and prefer short-lived, single-use secrets in any body you send.
 
 ---
 
