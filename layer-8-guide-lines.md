@@ -1904,7 +1904,7 @@ Desktop: `{ key, label, sortKey, filterKey, enumValues, render }`. Mobile adds: 
 | hours | Total minutes |
 | date | Unix timestamp (0=Current) |
 | reference | ID value |
-| checkbox | 1 or 0 |
+| checkbox / toggle | `true` / `false` (protobuf bool rejects numbers) |
 | period | `{periodType, periodYear, periodValue}` |
 
 ### Layer8Markdown

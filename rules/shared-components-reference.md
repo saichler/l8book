@@ -153,7 +153,7 @@ Use this for system-managed fields that the user can see but not modify (e.g., a
 | hours | HH:MM | Total minutes |
 | date | Calendar picker | Unix timestamp (0 = Current/N/A) |
 | reference | Picker | ID value |
-| checkbox | Toggle | 1 or 0 |
+| checkbox | Toggle | `true` / `false` (protobuf bool rejects numbers) |
 | number | Number | parseFloat |
 | period | 3 cascading selects (type/year/value) | `{periodType, periodYear, periodValue}` (L8Period) |
 
