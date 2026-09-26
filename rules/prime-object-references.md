@@ -158,6 +158,28 @@ Standalone UI for a child creates orphan records and hides the parent-child rela
 
 ---
 
+## Rule 4: The Primary Key Is a String UUID
+
+A Prime Object's ID/key field is ALWAYS `string`, holding a UUID. It can NEVER be `int32` or `int64` (or any other numeric type).
+
+```protobuf
+// CORRECT
+message SalesOrder {
+    string sales_order_id = 1;   // UUID, set by common.GenerateID
+}
+
+// WRONG -- numeric primary key
+message SalesOrder {
+    int64 sales_order_id = 1;
+}
+```
+
+- The ServiceCallback generates it on POST with `common.GenerateID(&entity.PrimaryKeyField)`, which sets `ifs.NewUuid()` when empty (a preset ID, e.g. on import, is kept).
+- Every reference to a Prime Object (Rule 2) is therefore a `string` too.
+- There are no numeric IDs anywhere in Layer 8: code must never convert an ID to a number (`parseInt`, `Number()`, `strconv.Atoi`). l8ui's reference fields once ran `parseInt` on picked IDs and cut every UUID starting with digits to its leading number (`"4660db2e-..."` -> `4660`).
+
+---
+
 ## Verification
 
 ### Before creating a new service
@@ -166,9 +188,10 @@ Standalone UI for a child creates orphan records and hides the parent-child rela
 3. If unsure, default to embedded child. It is easy to promote a child to a Prime Object later; it is painful to demote a Prime Object to a child (requires deleting services, updating UI, etc.)
 
 ### Before creating or modifying a protobuf message
-1. Check if any `*Type` or `repeated Type` fields reference a Prime Object
-2. If yes, replace with the corresponding ID field(s)
-3. After fixing proto, regenerate bindings, update mock generators, forms, and columns
+1. Check that the primary key field is `string` (Rule 4), never `int32`/`int64`
+2. Check if any `*Type` or `repeated Type` fields reference a Prime Object
+3. If yes, replace with the corresponding ID field(s)
+4. After fixing proto, regenerate bindings, update mock generators, forms, and columns
 
 ```bash
 # Find all Prime Object type names

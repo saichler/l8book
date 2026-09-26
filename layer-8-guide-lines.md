@@ -1582,6 +1582,15 @@ f.section('Order Lines', [
 ])
 ```
 
+### Rule 4: The Primary Key Is a String UUID
+
+A Prime Object's ID/key field is ALWAYS `string` holding a UUID -- NEVER `int32`/`int64`. Set on POST by `common.GenerateID(&entity.PrimaryKeyField)` (`ifs.NewUuid()` when empty; a preset ID, e.g. on import, is kept). References to Prime Objects (Rule 2) are strings too. There are no numeric IDs anywhere in Layer 8, so code must never convert an ID to a number (`parseInt`, `Number()`, `strconv.Atoi`) -- l8ui once cut every digit-leading UUID to its leading number that way (`"4660db2e-..."` -> `4660`).
+
+```protobuf
+// CORRECT                          // WRONG
+string sales_order_id = 1;          int64 sales_order_id = 1;
+```
+
 ## ProtobufRules
 
 ### Model Names Must Match Protobuf Types
