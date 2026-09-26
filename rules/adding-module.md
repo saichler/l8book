@@ -236,9 +236,9 @@ LAYER8M_NAV_CONFIG.projects = {
 };
 ```
 
-### Step 3: Register Module with Nav.js
+### Step 3: Nav Lookup (nothing to edit)
 
-In `l8ui/m/js/layer8m-nav-data.js`, add `window.MobileProjects` to the registry arrays in `_getServiceColumns`, `_getServiceFormDef`, and `_getServiceTransformData`. **Note:** This requires modifying a library file; future versions may support dynamic registration.
+`Layer8MModuleRegistry.create('MobileProjects', {...})` (Step 2) records the registry, and `l8ui/m/js/layer8m-nav-data.js` finds its columns, forms and transforms under any name through `Layer8MModuleRegistry.all()`. Never add a project global to l8ui; a registry assigned to `window` by hand, not through `create()`, is not found (only the older globals l8ui already lists are).
 
 ### Step 4: Update m/app.html
 
@@ -289,7 +289,7 @@ Then include it in `m/app.html` after the main reference registry loads.
 - [ ] Per sub-module: enums, columns (with `primary`/`secondary`), forms
 - [ ] Registry index file (`getColumns`, `getFormDef`, `getTransformData`, `hasModel`)
 - [ ] Nav config: `hasSubModules: true` + config block with `subModules` and `services`
-- [ ] Nav.js: registry added to all lookup arrays
+- [ ] Registry built with `Layer8MModuleRegistry.create()` (the nav finds it; never edit l8ui)
 - [ ] m/app.html: script tags + sidebar link (`data-section="dashboard" data-module="xxx"`)
 - [ ] Reference registry entries
 

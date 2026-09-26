@@ -79,7 +79,7 @@ Layer8DModuleFactory.create({
 
 **3. Nav config**: Add to `layer8m-nav-config-base.js` modules array with `hasSubModules:true`. Add config block with `subModules` and `services` to category file.
 
-**4. Nav.js**: Add `window.MobileProjects` to registry arrays in `_getServiceColumns`, `_getServiceFormDef`, `_getServiceTransformData`.
+**4. Nav lookup**: nothing to edit. `Layer8MModuleRegistry.create()` records the registry, and `layer8m-nav-data.js` finds its columns, forms and transforms under any name (`Layer8MModuleRegistry.all()`). Never add a project global to l8ui.
 
 **5. m/app.html**: Script tags + sidebar link `data-section="dashboard" data-module="projects"`.
 
@@ -89,7 +89,7 @@ Layer8DModuleFactory.create({
 
 Desktop: config, per-submodule data (enums/columns/forms), init, section HTML (correct container IDs), app.html scripts, sections.js, reference registry.
 
-Mobile: per-submodule data (with `primary`/`secondary`), registry index, nav config (`hasSubModules`), nav.js arrays, m/app.html scripts+sidebar, reference registry.
+Mobile: per-submodule data (with `primary`/`secondary`), registry index, nav config (`hasSubModules`), m/app.html scripts+sidebar, reference registry.
 
 Rules: field names must match `.pb.go`, endpoint names max 10 chars, CSS uses `l8-` prefix. Desktop: `new Layer8DTable(options)` then `table.init()`. Mobile: `new Layer8MEditTable(containerId, config)` -- no init() needed.
 
