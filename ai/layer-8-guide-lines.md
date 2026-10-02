@@ -1,6 +1,6 @@
 # Layer 8 Ecosystem — Implementation Guide Lines
 
-Compacted rule reference for AI context. All 75 rules from `l8book/rules/` combined.
+Compacted rule reference for AI context. All 77 rules from `l8book/rules/` combined.
 Preserves all technical details (field names, interfaces, patterns, code). Not intended for human reading.
 
 ---
@@ -343,55 +343,69 @@ Available: `col`, `basic`, `number`, `boolean`, `status`, `enum`, `date`, `money
 grep -rn 'factory\.\w\+(' --include="*-enums.js" | grep -v 'factory\.create\b\|factory\.simple\b\|factory\.withValues\b'
 ```
 
-## EventsServiceRequired
+## SystemServicesRequired
 
-Every project must include `l8events`. Required infrastructure.
+Every project includes `l8events` and `l8notify` (required infrastructure). Both are activated by `l8common` -- projects must NOT call `evtservices.ActivateEvents`, `notifyservices.ActivateNotify` or `ActivateIntegrationConfig` (a second activation diverges caches -- SingleOwnerDatabaseTable).
 
-**Backend:** the `Events` service (ServiceArea 76) is activated by `l8common` -- projects must NOT call `evtservices.ActivateEvents` themselves (a second activation diverges caches -- see SingleOwnerDatabaseTable). Post events via `vnic.Resources().Events().PostXxxEvent(...)`.
+| Lib | Area | Service: type (PK) | Use |
+|-----|------|--------------------|-----|
+| `l8events` | 76 | `Events`: `EventRecord` (`EventId`) | `vnic.Resources().Events().PostXxxEvent(...)` |
+| `l8notify` | 78 | `Notify`: `NotifyRecord` (`NotifyId`), immutable log: POST dispatches+persists, PUT rejected | `vnic.Resources().Notify().Send(...)` |
+| | | `IntegCfg`: `IntegrationConfig` (`IntegrationId`), CRUD | admin UI |
+
+L8Query `from` = type name (`NotifyRecord`), not ServiceName.
 
 **UI main.go:**
 ```go
-import l8events "github.com/saichler/l8types/go/types/l8events"
+import (
+    l8events "github.com/saichler/l8types/go/types/l8events"
+    "github.com/saichler/l8types/go/types/l8notify"
+)
 l8c.RegisterType(resources, &l8events.EventRecord{}, &l8events.EventRecordList{}, "EventId")
-```
-
-```bash
-grep -rn "ActivateEvents" go/<project> --include=*.go | grep -v vendor/   # should be empty
-grep -n "EventRecord" go/<project>/ui/*.go
-```
-
-## NotifyServiceRequired
-
-Every project must include `l8notify`. Required infrastructure, same as `l8events`. It is a system service, not a library to copy logic from -- all email/webhook/Slack notifications go through `Resources().Notify()`; never hand-roll SMTP/HTTP senders or a project-local delivery-log table.
-
-Services (ServiceArea 78): `Notify` (`NotifyRecord`, PK `NotifyId` -- immutable log; POST dispatches then persists, PUT rejected) and `IntegCfg` (`IntegrationConfig`, PK `IntegrationId` -- editable CRUD). L8Query `from` uses the type name (`NotifyRecord`), not the ServiceName.
-
-**Backend:** both services are activated by `l8common` -- projects must NOT call `notifyservices.ActivateNotify`/`ActivateIntegrationConfig` themselves (see SingleOwnerDatabaseTable).
-
-**UI main.go:**
-```go
-import "github.com/saichler/l8types/go/types/l8notify"
 l8c.RegisterType(resources, &l8notify.NotifyRecord{}, &l8notify.NotifyRecordList{}, "NotifyId")
 l8c.RegisterType(resources, &l8notify.IntegrationConfig{}, &l8notify.IntegrationConfigList{}, "IntegrationId")
 ```
 
-**Sending (from any service):** synchronous, returns `*DeliveryResult`.
+### l8notify specifics
+All email/webhook/Slack goes through `Resources().Notify()` -- never hand-roll SMTP/HTTP senders or a project-local delivery-log table.
+
+**Send** (sync, returns `*DeliveryResult`):
 ```go
-result := vnic.Resources().Notify().Send(l8notify.NotifyChannel_NOTIFY_CHANNEL_EMAIL,
-    "user@example.com", "Subject", "Body", nil)
+result := vnic.Resources().Notify().Send(l8notify.NotifyChannel_NOTIFY_CHANNEL_EMAIL, "user@example.com", "Subject", "Body", nil)
 ```
 
-**Secrets:** `IntegrationConfig` holds non-secret routing data only (entered via admin UI). Secrets go in the project's security config JSON `credentials` map, keyed by `IntegrationConfig.credential_key` (`zside` = username/secret, `yside` = password).
+**Secrets:** `IntegrationConfig` = non-secret routing only. Secrets in security config JSON `credentials` map, keyed by `credential_key` (`zside`=username/secret, `yside`=password).
 
-**UI:** components ship in `l8ui/notify/` (`l8notify-enums.js` first, then `l8notify-integration-mgmt.js`, `l8notify-delivery-log.js`, `l8notify-target-editor.js`, plus `l8notify-notification.css`). Data-only -- wire `getColumns()`/`getFormDefinition()` into `Layer8DTable`/`Layer8DForms` against `/<prefix>/78/IntegCfg` and `/<prefix>/78/Notify`.
+**UI:** `l8ui/notify/`: `l8notify-enums.js` first, then `l8notify-integration-mgmt.js`, `l8notify-delivery-log.js`, `l8notify-target-editor.js`, `l8notify-notification.css`. Data-only: wire `getColumns()`/`getFormDefinition()` into `Layer8DTable`/`Layer8DForms` on `/<prefix>/78/IntegCfg`, `/<prefix>/78/Notify`.
 
-Direct use of `l8notify/go/channel|template|throttle|escalation` is allowed only for bespoke policy flows that own their own persistence; prefer `Notify().Send` so deliveries appear in the shared log.
+Direct `l8notify/go/channel|template|throttle|escalation` only for bespoke flows owning their persistence; prefer `Notify().Send` (shared log).
 
 ```bash
-grep -rn "ActivateNotify\|ActivateIntegrationConfig" go/<project> --include=*.go | grep -v vendor/   # should be empty
-grep -n "NotifyRecord\|IntegrationConfig" go/<project>/ui/*.go
-grep -rn "net/smtp\|hooks.slack.com" go/<project> --include=*.go | grep -v vendor/   # should be empty
+grep -rn "ActivateEvents\|ActivateNotify\|ActivateIntegrationConfig" go/<project> --include=*.go | grep -v vendor/   # empty
+grep -n "EventRecord\|NotifyRecord\|IntegrationConfig" go/<project>/ui/*.go
+grep -rn "net/smtp\|hooks.slack.com" go/<project> --include=*.go | grep -v vendor/   # empty
 ```
+
+## FailFastNoSilentFallback
+
+Missing dependency or failed required fetch must throw where the cause is visible. No guards around required calls, no degraded mode.
+
+1. **No `typeof` guard around a required call.** `if (typeof Layer8ExportHelper !== 'undefined') {...}` = WRONG. Add the script tag to `app.html`/`m/app.html` and call directly. `typeof` only for genuinely optional integrations, and the absent branch must be observable.
+2. **Failed required fetch throws.** WRONG: `catch (e) { console.warn(...) }` on `/permissions` -- unset `Layer8DPermissions` is read by l8ui as PERMISSIVE (security bug). CORRECT:
+```js
+if (!resp.ok) throw new Error('/permissions returned HTTP ' + resp.status);
+var perms = await resp.json();
+if (perms === null || typeof perms !== 'object') throw new Error('expected an object');
+window.Layer8DPermissions = perms;
+```
+3. **Startup check per shell:** `<project>-deps-check.js` lists unguarded globals, loaded right before app init (`app.js`/`app-core.js`) in both `app.html` and `m/app.html`. Missing -> log, full-screen error, throw, naming all absent. Run at DOM-ready, NOT synchronously (e.g. `l8ui/popup/layer8d-popup.js` assigns its global in an immediate `init()`; sync check = false missing). Never trim an entry -- add the script tag.
+4. **Guards inside l8ui:** fix upstream by pushing l8ui, never edit the submodule (L8UINoProjectSpecificCode). Downstream, load the hidden file.
+
+```bash
+grep -rhoE 'window\.(Layer8|L8)[A-Za-z0-9_]*\s*=' l8ui/ | sed 's/window\.//;s/ *=//' | sort -u
+grep -oE '<script src="[^"]+\.js' app.html | sed 's/.*src="//'
+```
+Cross-check both shells after every l8ui bump (new file unloaded -> `Uncaught ReferenceError: <GlobalName> is not defined` deep in a table render). See ScriptLoadingOrder, VerifyAppHtmlScriptsAgainstLoadingOrder.
 
 ## FileUploadPattern
 
@@ -1451,26 +1465,23 @@ All portals served by single `go/<project>/ui/main.go`. Type registrations for a
 
 ## PostImplementationE2ETesting
 
-After the initial implementation phase (backend + UI wired, `go/tests/` green), every project gets its own follow-up phase that drives a real browser against a real, live KIND-deployed cluster. `go/tests/` proves the API contract; it cannot catch what only rendering, CSS, and real framework wiring can break — confirmed repeatedly on one project alone: a hardcoded `color: white` button invisible against a theme's light primary, a shared factory silently never resolving `service.alternateViews` (a field name mismatch nothing else could have caught), an L8QL aggregate that's only correct on `page 0`, a dead `onClick` handler in a commonly-reached-for column helper, a stale chart instance surviving a section re-render. None of these are backend bugs; all of them shipped invisible to `go/tests/` and were only found by actually loading the page.
+After initial implementation (backend + UI wired, `go/tests/` green), every project gets a follow-up phase: real browser against a live KIND cluster. `go/tests/` proves the API contract only; it misses rendering/CSS/wiring bugs (e.g. hardcoded `color: white` invisible on light theme, `service.alternateViews` field mismatch, L8QL aggregate correct only on page 0, dead `onClick` in a column helper, stale chart instance after re-render).
 
-### Infrastructure: a real KIND cluster, not mocks
-`k8s/kind-start.sh`/`kind-stop.sh` (see `K8sRules`) stand up a real cluster running the project's actual images. Iterating on a fix is: rebuild the image, `kind load docker-image <img>:latest --name <cluster>`, `kubectl delete pod -n <ns> <pod>` (force a fresh pull of the loaded image), `kubectl wait --for=condition=Ready pod/<pod> --timeout=90s`, then rerun the suite. A full `kind-stop.sh && kind-start.sh` gives a clean-data baseline when needed, but note KIND assigns the worker node a fresh IP on every recreate — point the suite at `localhost:<port>` (the stable host port mapping) or re-derive the IP, never hardcode it permanently.
+**Infra:** `k8s/kind-start.sh`/`kind-stop.sh` (K8sRules), real images, no mocks. Fix loop: rebuild image -> `kind load docker-image <img>:latest --name <cluster>` -> `kubectl delete pod -n <ns> <pod>` -> `kubectl wait --for=condition=Ready pod/<pod> --timeout=90s` -> rerun. Full stop+start = clean data. Worker IP changes on recreate: use `localhost:<port>`, never hardcode the IP.
 
-### Suite layout: `e2e/` at project root
-Sibling to `go/`, `k8s/`, `plans/` — a separate language/runtime (Node/TypeScript/Playwright) driving the real deployed app (`app.html` desktop + `m/app.html` mobile), not a `_test.go` file and not exempt from `TestLocationAndApproach`'s spirit, just a different location for a different kind of test. Structure: `fixtures/` (auth session capture + reuse, since a bearer-token-in-sessionStorage app isn't covered by Playwright's own `storageState`; env config; API-backed cleanup helpers), `pages/` (page-object layer — login, nav, table, popup — reused across every spec), `tests/desktop/` and `tests/mobile/` (mobile means the real mobile bundle at its own URL, never a resized desktop viewport).
+**Layout:** `e2e/` at project root (sibling of `go/`, `k8s/`, `plans/`), Node/TypeScript/Playwright against `app.html` + `m/app.html`. `fixtures/` (auth capture/reuse -- bearer token in sessionStorage isn't covered by `storageState`; env config; API cleanup helpers), `pages/` (page objects: login, nav, table, popup), `tests/desktop/`, `tests/mobile/` (real mobile bundle, never a resized desktop viewport).
 
-### Hygiene rules learned the hard way
-- **Clean up what you create.** Every spec that creates real data (via the real UI, against the real API) deletes it in `test.afterEach`, wrapped so a cleanup failure never masks the test's own pass/fail — otherwise the live cluster accumulates orphaned rows across every run, which then breaks *other*, unrelated specs' assumptions (a table default page-1 visibility check breaks once enough rows pile up).
-- **Never assert exact counts against live data.** Assert *presence of the row this test created*, never a total — other runs and real usage change the numbers.
-- **Filter before asserting visibility**, don't rely on default page-1 rendering — real data volume grows over time and a specific row isn't guaranteed to land on the first page.
-- **Debug/scratch spec files get a `zzz-` prefix and are always deleted before moving on** — never leave one committed.
-- **A cached auth session goes stale after a pod/cluster restart** (new process, sometimes a new signing key) — clear it and re-login rather than debugging a mysterious redirect-to-login failure.
-- **Distinguish infra churn from a real bug before fixing anything.** A failure immediately after a pod restart or redeploy is often the cluster still settling (stale connections, DNS, vnic mesh reconnecting) — rerun once before concluding it's a regression. A failure that reproduces consistently in isolation, away from any recent redeploy, is real.
+**Hygiene:**
+- Delete created data in `test.afterEach`, wrapped so cleanup failure never masks the result (orphans break other specs).
+- Never assert exact counts on live data; assert presence of the row this test created.
+- Filter before asserting visibility; don't rely on page 1.
+- Debug specs get a `zzz-` prefix; delete before moving on, never commit.
+- Cached auth goes stale after pod/cluster restart: clear and re-login.
+- Failure right after restart/redeploy may be cluster settling: rerun once. Consistent repro in isolation = real bug.
 
 ```bash
-# Verify the suite exists and isn't polluting the cluster with debug leftovers
 ls e2e/playwright.config.ts e2e/fixtures/ e2e/pages/ e2e/tests/desktop/ e2e/tests/mobile/
-find e2e/tests -name "zzz-*"  # must return nothing once work is done
+find e2e/tests -name "zzz-*"  # must be empty
 ```
 
 ## PrdCompliance
@@ -2068,6 +2079,8 @@ grep 'src="l8ui/' go/<project>/ui/web/app.html | sed 's/.*src="//' | sed 's/".*/
 Commonly missed: `layer8-module-factory-core.js`, `layer8d-service-registry.js`, `layer8d-forms-fields.js`.
 
 Symptom: `Uncaught ReferenceError: <GlobalName> is not defined`, page loads but nothing works.
+
+Prevent recurrence with a startup dependency check -- see `FailFastNoSilentFallback`.
 
 ## VerifyPrdCompletenessBeforeDone
 
