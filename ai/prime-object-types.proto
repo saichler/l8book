@@ -1,0 +1,80 @@
+// Shared types used by the Prime Object modeling rules (see prime-object.md).
+
+syntax = "proto3";
+
+package common;
+
+// MetaData provides metadata and statistics about a list result.
+// Every <Name>List message carries it as field 2 (see Rule 6).
+message MetaData {
+  // Count statistics for primary keys
+  Count key_count = 1;
+  // Count statistics per value, keyed by property name
+  map<string, Count> value_count = 2;
+}
+
+// Count holds count statistics as a map of value to count.
+message Count {
+  // Map of value string to occurrence count
+  map<string, double> counts = 1;
+}
+
+// AuditInfo is the shared audit trail embedded in Prime Objects and children.
+message AuditInfo {
+  int64 created_at = 1;
+  string created_by = 2;
+  int64 modified_at = 3;
+  string modified_by = 4;
+}
+
+// Money represents a monetary amount with currency.
+message Money {
+  int64 amount = 1;        // Amount in smallest currency unit (e.g., cents)
+  string currency_id = 2;  // ID of the Currency Prime Object
+}
+
+// Address represents a physical or mailing address.
+message Address {
+  string address_id = 1;
+  AddressType address_type = 2;
+  string line1 = 3;
+  string line2 = 4;
+  string city = 5;
+  string state_province = 6;
+  string postal_code = 7;
+  string country_code = 8;  // ISO 3166-1 alpha-2
+  bool is_primary = 9;
+}
+
+enum AddressType {
+  ADDRESS_TYPE_UNSPECIFIED = 0;
+  ADDRESS_TYPE_HOME = 1;
+  ADDRESS_TYPE_WORK = 2;
+  ADDRESS_TYPE_MAILING = 3;
+  ADDRESS_TYPE_BILLING = 4;
+}
+
+// ContactInfo represents various contact methods.
+message ContactInfo {
+  string contact_id = 1;
+  ContactType contact_type = 2;
+  string value = 3;  // Phone number, email, etc.
+  bool is_primary = 4;
+  bool is_verified = 5;
+}
+
+enum ContactType {
+  CONTACT_TYPE_UNSPECIFIED = 0;
+  CONTACT_TYPE_PHONE_MOBILE = 1;
+  CONTACT_TYPE_PHONE_HOME = 2;
+  CONTACT_TYPE_PHONE_WORK = 3;
+  CONTACT_TYPE_EMAIL_PERSONAL = 4;
+  CONTACT_TYPE_EMAIL_WORK = 5;
+  CONTACT_TYPE_FAX = 6;
+}
+
+// DateRange represents a start and end date pair.
+message DateRange {
+  int64 start_date = 1;
+  int64 end_date = 2;
+}
