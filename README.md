@@ -136,11 +136,11 @@ Claude will generate a full, production-grade distributed system aligned with La
 ### 5. Run Locally
 
 ```bash
-cd go
-./run-local.sh
+cd k8s
+./kind-start.sh
 ```
 
-This launches the full distributed system locally.
+This creates a KIND cluster, deploys the full distributed system and seeds mock data. All testing runs end-to-end against it with Playwright (`cd e2e && npm test`).
 
 ### 6. Build and Deploy
 

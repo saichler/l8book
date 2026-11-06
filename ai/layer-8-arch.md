@@ -156,7 +156,7 @@ Real bugs found and fixed in the shared framework during implementation work, pl
 These are complete implementation projects that serve as references for new projects.
 
 ### l8erp — Enterprise Resource Planning (canonical for ERP-style projects)
-Full ERP with 12 modules (HCM, FIN, SCM, Sales, MFG, CRM, PRJ, BI, DOC, ECOM, COMP, SYS). Canonical reference for project structure, service patterns, UI patterns, mock data, deployment (Docker/K8s), run-local.sh, login.json, and all four K8s deployment modes.
+Full ERP with 12 modules (HCM, FIN, SCM, Sales, MFG, CRM, PRJ, BI, DOC, ECOM, COMP, SYS). Canonical reference for project structure, service patterns, UI patterns, mock data, deployment (Docker/K8s), KIND local runs with mock seeding, the `e2e/` Playwright suite, login.json, and all four K8s deployment modes.
 
 ### probler — Network/Infrastructure Observation (canonical for observation projects)
 Full observation pipeline: targets, collectors (SNMP/SSH/K8s/REST), parsers, inventory cache, ORM persistence, topology, alarms. Canonical reference for the l8pollaris pattern (targets-collect-parse-cache), binary layout, Dockerfiles, and K8s manifests for observation projects.
