@@ -1476,10 +1476,41 @@ After initial implementation (backend + UI wired, `go/tests/` green), every proj
 - Debug specs get a `zzz-` prefix; delete before moving on, never commit.
 - Cached auth goes stale after pod/cluster restart: clear and re-login.
 - Failure right after restart/redeploy may be cluster settling: rerun once. Consistent repro in isolation = real bug.
+- Seed data: `k8s/kind-start.sh` ends by running `k8s/seed-mocks.sh` (mock uploader against `https://localhost:<port>`, as a non-TFA account with wildcard allow, e.g. `operator`). An empty cluster makes table/filter/paging specs pass vacuously.
+
+**No fixed sleeps.** `waitForTimeout(n)` and `setTimeout` polling loops are forbidden in `e2e/` -- they are slow when the app is fast and flaky when it is slow. Wait on what the app actually does:
+
+| Waiting for | Wait on |
+|---|---|
+| Table re-render (filter, sort, paging, refresh) | Tag the container's children (`data-e2e-stale`), act, `expect(root.locator(':scope > [data-e2e-stale]')).toHaveCount(0)`. Layer8DTable `render()`/`showError()` replace the whole container innerHTML and a server-side table renders only after its response is parsed, so this covers debounce + request + parse. Same for mobile cards and view switches (`layer8d-view-factory` clears the container). |
+| Section load (`sections.js`) | Tag the current `.section-container`, click, wait for `.section-container:not([data-e2e-stale])`, then inline `el.style.opacity === '1'`. Never `getComputedStyle(...).opacity`: the 0.5s transition keeps the computed value ~1 at the start of the fade-OUT, so the wait passes before the swap and the next click hits detached DOM. |
+| Module tab / popup tab | `expect(content).toHaveClass(/active/)` / pane `toBeVisible()`; retry the click up to 3x only when the class never arrives. |
+| Popup closed | `expect(overlays).toHaveCount(n - 1)`. |
+| Save outcome | Poll for whichever comes first: `.layer8d-notification-error` (validation or server rejection) or the popup overlay count dropping (accepted). |
+| Menu open (view switcher, export) | The target item `waitFor({ state: 'visible' })`. |
+| Shell settled after boot / portal / login page | `waitForLoadState('networkidle')` (l8ui shells do no background polling; websockets don't count). |
+| In-page state (websocket connected, global defined) | `page.waitForFunction(...)`, not an evaluate loop. |
+| Eventual API state after a write | `expect.poll(() => api.query(...)).toBe(x)` with a bounded timeout. |
+
+Add `"lint:sleep"` to `e2e/package.json` (fails on `waitForTimeout(` or a bare `setTimeout(`, not `test.setTimeout`) next to `lint:scratch`.
+
+**Session reuse (one boot per worker).** Booting `app.html` is ~2s, ~1000 responses (~8MB, served `no-store`) and ~60 API calls (dashboard KPIs); per test that was ~20% of wall clock and most of the backend load. In `fixtures/test.ts`:
+- `api` is `{ scope: 'worker' }`; `desktopSession` / `mobileSession` are worker-scoped contexts+pages booted once. Worker fixtures can't use test-scoped option fixtures, so build the context from `workerInfo.project.use` (`baseURL`, `ignoreHTTPSErrors`, `viewport`, `userAgent`, `deviceScaleFactor`, `isMobile`, `hasTouch`) -- dropping these silently turns the mobile project into a desktop browser.
+- `app` / `mobile` lend the shared page to one test after a reset: close popups/toasts, tag the current section stale (desktop) or `Layer8MNav.showHome()` (mobile; home = `.nav-card[data-module]`, sub-grids reuse `.nav-card-grid`).
+- Console capture: attach listeners once per page and route them to a per-test capture object (`router.current = consoleErrors`), so each test sees only its own errors.
+- Per-test `QueryRecorder`: reset at test start and `page.off()` at test end -- a recorder attached per navigation leaks listeners on a page that lives for hundreds of tests.
+- On failure, screenshot the shared page manually (`testInfo.attach`); Playwright's automatic screenshot covers the test's own `page`. Playwright replaces the worker after any failure, so the next test gets a clean session.
+- `freshApp` / `freshMobile` (per-test context) for tests that assert on boot errors, log out, or change the theme (persisted per context).
+
+**Navigate only when needed.** `openSection()` returns immediately if the link is active, inline opacity isn't `'0'` and the current container isn't stale -- re-clicking the active section re-fetches its HTML, re-runs every initializer and re-queries the default service. Never `page.goto(shell)` to get back home between services; use the app's own navigation.
+
+**Concurrency** follows the deployment (one `erp-web` + one backend pod -> `workers: 2`); add replicas before raising workers. Use `--grep @smoke` / `-g "<module> /"` slices while iterating, the full sweep before merge, `--shard=i/N` in CI.
 
 ```bash
 ls e2e/playwright.config.ts e2e/fixtures/ e2e/pages/ e2e/tests/desktop/ e2e/tests/mobile/
 find e2e/tests -name "zzz-*"  # must be empty
+grep -rnE 'waitForTimeout\(|(^|[^.[:alnum:]_])setTimeout\(' e2e/tests e2e/pages e2e/drivers e2e/fixtures  # must be empty
+grep -n "scope: 'worker'" e2e/fixtures/test.ts  # api + shared sessions
 ```
 
 ## PrdCompliance
