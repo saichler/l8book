@@ -288,7 +288,7 @@ Symptom: dates show raw numbers like `1704067200` -- completely silent.
 Every PRD introducing a new deployable service must include: `build.sh`, `Dockerfile`, K8s YAMLs (4 modes), KIND scripts, updates to `build-all-images.sh` and `deploy.sh`/`undeploy.sh`.
 
 ### Docker image pattern:
-- Multi-stage: `saichler/builder:latest` build stage, `saichler/<project>-security:latest` (or `<project>-postgres`) runtime
+- Multi-stage: `builder:latest` build stage, `saichler/<project>-security:latest` (or `<project>-postgres`) runtime
 - `build.sh`: `docker build --no-cache --platform=linux/amd64 -t saichler/<image>:latest . && docker push`
 
 ### Base image rule:
@@ -298,11 +298,11 @@ Every project MUST have its own `-security` and `-postgres` base images. Never u
 
 | Image | Directory | Base | K8s Kind |
 |-------|-----------|------|----------|
-| `saichler/erp` | `go/erp/main/` | `erp-postgres` | StatefulSet |
-| `saichler/erp-web` | `go/erp/ui/` | `erp-security` | DaemonSet(hostNetwork) |
-| `saichler/erp-vnet` | `go/erp/vnet/` | `erp-security` | DaemonSet(hostNetwork) |
-| `saichler/erp-logs-vnet` | `go/logs/vnet/` | `erp-security` | DaemonSet(hostNetwork) |
-| `saichler/erp-log-agent` | `go/logs/agent/` | `erp-security` | DaemonSet |
+| `registry.layer-8.dev:44443/erp/erp` | `go/erp/main/` | `erp-postgres` | StatefulSet |
+| `registry.layer-8.dev:44443/erp/erp-web` | `go/erp/ui/` | `erp-security` | DaemonSet(hostNetwork) |
+| `registry.layer-8.dev:44443/erp/erp-vnet` | `go/erp/vnet/` | `erp-security` | DaemonSet(hostNetwork) |
+| `registry.layer-8.dev:44443/erp/erp-logs-vnet` | `go/logs/vnet/` | `erp-security` | DaemonSet(hostNetwork) |
+| `registry.layer-8.dev:44443/erp/erp-log-agent` | `go/logs/agent/` | `erp-security` | DaemonSet |
 
 Does NOT apply when adding services to existing images, pure UI changes, or library changes.
 
@@ -617,7 +617,7 @@ Projects using l8pollaris (collection/parsing/inventory/orm pattern) MUST mirror
 go/<module>/<service>/
 ├── main.go
 ├── build.sh        # docker build --no-cache --platform=linux/amd64 + docker push
-└── Dockerfile      # Multi-stage: saichler/builder -> saichler/<project base> final
+└── Dockerfile      # Multi-stage: builder -> saichler/<project base> final
 ```
 
 ### Required separate binaries

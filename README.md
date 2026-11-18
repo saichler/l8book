@@ -148,8 +148,8 @@ Before building images, either:
 - Obtain the secure base images (security + PostgreSQL), or
 - For testing with unsecure images, replace:
   - Security base images with **alpine**
-  - Postgres base images with **saichler/unsecure-postgres:latest**
-  - Builder base images with **saichler/builder-ns:latest**
+  - Postgres base images with **registry.layer-8.dev:44443/library/unsecure-postgres:latest**
+  - Builder base images with **builder-ns:latest**
 
 Build all images:
 
