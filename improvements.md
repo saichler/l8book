@@ -10,7 +10,7 @@ come for free with a version bump; the rest are per-project changes.
 3. Update `AgentConfig`: local LLM, `help.md`, `WebToolsURL`.
 4. Add the `AgntChat` timeout and the k8s `hostAliases`.
 5. Put custom screens (dashboards) on a live slot.
-6. Add `seed-mocks.sh` with the endpoint wait; set `imagePullPolicy: IfNotPresent` on kind/local.
+6. Add `seed-mocks.sh` with the endpoint wait; set `imagePullPolicy: Always` on every manifest (`IfNotPresent` is forbidden).
 7. Copy the `e2e/` skeleton: inventory generator, worker fixtures, lint scripts, page objects.
 8. Run the shell-integrity spec first — it finds missing-script bugs fastest.
 
@@ -66,8 +66,8 @@ permissions and theme, inline tables, exports, reference pickers, realtime, port
   **waits until a real service endpoint stops returning 404** — on a fresh cluster endpoints register
   late, which used to fail the whole seed.
 - No `run-local.sh` / `start-db.sh`; local testing is KIND only.
-- `imagePullPolicy: IfNotPresent` on kind/local manifests. `Always` silently discards images loaded
-  with `kind load`, so you test a stale build.
+- `imagePullPolicy: Always` on every manifest, kind/local included; `IfNotPresent` is forbidden (a node
+  keeps running its cached `:latest`). Push an image to Harbor before testing it in KIND.
 - Images build on local base images and push to Harbor (`registry.layer-8.dev:44443/<proj>`);
   `k8s/secrets.sh` creates the `harbor-pull` Secret.
 - `erp-web` reads web assets into memory at startup: editing a file under `web/` changes nothing until

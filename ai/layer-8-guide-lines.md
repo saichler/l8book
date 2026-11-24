@@ -536,6 +536,29 @@ Symptoms: empty columns (silent), row clicks do nothing (silent), server log `Un
 - Container `env` with `NODE_IP` from `status.hostIP`
 - Volume name `hdata` (not `data`), mountPath `/data`
 
+### imagePullPolicy: Always (all manifests, all modes)
+Every container and init container in every manifest MUST set `imagePullPolicy: Always`, explicitly (an omitted policy defaults to `IfNotPresent` for any tag other than `:latest`). `IfNotPresent` is forbidden: with `:latest` tags a node keeps running its cached image after a new one is pushed. KIND included -- test changes in KIND by pushing the image to Harbor; a `kind load`-ed image is not used.
+
+### Wait-for-VNet Init Container (all 4 modes)
+Services connect to the vnet on `$NODE_IP` and panic if it does not answer their first requests. Every workload (Deployment/DaemonSet/StatefulSet) except the vnet workloads themselves MUST have a `wait-for-vnet` init container. It runs in the service's own image (no extra pull); `sh` and `nc` must be in the base image. Ports: the project vnet (e.g. `26000`), plus the logs vnet (e.g. `27000`) for workloads that use it (web UI, log-agent). Jobs (e.g. admission bootstrap) are exempt.
+
+```yaml
+      initContainers:
+        - name: wait-for-vnet
+          image: <same image as the service container>
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+            - for p in 26000; do until nc -z -w 2 "$NODE_IP" "$p"; do echo "waiting for vnet $NODE_IP:$p"; sleep 2; done; done; sleep 10
+          env:
+            - name: NODE_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.hostIP
+```
+The trailing `sleep 10` lets a vnet that just opened its port finish starting.
+
 ### Four Deployment Modes Required
 
 **Local** (`-local.yaml`): `hostPath` volumes, `DirectoryOrCreate`. DaemonSet for per-node, Deployment for scalable, StatefulSet for stateful.
@@ -575,6 +598,8 @@ grep "rancher.io/local-path" k8s/<project>-baremetal.yaml
 grep "kubernetes.io/gce-pd" k8s/<project>-gke.yaml
 grep -c "kind: StorageClass" k8s/<project>-kind.yaml  # expect 0
 diff <(grep "image:" k8s/<project>-local.yaml | sort) <(grep "image:" k8s/<project>-baremetal.yaml | sort)
+grep -c "name: wait-for-vnet" k8s/<project>-{local,baremetal,gke,kind}.yaml  # expect = workloads minus vnets, same in each
+grep -c "IfNotPresent" k8s/*.yaml  # expect 0 in every file
 ```
 
 Canonical: `probler/k8s/` (all 4 modes + KIND scripts).
