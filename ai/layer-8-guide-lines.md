@@ -139,7 +139,7 @@ Layer8DConfig -> Layer8DUtils <- Layer8DRenderers
   +- Forms: FormsFields, FormsData, FormsPickers, FormsModal -> Forms facade
   +- Module: ServiceRegistry, ModuleNavigation, ModuleCRUD, ToggleTree, ModuleFilter -> ModuleFactory
   +- Views: ViewFactory, ViewSwitcher, DataSource, Chart(Bar/Line/Pie), Kanban, Timeline, Calendar, Gantt, TreeGrid, Wizard
-  +- Widget, Markdown, L8AgentChat
+  +- Widget, Markdown, L8ChatBubble (l8chat; L8AgentChat legacy)
 ```
 
 ### Mobile Dependency Graph
@@ -149,14 +149,14 @@ Layer8MConfig -> Layer8MAuth, Layer8MUtils
   +- Components: MPopup, MConfirm, MTable, MEditTable, MForms, MDatePicker, MReferenceRegistry/Picker, MRenderers
   +- Module: MModuleRegistry, DToggleTree, DModuleFilter, NAV_CONFIG, MNavCrud, MNavData, MNav
   +- Views: MViewFactory, ViewSwitcher(shared), MChart, MKanban, MCalendar, MTimeline, MGantt, MTreeGrid, MWizard
-  +- MDataSource, L8AgentChatMobile
+  +- MDataSource, L8ChatBubbleMobile (l8chat; L8AgentChatMobile legacy)
 ```
 
 ### Project Structure
 ```
 l8ui/: shared/, edit_table/, popup/, reference_picker/, datepicker/, input_formatters/,
        chart/, kanban/, calendar/, timeline/, tree_grid/, gantt/, wizard/, dashboard/,
-       notification/, login/, register/, l8agent/(+m/), m/(js/,css/),
+       notification/, login/, register/, l8chat/(+m/), l8agent/(+m/, legacy), m/(js/,css/),
        sys/(security/,modules/,health/,logs/,dataimport/), images/, font/
 ```
 
@@ -439,7 +439,7 @@ Never add methods/types/interfaces to `l8types/go/ifs/` for feature work in cons
 Three sub-rules:
 1. **Feature hooks go in implementation layer** (`l8services`, `l8web`, project code), not contract layer (`l8types/go/ifs/`).
 2. **Refactor before abstracting** -- extract/reorganize existing code rather than creating new abstractions.
-3. **Use existing extension points first**: `IServiceHandler` (CRUD), `IServiceCacheListener` (cache notifications), `ITransactionConfig`, `IWebService`, `ServiceCallback` (Before/After hooks).
+3. **Use existing extension points first**: `IServiceHandler` (CRUD), `IServiceMessageHandler` (CRUD with the incoming `*Message`, e.g. requester aaaId), `IServiceCacheListener` (cache notifications), `ITransactionConfig`, `IWebService`, `ServiceCallback` (Before/After hooks).
 
 If genuinely needed: flag to framework owner, don't add yourself.
 
@@ -579,23 +579,28 @@ diff <(grep "image:" k8s/<project>-local.yaml | sort) <(grep "image:" k8s/<proje
 
 Canonical: `probler/k8s/` (all 4 modes + KIND scripts).
 
-## L8AgentChat
+## L8Chat (l8ai)
 
-AI chat with conversation management, markdown responses, inline data tables.
+Chat bubble for l8ai: people and the AI agent **Tanto (Layer8)** in one chat (DMs, groups, presence, attachments, LLM profile picker, markdown). Use it for new projects; `L8AgentChat`/`l8agent/` is legacy (still in l8erp/l8alarms until their migration) -- do not adopt it.
 
-**Desktop:**
+l8chat names no service itself; the project supplies the endpoints (one file shared by both shells):
 ```js
-L8AgentChat.init({ containerId: 'agent-container', chatEndpoint: '/0/AgentChat' });
-L8AgentChat.sendMessage(text)
-L8AgentChat.loadConversation(id)
-L8AgentChat.newConversation()
+window.<PROJECT>_CHAT_ENDPOINTS = {
+    msg: '/81/ChatMsg', conv: '/81/ChatConv', peer: '/81/ChatPeer', sync: '/81/ChatSync',
+    stat: '/81/ChatStat', group: '/81/ChatGroup', users: '/73/users', llmProf: '/79/LlmProf'
+};
+L8ChatBubble.init({ endpoints: <PROJECT>_CHAT_ENDPOINTS });        // desktop app.js, before Layer8DWebSocket.init()
+L8ChatBubbleMobile.init({ endpoints: <PROJECT>_CHAT_ENDPOINTS });  // mobile app-core.js, after Layer8DWebSocket.init()
 ```
+A missing endpoint throws at init. Needs `sessionStorage.currentUser` (set by l8ui login; seed it in e2e) and https or localhost (`crypto.subtle`). Includes: `layer8-markdown.css`, `l8chat/l8chat.css` (+ `l8chat/m/l8chat-m.css` on mobile); JS after websocket, popup, file-upload and markdown: `l8chat-core-api`, `-core-store`, `-core-live`, `-core-actions`, `-core-files`, `-status`, `-sidebar`, `-convlist`, `-composer`, `-thread`, `-group-dialog`, `-conv-dialog`, then `l8chat-bubble` (desktop) or `m/l8chat-m`, `m/l8chat-bubble-m` (mobile), then the endpoints file. Backend (five binaries, area 81), security config (`llmProviders`/`llmProfiles`, `chatdb`), K8s and e2e: `l8ai/docs/l8agent-to-l8ai-runbook.md`; worked example: probler.
 
-**Mobile** (`L8AgentChatMobile`): Same API, uses `Layer8MAuth` for HTTP, `Layer8MTable` for inline tables.
+## LiveUpdates
 
-```js
-L8AgentChatMobile.init({ containerId: 'agent-container', chatEndpoint: '/0/AgentChat' });
-```
+Mechanism and details: `layer-8-arch.md` "Live Updates (WebSocket)". Rules:
+- Views are live by default (`Layer8DTable`, data-source views, mobile counterparts); opt out with `realtime: false`. Do not write per-model websocket code.
+- A browser is notified only of changes to rows on its displayed page. Never multicast a hand-built, record-less or untargeted notification to `websock` -- `l8web` drops empty `AaaIds`; send the cache-built `cn` instead.
+- A `DCache` created with a nil/non-vnic listener sends no client notifications until `SetWebSocketNotifier(vnic)` is called.
+- A new live component: `Layer8DWebSocket.registerQuery(id, owner, endpoint, text, hooks)` on every fetch (sends `register`/`registerId` in the query body), `listen(id, owner, modelType, cb)`, apply pushes with `applyChange` (`{index, refetch}`), re-fetch pushes/reconnects with `hooks.keepPosition`. At most 5 live components per page (oldest evicted and unregistered).
 
 ## L8Logs
 
@@ -756,7 +761,8 @@ All projects are siblings under the same parent. `../projectname` resolves from 
 | `l8parser` | Canonical parsing stage |
 | `l8topology` | Topology visualization |
 | `l8opensim` | API simulation |
-| `l8agent` | AI agent |
+| `l8ai` | Chat + Tanto AI agent (area 81); UI in `l8ui/l8chat/` |
+| `l8agent` | Legacy AI agent -- superseded by l8ai, do not adopt |
 | `l8logfusion` | Distributed log collection |
 | `l8events` | Event recording service (`Events`, area 76) -- required |
 | `l8alarms` | Alarm lifecycle + RCA (area 10); consumes l8events, sends via l8notify |
@@ -1574,6 +1580,9 @@ Full list includes: theme-switcher, config, websocket, utils, renderers, referen
 
 ### Mobile
 Same audit for all mobile CSS/JS from mobile-script-loading-order.md.
+
+### Chat
+The lists above follow l8erp's loading-order rules, which still carry l8agent. A project on l8ai audits the l8chat files instead (desktop: `l8chat.css` + 13 l8chat JS files; mobile: adds `l8chat-m.css`, `l8chat-m.js`, `l8chat-bubble-m.js` -- see L8Chat) and marks the l8agent files N/A.
 
 First implementation phase must create `app.html` and `m/app.html` with ALL checked files included.
 
