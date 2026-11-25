@@ -1600,11 +1600,11 @@ Every UI PRD MUST contain an "L8UI Includes Audit" section listing every CSS and
 ### Desktop CSS (36 files)
 layer8d-theme-tokens, layer8d-theme, layer8d-animations, layer8d-scrollbar, layer8-print, layer8-section-layout, layer8-section-responsive, layer8d-table, layer8d-chart, layer8d-kanban, layer8d-timeline, layer8d-calendar, layer8d-tree-grid, layer8d-gantt, layer8d-wizard, layer8d-widget, layer8-view-switcher, layer8-markdown, l8agent-chat, l8agent-bubble, l8sys, l8health, l8sys-modules, l8logs, l8dataimport, layer8d-toggle-tree, layer8d-popup, layer8d-popup-forms, layer8d-form-fields, layer8-file-upload, layer8d-popup-inline-table, layer8d-popup-content, layer8d-datepicker, layer8d-reference-picker, layer8d-input-formatter, layer8d-notification.
 
-### Desktop JS (97 files)
-Full list includes: theme-switcher, config, websocket, utils, renderers, reference-registry, portal-switcher, enum-factory, ref-factory, column-factory, form-factory, form-factory-presets, svg-factory, module-config-factory, section-generator, notification, 6 input-formatter files, format-display, forms-fields, forms-fields-ext, forms-data, forms-pickers, forms-modal, forms, popup, 4 datepicker files, 6 reference-picker files, 6 table files, csv-export, excel-export, pdf-export, export-helper, file-upload, data-source, view-factory, view-switcher, 3 chart files, 3 kanban files, timeline, 3 calendar files, 3 tree-grid files, 3 gantt files, 2 wizard files, widget, service-registry, module-crud, module-navigation, toggle-tree, module-filter, permission-filter, module-factory-core, module-factory, markdown, 5 l8agent files, l8sys-config, l8health, 5 l8security files, 2 l8security-events files, l8sys-dependency-graph, l8sys-modules-map, l8sys-modules, l8logs, 4 l8dataimport files, l8sys-init.
+### Desktop JS (99 files)
+Full list includes: theme-switcher, config, websocket, utils, renderers, reference-registry, portal-switcher, enum-factory, ref-factory, column-factory, form-factory, form-factory-presets, svg-factory, module-config-factory, section-generator, notification, 6 input-formatter files, format-display, forms-fields, forms-fields-ext, forms-data, forms-pickers, forms-modal, forms, popup, 4 datepicker files, 6 reference-picker files, 6 table files, csv-export, excel-export, pdf-export, export-helper, file-upload, data-source, view-factory, view-switcher, 3 chart files, 3 kanban files, timeline, 3 calendar files, 3 tree-grid files, 3 gantt files, 2 wizard files, widget, service-registry, module-crud, module-navigation, toggle-tree, module-filter, permission-filter, module-factory-core, module-factory, markdown, clipboard, 5 l8agent files, l8sys-config, l8health, 6 l8security files (incl. l8security-apikeys-crud), 2 l8security-events files, l8sys-dependency-graph, l8sys-modules-map, l8sys-modules, l8logs, 4 l8dataimport files, l8sys-init.
 
 ### Mobile
-Same audit for all mobile CSS/JS from mobile-script-loading-order.md.
+Same audit for all mobile CSS/JS from mobile-script-loading-order.md, plus `shared/layer8-clipboard`, `sys/security/l8security-enums` and `sys/security/m/l8security-apikeys-m`.
 
 ### Chat
 The lists above follow l8erp's loading-order rules, which still carry l8agent. A project on l8ai audits the l8chat files instead (desktop: `l8chat.css` + 13 l8chat JS files; mobile: adds `l8chat-m.css`, `l8chat-m.js`, `l8chat-bubble-m.js` -- see L8Chat) and marks the l8agent files N/A.
@@ -1787,7 +1787,7 @@ CSS first (theme, section layout, components, view system, markdown, file upload
 4. Reference registries (project-specific)
 5. Notification
 6. Input formatters (6 files in order)
-7. Markdown, file upload, CSV export
+7. Markdown, file upload, clipboard (`layer8-clipboard`), CSV export
 8. Forms (fields, fields-ext, data, pickers, modal, forms facade)
 9. Popup
 10. Date picker (4 files)
@@ -1796,7 +1796,7 @@ CSS first (theme, section layout, components, view system, markdown, file upload
 13. View system: view-factory, view-switcher, data-source, chart (3), kanban (2), timeline, calendar (2), gantt (2), tree-grid, wizard (2), widget
 14. Module abstractions: service-registry, module-crud, module-navigation, toggle-tree, module-filter, module-factory-core, module-factory
 15. Module data (per module: section-config, config, enums, columns, forms, init)
-16. SYS module (config, health, security files, modules, logs, dataimport, init)
+16. SYS module (config, health, security files incl. `l8security-apikeys-crud` after `l8security-credentials-crud`, modules, logs, dataimport, init)
 17. AI agent (enums, columns, forms, chat)
 
 ### Mobile
@@ -1810,8 +1810,8 @@ CSS (12 files), then JS:
 6. Mobile components: popup, confirm, table, edit-table, forms (5 files), datepicker, reference-registry
 7. Project-specific reference registries
 8. Reference picker, renderers, data-source
-9. Shared: markdown, file-upload, csv-export
-10. Module data
+9. Shared: markdown, file-upload, clipboard (`layer8-clipboard`), csv-export
+10. Module data (incl. `sys/security/l8security-enums` and `sys/security/m/l8security-apikeys-m` before the project's security columns)
 11. Toggle tree, module filter, SYS modules
 12. Nav core (crud, data, nav) BEFORE nav configs
 13. Nav configs (project-specific) AFTER nav core
@@ -1855,6 +1855,16 @@ Actions: `-999`=all, `1`=POST, `2`=PUT, `3`=PATCH, `4`=DELETE, `5`=GET.
 - `${userId}` = only supported placeholder, substituted at runtime
 - Deny = negative filter: `where buyerId!=${userId}` means user sees only their own rows
 
+### Required API-key rules (every role)
+Every role carries the hash field deny; every role that is not a key manager (cannot PATCH `L8User`) also carries the own-keys row filter. Without `apikey-own`, a non-manager can see, revoke and delete other users' keys.
+```json
+"apikey-hash": { "ruleId": "apikey-hash", "elemType": "L8ApiKey", "allowed": false, "actions": {},
+  "attributes": { "l8apikey.secrethash": "" } },
+"apikey-own":  { "ruleId": "apikey-own", "elemType": "L8ApiKey", "allowed": false, "actions": {},
+  "attributes": { "L8ApiKey": "select * from L8ApiKey where userId!=${userId}" } }
+```
+Optional top-level policy (0 = default): `"apiKeyPolicy": { "defaultLifetimeDays": 90, "maxLifetimeDays": 365, "maxActiveKeysPerUser": 10 }`. Go-generated configs use `common.ApiKeyRules(manager)` / `common.MergeApiKeyRules`.
+
 Pipeline: JSON -> protojson.Unmarshal -> AES encrypt -> .sec file -> runtime decrypt -> SecurityProvider.init() -> ScopeView() filters GET results.
 
 Canonical reference: `l8secure/go/secure/plugin/phy/phy.json`.
@@ -1864,6 +1874,10 @@ Canonical reference: `l8secure/go/secure/plugin/phy/phy.json`.
 ### Security Provider Interface
 
 All AAA MUST go through `ifs.ISecurityProvider`. No custom auth middleware, no hardcoded permission checks, no independent session management.
+
+### API Keys for Non-Interactive Clients
+
+Scripts and services authenticate with an API key sent as `Authorization: Bearer l8k_…` (created in System > Security > API Keys, or `POST /71/ApiKeys`). Never hand-roll key headers, never put a key in a URL (including `/ws?token=`), and never reuse `RestClient`'s `IsAPIKey`/`X-API-KEY` mode for Layer 8 services -- that mode is for third-party APIs. Go: `RestClientConfig{TokenRequired: true}` and `rc.Token = key`.
 
 ### Provisioning: Only Config JSON or Security API
 
