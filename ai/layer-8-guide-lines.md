@@ -559,6 +559,76 @@ Services connect to the vnet on `$NODE_IP` and panic if it does not answer their
 ```
 The trailing `sleep 10` lets a vnet that just opened its port finish starting.
 
+### Wait-for-Instances Init Container (leaders that rebuild state from instances, all 4 modes)
+A service whose leader rebuilds its state **from the live instances of another service** when it takes over MUST NOT start before all of those instances are ready: an instance that is not up yet is left out of the rebuilt state. Such a service gets a second init container, after `wait-for-vnet`, that waits until the other workload reports every replica ready. Example: the l8ai chat router rebuilds its conversation index (conversation -> owning chat instance) by asking every chat instance which conversations it holds, so it waits for the chat workload (`wait-for-chat`).
+
+Rebuild from the instances, never from the ORM: only one service reads and writes the ORM for a given proto message (for chat conversations, the chat instances). A leader that reads the ORM to rebuild ownership races the instances that own the data and reassigns what they already hold.
+
+Rules:
+- Same image as the service container (busybox `wget`, `grep`, `sh` in the base image), `imagePullPolicy: Always`.
+- Read the workload through the Kubernetes API with the pod's ServiceAccount token: `statefulsets/<name>` or `deployments/<name>`, matching the waited-on workload's kind in each mode (it can differ between modes, e.g. a Deployment in local/GKE and a StatefulSet in bare-metal/KIND). Done when `readyReplicas >= spec.replicas`; a missing `readyReplicas` means 0. Re-read the token on every attempt (it rotates).
+- Its own ServiceAccount (`serviceAccountName`) with a Role limited to `get` on that one object (`resourceNames`), plus the RoleBinding. Put the ServiceAccount, Role and RoleBinding right before the workload, so they are applied in the same KIND phase.
+- Trailing `sleep 10`, like `wait-for-vnet`: a ready pod still needs a moment to join the vnet and publish its services.
+
+```yaml
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: probler-chat-router
+  namespace: probler
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: probler-chat-router-wait
+  namespace: probler
+rules:
+  - apiGroups: ["apps"]
+    resources: ["statefulsets"]        # "deployments" where the chat is a Deployment
+    resourceNames: ["probler-chat"]
+    verbs: ["get"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: probler-chat-router-wait
+  namespace: probler
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: probler-chat-router-wait
+subjects:
+  - kind: ServiceAccount
+    name: probler-chat-router
+    namespace: probler
+---
+# in the probler-chat-router workload's pod spec:
+      serviceAccountName: probler-chat-router
+      initContainers:
+        - name: wait-for-vnet
+          # ... as above
+        - name: wait-for-chat
+          image: <same image as the service container>
+          imagePullPolicy: Always
+          command:
+            - sh
+            - -c
+            - |
+              sa=/var/run/secrets/kubernetes.io/serviceaccount
+              api="https://kubernetes.default.svc/apis/apps/v1/namespaces/$(cat $sa/namespace)/statefulsets/probler-chat"
+              while :; do
+                s=$(wget -q -O - --no-check-certificate --header "Authorization: Bearer $(cat $sa/token)" "$api")
+                want=$(echo "$s" | grep -o '"replicas": *[0-9]*' | head -1 | tr -dc 0-9)
+                ready=$(echo "$s" | grep -o '"readyReplicas": *[0-9]*' | head -1 | tr -dc 0-9)
+                if [ -n "$want" ] && [ "${ready:-0}" -ge "$want" ]; then break; fi
+                echo "waiting for probler-chat: ${ready:-0}/${want:-?} ready"
+                sleep 2
+              done
+              sleep 10
+```
+The first `"replicas"` in the response is `spec.replicas` (spec precedes status). The waited-on workload must not depend on the waiting one to become ready, or neither starts.
+
 ### Four Deployment Modes Required
 
 **Local** (`-local.yaml`): `hostPath` volumes, `DirectoryOrCreate`. DaemonSet for per-node, Deployment for scalable, StatefulSet for stateful.
@@ -570,7 +640,7 @@ The trailing `sleep 10` lets a vnet that just opened its port finish starting.
 **KIND** (`-kind.yaml`): Same as bare-metal but remove custom StorageClass, use `storageClassName: standard`.
 
 ### KIND Scripts
-`kind-start.sh`: install kind, create cluster (1 cp + 1 worker), load images, deploy in 3 phases.
+`kind-start.sh`: install kind, create cluster (1 cp + 1 worker), deploy in 3 phases. No `kind load`: every image is pulled from the registry (`imagePullPolicy: Always`). Phase boundaries come from marker comments in the manifest (e.g. `# probler-parser` ends phase 1, `# l8collector-admission` ends phase 2), never from the first `kind: ServiceAccount` or fixed line numbers: a workload's own ServiceAccount/RBAC must be applied in the same phase as the workload.
 `kind-stop.sh`: delete cluster, cleanup.
 
 ### Identical across modes:
@@ -599,6 +669,7 @@ grep "kubernetes.io/gce-pd" k8s/<project>-gke.yaml
 grep -c "kind: StorageClass" k8s/<project>-kind.yaml  # expect 0
 diff <(grep "image:" k8s/<project>-local.yaml | sort) <(grep "image:" k8s/<project>-baremetal.yaml | sort)
 grep -c "name: wait-for-vnet" k8s/<project>-{local,baremetal,gke,kind}.yaml  # expect = workloads minus vnets, same in each
+grep -c "name: wait-for-chat" k8s/<project>-{local,baremetal,gke,kind}.yaml  # projects with the l8ai chat: expect 1 in each
 grep -c "IfNotPresent" k8s/*.yaml  # expect 0 in every file
 ```
 
